@@ -1,0 +1,4 @@
+@mixin custom-colors {
+  --mat-expansion-header-focus-state-layer-color: transparent;
+  --mat-divider-color: var(--mat-sys-outline-variant);
+}

@@ -1,0 +1,61 @@
+<div class="filter-container">
+    <div class="filter-controls">
+        <!-- ปีการศึกษา -->
+        <mat-form-field appearance="outline" class="filter-select">
+            <mat-label>ปีการศึกษา</mat-label>
+            <mat-select [(value)]="selectedAcademicYear" (selectionChange)="onFilterChange()">
+                @for (year of academicYears; track year) {
+                <mat-option [value]="year">{{ year }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <!-- ภาคการศึกษา -->
+        <mat-form-field appearance="outline" class="filter-select">
+            <mat-label>ภาคการศึกษา</mat-label>
+            <mat-select [(value)]="selectedSemester" (selectionChange)="onFilterChange()">
+                @for (semester of semesters; track semester.value) {
+                <mat-option [value]="semester.value">{{ semester.label }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <!-- ภูมิภาค -->
+        <mat-form-field appearance="outline" class="filter-select">
+            <mat-label>ภูมิภาค</mat-label>
+            <mat-select [(value)]="selectedRegion" (selectionChange)="onFilterChange()">
+                @for (region of regions; track region.value) {
+                <mat-option [value]="region.value">{{ region.label }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <!-- จังหวัด -->
+        <mat-form-field appearance="outline" class="filter-select">
+            <mat-label>จังหวัด</mat-label>
+            <mat-select [(value)]="selectedProvince" (selectionChange)="onFilterChange()">
+                @for (province of provinces; track province.value) {
+                <mat-option [value]="province.value">{{ province.label }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <!-- สถานบันอุดมศึกษา -->
+        <mat-form-field appearance="outline" class="filter-select">
+            <mat-label>สถานบันอุดมศึกษา</mat-label>
+            <mat-select [(value)]="selectedUniversity" (selectionChange)="onFilterChange()">
+                @for (university of universities; track university.value) {
+                <mat-option [value]="university.value">{{ university.label }}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <!-- Clear Filter Button - แก้ไขให้ match ความสูง -->
+        <div class="clear-button-wrapper">
+            <button mat-raised-button class="clear-filter-btn" (click)="onClearFilter()">
+                <mat-icon>clear</mat-icon>
+                ล้างตัวกรอง
+            </button>
+        </div>
+    </div>
+</div>

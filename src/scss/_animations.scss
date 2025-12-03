@@ -1,0 +1,26 @@
+$transition-fn: cubic-bezier(0.4, 0, 0.2, 1);
+
+@mixin font-filled {
+  @keyframes font-filled {
+    0% {
+      font-variation-settings: 'FILL' 0;
+    }
+    100% {
+      font-variation-settings: 'FILL' 1;
+    }
+  }
+}
+
+@mixin font-filled-and-bold {
+  @keyframes font-filled-and-bold {
+    0% {
+      font-variation-settings: 'FILL' 0, 'wght' 400;
+    }
+    33.33% {
+      font-variation-settings: 'FILL' 0, 'wght' 500;
+    }
+    100% {
+      font-variation-settings: 'FILL' 1, 'wght' 700;
+    }
+  }
+}

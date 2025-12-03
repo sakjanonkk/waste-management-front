@@ -1,0 +1,97 @@
+@use "@angular/material" as mat;
+@use "scss/theme-colors";
+@use "overrides";
+@use "globals";
+
+@include mat.elevation-classes();
+@include mat.app-background();
+
+html {
+  color-scheme: light;
+  @include mat.theme(
+    (
+      color: (
+        primary: theme-colors.$primary-palette,
+        tertiary: theme-colors.$tertiary-palette,
+      ),
+      typography: (
+        plain-family: "Bai Jamjuree",
+        brand-family: "Bai Jamjuree",
+      ),
+      density: 0,
+    )
+  );
+  @include mat.table-overrides(
+    (
+      row-item-outline-color: var(--mat-sys-outline-variant),
+    )
+  );
+}
+@include overrides.all-component-colors;
+@include overrides.all-component-typographies;
+@include overrides.divider;
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: "Bai Jamjuree", "Helvetica Neue", sans-serif;
+}
+
+.dense {
+  @include mat.theme(
+    (
+      density: -4,
+    )
+  );
+}
+
+a {
+  cursor: pointer;
+  color: var(--mat-sys-primary);
+}
+
+.content-container {
+  padding: 1rem;
+}
+
+.flex-spacer {
+  flex: 1 1 auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.mat-mdc-card {
+  overflow: hidden;
+}
+
+.main-content-transition {
+  view-transition-name: main-container-transition;
+}
+
+.cdk-overlay-container {
+  .mat-mdc-menu-content,
+  div.mat-mdc-select-panel {
+    padding: 0;
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+body.dark-mode {
+  color-scheme: dark;
+}

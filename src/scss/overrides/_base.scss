@@ -1,0 +1,82 @@
+@use "@angular/material" as mat;
+@use "theme-colors";
+
+@mixin all-component-colors {
+  [class^="primary"] {
+    @include mat.theme(
+      (
+        color: theme-colors.$primary-palette,
+      )
+    );
+  }
+
+  [class^="secondary"] {
+    @include mat.theme(
+      (
+        color: theme-colors.$secondary-palette,
+      )
+    );
+  }
+
+  [class^="tertiary"] {
+    @include mat.theme(
+      (
+        color: theme-colors.$tertiary-palette,
+      )
+    );
+  }
+
+  [class^="info"] {
+    @include mat.theme(
+      (
+        color: theme-colors.$info-palette,
+      )
+    );
+  }
+
+  [class^="success"] {
+    @include mat.theme(
+      (
+        color: theme-colors.$success-palette,
+      )
+    );
+  }
+
+  [class^="warning"],
+  [class^="wait"] {
+    @include mat.theme(
+      (
+        color: theme-colors.$warning-palette,
+      )
+    );
+  }
+
+  [class^="danger"],
+  [class^="error"] {
+    @include mat.theme(
+      (
+        color: theme-colors.$danger-palette,
+      )
+    );
+  }
+
+  @include mat.divider-overrides(
+    (
+      color: var(--mat-sys-outline-variant),
+    )
+  );
+
+  @include mat.expansion-overrides(
+    (
+      header-focus-state-layer-color: transparent,
+    )
+  );
+}
+
+@mixin all-component-typographies {
+  @include mat.form-field-overrides(
+    (
+      container-text-line-height: 1.5,
+    )
+  );
+}
