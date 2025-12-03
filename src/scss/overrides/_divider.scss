@@ -1,0 +1,10 @@
+@use '@angular/material' as mat;
+@use 'theme-colors';
+
+@mixin divider {
+
+  @include mat.divider-overrides((
+    color: var(--mat-sys-outline-variant),
+  ));
+
+}

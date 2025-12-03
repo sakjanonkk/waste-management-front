@@ -1,0 +1,43 @@
+@mixin table-theme() {
+  .data-table {
+    --mat-table-background-color: var(--mat-sys-surface-container-lowest);
+    --mat-table-row-item-outline-color: color-mix(in srgb, var(--mat-sys-surface), var(--mat-sys-surface-tint) 4%);
+    border-collapse: collapse;
+
+    .mat-mdc-row:nth-child(even){
+      background-color:
+      color-mix(in srgb, var(--mat-sys-surface), var(--mat-sys-surface-tint) 4%);
+  }
+
+  .mat-mdc-row:nth-child(odd){
+      background-color: var(--mat-sys-surface-container-lowest);
+  }
+
+    .mat-mdc-row {
+      &:hover {
+        background-color: color-mix(in srgb, var(--mat-sys-surface-container), var(--mat-sys-primary) 4%);
+      }
+    }
+
+    .mdc-data-table__cell, .mdc-data-table__header-cell {
+      padding: 0 8px;
+    }
+    .mdc-data-table__header-cell{
+      text-align: center;
+    }
+
+    .sticky-header thead {
+      position: sticky;
+      inset-block-start: var(--table-header-sticky-offset);
+    }
+
+  }
+  ::ng-deep .data-table.mat-mdc-table thead {
+    inset-block-start: var(--table-header-sticky-offset);
+    background-color: var(--mat-sys-primary);
+    --mat-table-header-headline-color: var(--mat-sys-on-primary);
+    --mat-sort-arrow-color: var(--mat-sys-on-primary);
+    --mat-table-header-headline-size: 0.75rem;
+  }
+
+}

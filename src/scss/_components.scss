@@ -1,0 +1,14 @@
+@use 'components/input';
+@use 'overrides/paginator';
+@use 'components/table';
+@use 'components/card';
+
+@mixin all-components-theme() {
+  @include input.input-theme();
+  @include paginator.paginator();
+}
+
+@mixin all-components-variant($theme) {
+  //@include badge.badge-variant($theme);
+  //@include button.button-variant($theme);
+}

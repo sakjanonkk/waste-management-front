@@ -1,0 +1,15 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin card-theme() {
+  .rounded-card {
+    @include mat.card-overrides((
+      elevated-container-shape: 16px,
+    ));
+    &:has(.paginator-in-card-header) {
+      @include mat.card-overrides((
+        elevated-container-shape: 32px 32px 16px 16px,
+      ));
+    }
+  }
+}

@@ -1,0 +1,10 @@
+@use '@angular/material' as mat;
+@use 'theme-colors';
+
+@mixin expansion-panel {
+
+  @include mat.expansion-overrides((
+    header-focus-state-layer-color: transparent,
+  ));
+
+}

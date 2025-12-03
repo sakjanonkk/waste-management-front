@@ -1,0 +1,31 @@
+@use '@angular/material' as mat;
+
+@mixin paginator {
+
+  @include mat.paginator-overrides((
+    container-background-color: var(--mat-sys-surface-container-lowest),
+  ));
+
+  @media screen and (max-width: 599.98px) {
+    @include mat.paginator-overrides((
+      container-background-color: var(--webkit-mobile-pagination-background-color, var(--mat-sys-surface-container-lowest)),
+    ));
+
+    .mat-mdc-paginator {
+      position: var(--webkit-mobile-pagination-position, fixed);
+      width: var(--webkit-mobile-pagination-width, auto);
+      bottom: var(--webkit-mobile-pagination-bottom, 0.5rem);
+      left: var(--webkit-mobile-pagination-left, 0.5rem);
+      right: var(--webkit-mobile-pagination-right, 0.5rem);
+    }
+
+    .mat-mdc-paginator-range-actions {
+      width: 100%;
+    }
+
+    .mat-mdc-paginator-range-label {
+      flex-grow: 1;
+    }
+  }
+
+}
