@@ -21,9 +21,9 @@ jobs:
               "branch": "${{ github.ref_name }}",
               "commit": "${{ github.sha }}",
               "author": "${{ github.actor }}",
-              "message": "${{ github.event.head_commit.message }}"
+              `message": "${{ github.event.head_commit.message }}`
             }' \
             http://43.229.135.49:8888/deploy
-      
+
       - name: Check deployment status
         run: echo "Triggered"
