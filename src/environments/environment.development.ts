@@ -1,5 +1,6 @@
 export const environment = {
-    production: false,
-    api_url: '/api',
-    
+  production: false,
+  apiUrl: 'https://waste.mysterchat.com', // หรือ backend URL ใหม่
+  enableDebugTools: true,
+  logLevel: 'debug'
 };

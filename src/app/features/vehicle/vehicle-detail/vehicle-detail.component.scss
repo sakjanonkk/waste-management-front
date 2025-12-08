@@ -1,0 +1,253 @@
+.vehicle-detail-page {
+  padding: 1rem;
+}
+
+/* แถบปุ่มด้านบน */
+.vehicle-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+}
+
+/* เนื้อหาหลัก + title */
+.vehicle-detail-content {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.vehicle-detail-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Loading */
+.vehicle-detail-loading {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
+}
+
+/* การ์ดหลัก */
+.vehicle-detail-card {
+  padding: 2rem 2.5rem;
+  border-radius: 1.5rem;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+
+  &__content {
+    padding: 0;
+  }
+}
+
+/* แบ่ง layout ซ้าย/ขวา */
+.vehicle-detail-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.vehicle-detail-main {
+  flex: 1 1 280px;
+}
+
+.vehicle-detail-side {
+  flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Badge ทะเบียน + สถานะ */
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+
+  .code {
+    font-size: 1.25rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    background: #e3f2fd;
+  }
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: #eeeeee;
+  color: #424242;
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #9e9e9e;
+  }
+
+  &.available {
+    background: #e8f5e9;
+    color: #2e7d32;
+
+    .dot {
+      background: #2e7d32;
+    }
+  }
+
+  &.inuse {
+    background: #fff8e1;
+    color: #f9a825;
+
+    .dot {
+      background: #f9a825;
+    }
+  }
+
+  &.maint {
+    background: #ffebee;
+    color: #c62828;
+
+    .dot {
+      background: #c62828;
+    }
+  }
+}
+
+.desc {
+  margin-bottom: 1rem;
+  color: #616161;
+}
+
+/* สเป็กของรถ */
+.spec {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .row {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .label {
+    width: 150px;
+    color: #757575;
+  }
+
+  .value {
+    font-weight: 500;
+  }
+}
+
+/* ปุ่มกลับ */
+.card-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.vehicle-detail-back-icon {
+  margin-right: 0.5rem;
+  font-size: 20px;
+}
+
+/* รูปรถ */
+.vehicle-photo {
+  width: 100%;
+  min-height: 160px;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* การ์ดคนขับ */
+.driver-card {
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  background: #fafafa;
+
+  &.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80px;
+    font-size: 0.95rem;
+    color: #757575;
+  }
+}
+
+.driver-title {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.driver {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+
+  .avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #e0e0e0;
+  }
+
+  .name {
+    font-weight: 600;
+  }
+
+  .role {
+    font-size: 0.875rem;
+    color: #616161;
+  }
+
+  .meta {
+    font-size: 0.875rem;
+    color: #757575;
+  }
+}
+
+/* จอเล็ก: ให้ซ้อนเป็นคอลัมน์ */
+@media (max-width: 768px) {
+  .vehicle-detail-card {
+    padding: 1.5rem;
+  }
+
+  .vehicle-detail-grid {
+    flex-direction: column;
+  }
+
+  .card-actions {
+    justify-content: flex-start;
+  }
+}

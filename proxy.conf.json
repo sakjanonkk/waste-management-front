@@ -1,0 +1,28 @@
+{
+  "/api/v1/staff": {
+    "target": "https://waste.mysterchat.com",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/api/v1/vehicles": {
+    "target": "https://waste.mysterchat.com",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/api/v1/collection_point": {
+    "target": "http://localhost:4000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/api/v1/auth": {
+    "target": "https://waste.mysterchat.com",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
+
+

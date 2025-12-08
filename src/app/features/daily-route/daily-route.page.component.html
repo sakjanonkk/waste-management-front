@@ -1,0 +1,206 @@
+<div class="daily-route-page">
+  <!-- Header -->
+  <h1 class="daily-route-title">หน้าแสดงเส้นทางการเก็บขยะประจำวัน</h1>
+
+  <!-- Main Layout -->
+  <div class="daily-route-layout">
+    <!-- Left: Map + summary cards -->
+    <div class="daily-route-main">
+      <!-- Map card -->
+      <mat-card class="daily-route-map-card">
+        <div class="daily-route-map">
+          <!-- Placeholder for map - will integrate real map later -->
+          <div class="daily-route-map__placeholder">
+            <svg
+              class="daily-route-map__icon"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+              />
+            </svg>
+            <p class="daily-route-map__label">แผนที่เส้นทาง</p>
+          </div>
+        </div>
+      </mat-card>
+
+      <!-- Summary cards under the map -->
+      <div class="daily-route-main-stats">
+        <!-- Collection stats -->
+        <mat-card class="daily-route-card">
+          <h3 class="daily-route-card__title">จำนวนรถเก็บขยะที่ใช้ในวันนี้</h3>
+          <div class="daily-route-card__value-row">
+            <span class="daily-route-card__value-main">3/5</span>
+            <span class="daily-route-card__value-unit">คัน</span>
+          </div>
+          <div class="daily-route-card__progress">
+            <div class="daily-route-card__progress-bar">
+              <div
+                class="daily-route-card__progress-fill"
+                style="width: 60%"
+              ></div>
+            </div>
+            <span class="daily-route-card__progress-label">60%</span>
+          </div>
+        </mat-card>
+
+        <!-- Alert problems -->
+        <mat-card class="daily-route-alert-card">
+          <div class="daily-route-alert-card__content">
+            <h3 class="daily-route-alert-card__title">แจ้งเตือนปัญหา</h3>
+            <p class="daily-route-alert-card__count">2 ปัญหา</p>
+          </div>
+
+          <button
+            mat-flat-button
+            color="warn"
+            class="daily-route-alert-card__button"
+            type="button"
+          >
+            รายละเอียดปัญหา
+          </button>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Right: Stats cards -->
+    <div class="daily-route-side">
+      <!-- Waste collection stats -->
+      <mat-card class="daily-route-card">
+        <h3 class="daily-route-card__title">ปริมาณขยะที่เก็บในแล้ว</h3>
+
+        <div class="daily-route-waste">
+          <!-- Recyclable -->
+          <div class="daily-route-waste__row">
+            <span class="daily-route-waste__label">ขยะรีไซเคิล</span>
+            <div class="daily-route-waste__bar-wrapper">
+              <div class="daily-route-waste__bar">
+                <div
+                  class="daily-route-waste__bar-fill daily-route-waste__bar-fill--recycle"
+                  style="width: 52%"
+                ></div>
+              </div>
+            </div>
+            <span class="daily-route-waste__value">6 ตัน</span>
+          </div>
+
+          <!-- General -->
+          <div class="daily-route-waste__row">
+            <span class="daily-route-waste__label">ขยะทั่วไป</span>
+            <div class="daily-route-waste__bar-wrapper">
+              <div class="daily-route-waste__bar">
+                <div
+                  class="daily-route-waste__bar-fill daily-route-waste__bar-fill--general"
+                  style="width: 100%"
+                ></div>
+              </div>
+            </div>
+            <span class="daily-route-waste__value">11.5 ตัน</span>
+          </div>
+        </div>
+      </mat-card>
+
+      <!-- Cost summary -->
+      <mat-card class="daily-route-card">
+        <h3 class="daily-route-card__title">ค่าใช้จ่าย</h3>
+
+        <div class="daily-route-cost">
+          <div class="daily-route-cost__block">
+            <div class="daily-route-cost__text">
+              <p class="daily-route-cost__label">ค่าใช้จ่ายรวมของทุกเส้นทาง</p>
+              <p class="daily-route-cost__hint">
+                (น้ำมัน + ค่าแรงขับรถทั้งหมด)
+              </p>
+            </div>
+            <p class="daily-route-cost__value">6000 บาท</p>
+          </div>
+
+          <div
+            class="daily-route-cost__block daily-route-cost__block--borderless"
+          >
+            <p class="daily-route-cost__label">ระยะทางทั้งหมดของทุกเส้นทาง</p>
+            <p class="daily-route-cost__value">72 กิโลเมตร</p>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Table card -->
+  <mat-card class="daily-route-table-card">
+    <div class="daily-route-table-card__header">
+      <h3 class="daily-route-table-card__title">
+        รายละเอียดเส้นทางของรถเก็บขยะเเต่ละคัน
+      </h3>
+    </div>
+
+    <div class="daily-route-table-card__body">
+      <div class="daily-route-table-wrapper">
+        <table class="daily-route-table">
+          <thead>
+            <tr>
+              <th>ทะเปียนรถ</th>
+              <th>ชื่อคนขับ</th>
+              <th>ความจุขยะทั่วไป</th>
+              <th>ความจุขยะรีไซเคิล</th>
+              <th>ระยะทางทั้งหมดวิ่ง</th>
+              <th>ค่าน้ำมัน</th>
+              <th>รายละเอียด</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (route of mockRoutes; track route) {
+            <tr>
+              <td>{{ route.id }}</td>
+              <td>{{ route.driver }}</td>
+              <td>{{ route.fullCapacity }}</td>
+              <td>{{ route.currentCapacity }}</td>
+              <td>{{ route.distance }}</td>
+              <td>{{ route.cost }}</td>
+              <td>
+                <span class="daily-route-status-chip">
+                  ✓ {{ route.status }}
+                </span>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="daily-route-table-card__footer">
+      <div class="daily-route-table-card__footer-left">
+        Showing {{ currentPage }} to {{ itemsPerPage }} of
+        {{ totalItems }} records
+      </div>
+
+      <div class="daily-route-table-card__footer-right">
+        <div class="daily-route-table-card__page-size">
+          <span>Items per page:</span>
+          <select>
+            <option>3</option>
+            <option>5</option>
+            <option>10</option>
+          </select>
+        </div>
+
+        <span class="daily-route-table-card__range">
+          {{ currentPage }}-{{ itemsPerPage }} of {{ totalItems }}
+        </span>
+
+        <div class="daily-route-table-card__pager-buttons">
+          <button type="button" disabled>«</button>
+          <button type="button" disabled>‹</button>
+          <button type="button" disabled>›</button>
+          <button type="button" disabled>»</button>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,72 @@
+<div class="vehicle-form-page">
+  <h2 class="vehicle-form-title">
+    {{ id ? "แก้ไขข้อมูลรถ" : "เพิ่มรถใหม่" }}
+  </h2>
+
+  <form [formGroup]="form" class="vehicle-form">
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>ทะเบียนรถ*</mat-label>
+      <input matInput formControlName="vehicle_reg_num" placeholder="กข-1234" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>รุ่นรถ</mat-label>
+      <input
+        matInput
+        formControlName="vehicle_type"
+        placeholder="เช่น Isuzu NQR"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>สถานะ*</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="active">พร้อมใช้งาน</mat-option>
+        <mat-option value="in_maintenance">ซ่อมบำรุง</mat-option>
+        <mat-option value="decommissioned">ปลดประจำการ</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>ประเภทเชื้อเพลิง*</mat-label>
+      <mat-select formControlName="fuel_category">
+        <mat-option value="DIESEL">ดีเซล</mat-option>
+        <mat-option value="GASOLINE">เบนซิน</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>ความจุขยะทั่วไป (ลบ.ม.)*</mat-label>
+      <input matInput type="number" formControlName="regular_capacity" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>ความจุขยะรีไซเคิล (ลบ.ม.)*</mat-label>
+      <input matInput type="number" formControlName="recycle_capacity" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>ค่าเสื่อมราคา/ปี (บาท)*</mat-label>
+      <input matInput type="number" formControlName="depreciation_thb" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>URL รูปภาพ</mat-label>
+      <input matInput formControlName="image_url" placeholder="https://..." />
+    </mat-form-field>
+  </form>
+
+  <div class="vehicle-form-actions">
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="submit()"
+      [disabled]="loading()"
+    >
+      บันทึก
+    </button>
+    <button mat-stroked-button (click)="cancel()" [disabled]="loading()">
+      ยกเลิก
+    </button>
+  </div>
+</div>

@@ -1,0 +1,264 @@
+<div class="max-w-5xl mx-auto collection-point-form">
+  <!-- Header -->
+  <div class="form-header">
+    <div class="flex items-center gap-3 mb-4">
+      <button mat-icon-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h2 class="text-2xl font-semibold">
+        {{ isEditMode ? "แก้ไขข้อมูลจุดเก็บขยะ" : "เพิ่มจุดเก็บขยะใหม่" }}
+      </h2>
+    </div>
+  </div>
+
+  @if (loading()) {
+  <div class="flex items-center justify-center py-16">
+    <mat-spinner diameter="48" />
+  </div>
+  } @else {
+  <form [formGroup]="pointForm" (ngSubmit)="onSubmit()">
+    <!-- Title Card -->
+    <mat-card class="title-card">
+      <mat-card-content>
+        <div class="title-section">
+          <h3 class="point-title">
+            {{
+              isEditMode ? "หน้าหมู้บ้านประชาไปใส" : "ทำให้หมู้บ้านประชาไปใส"
+            }}
+          </h3>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Main Grid -->
+    <div class="form-grid">
+      <!-- Left Column: Image & Map -->
+      <div class="left-column">
+        <!-- Image Upload Card -->
+        <mat-card class="image-card">
+          <mat-card-content>
+            <label class="section-label">อัพโหลดรูปจุดเก็บขยะ</label>
+
+            @if (imagePreview()) {
+            <div class="image-preview-container">
+              <img [src]="imagePreview()" alt="Preview" class="point-image" />
+              <button
+                type="button"
+                mat-icon-button
+                class="remove-image-btn"
+                (click)="removeImage()"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+            } @else {
+            <div class="no-image">
+              <mat-icon>image</mat-icon>
+              <span>ไม่มีรูปภาพ</span>
+            </div>
+            }
+
+            <button
+              type="button"
+              mat-stroked-button
+              class="upload-btn"
+              (click)="fileInput.click()"
+            >
+              <mat-icon>upload</mat-icon>
+              เลือกไฟล์รูปใหม่
+            </button>
+            <input
+              #fileInput
+              type="file"
+              accept="image/*"
+              style="display: none"
+              (change)="onFileSelected($event)"
+            />
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Right Column: Form Fields -->
+      <div class="right-column">
+        <!-- Name Card -->
+        <mat-card class="info-card">
+          <mat-card-content>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>ชื่อจุดเก็บขยะ</mat-label>
+              <input
+                matInput
+                formControlName="point_name"
+                placeholder="กรอกชื่อจุด"
+              />
+              @if (pointForm.get('point_name')?.hasError('required') &&
+              pointForm.get('point_name')?.touched) {
+              <mat-error>กรุณากรอกชื่อจุดเก็บขยะ</mat-error>
+              }
+            </mat-form-field>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Coordinates Card -->
+        <mat-card class="info-card">
+          <mat-card-content>
+            <div class="coordinates-grid">
+              <mat-form-field appearance="outline">
+                <mat-label>ละติจูด</mat-label>
+                <input
+                  matInput
+                  formControlName="latitude"
+                  type="number"
+                  step="any"
+                  placeholder="0.000000"
+                />
+                @if (pointForm.get('latitude')?.hasError('required') &&
+                pointForm.get('latitude')?.touched) {
+                <mat-error>กรุณากรอกละติจูด</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>ลองจิจูด</mat-label>
+                <input
+                  matInput
+                  formControlName="longitude"
+                  type="number"
+                  step="any"
+                  placeholder="0.000000"
+                />
+                @if (pointForm.get('longitude')?.hasError('required') &&
+                pointForm.get('longitude')?.touched) {
+                <mat-error>กรุณากรอกลองจิจูด</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Capacity Card -->
+        <mat-card class="info-card capacity-card">
+          <mat-card-content>
+            <div class="capacity-grid">
+              <div class="capacity-item">
+                <mat-form-field appearance="outline">
+                  <mat-label>ความจุขยะทั่วไป</mat-label>
+                  <input
+                    matInput
+                    formControlName="regular_capacity"
+                    type="number"
+                    placeholder="0"
+                  />
+                  <span matTextSuffix>Kg.</span>
+                  @if (pointForm.get('regular_capacity')?.hasError('required')
+                  && pointForm.get('regular_capacity')?.touched) {
+                  <mat-error>กรุณากรอกความจุ</mat-error>
+                  } @if (pointForm.get('regular_capacity')?.hasError('min')) {
+                  <mat-error>ต้องมากกว่า 0</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="capacity-item recycle">
+                <mat-form-field appearance="outline">
+                  <mat-label>ความจุขยะรีไซเคิล</mat-label>
+                  <input
+                    matInput
+                    formControlName="recycle_capacity"
+                    type="number"
+                    placeholder="0"
+                  />
+                  <span matTextSuffix>Kg.</span>
+                  @if (pointForm.get('recycle_capacity')?.hasError('required')
+                  && pointForm.get('recycle_capacity')?.touched) {
+                  <mat-error>กรุณากรอกความจุ</mat-error>
+                  } @if (pointForm.get('recycle_capacity')?.hasError('min')) {
+                  <mat-error>ต้องมากกว่า 0</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Address Card -->
+      <mat-card class="info-card address-card full-width-card">
+        <mat-card-content>
+          <div class="info-row">
+            <mat-icon class="info-icon">location_on</mat-icon>
+            <div class="info-content">
+              <label>ที่อยู่จุดเก็บขยะ</label>
+              <textarea
+                matInput
+                formControlName="address"
+                rows="3"
+                placeholder="กรอกที่อยู่"
+                class="address-textarea"
+              ></textarea>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Bottom Side -->
+    <div class="bottom-side">
+      <!-- Problem Report Card -->
+      <mat-card class="info-card problem-card">
+        <mat-card-content>
+          <div class="problem-section">
+            <div class="problem-header">
+              <mat-icon class="warning-icon">warning</mat-icon>
+              <label>หมายเหตุ</label>
+            </div>
+            <textarea
+              matInput
+              formControlName="problem_reported"
+              rows="3"
+              placeholder="กรอกหมายเหตุปัญหา (ถ้ามี)"
+              class="problem-textarea"
+            ></textarea>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Status Card -->
+      <mat-card class="info-card status-card">
+        <mat-card-content>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>สถานะ</mat-label>
+            <mat-select formControlName="status">
+              <mat-option value="ACTIVE">พร้อมใช้งาน</mat-option>
+              <mat-option value="INACTIVE">ไม่พร้อมใช้งาน</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button
+        type="button"
+        mat-flat-button
+        class="btn-cancel"
+        (click)="goBack()"
+      >
+        ยกเลิก
+      </button>
+      <button
+        type="submit"
+        mat-flat-button
+        class="btn-submit"
+        [disabled]="pointForm.invalid || submitting()"
+      >
+        @if (submitting()) {
+        <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+        <span>{{ isEditMode ? "บันทึก" : "ยืนยัน" }}</span>
+        }
+      </button>
+    </div>
+  </form>
+  }
+</div>

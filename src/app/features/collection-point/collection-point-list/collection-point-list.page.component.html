@@ -1,0 +1,164 @@
+<div class="max-w-7xl mx-auto collection-point-list-page">
+  <!-- Header / Actions -->
+  <div
+    class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4"
+  >
+    <h2 class="text-xl md:text-2xl font-semibold">ข้อมูลจุดเก็บขยะ</h2>
+    <button mat-flat-button class="btn-primary" (click)="goCreate()">
+      <mat-icon class="me-2">add</mat-icon>
+      เพิ่มจุดเก็บขยะ
+    </button>
+  </div>
+
+  <!-- Filter bar: search + status + action button -->
+  <form class="filter-bar" (submit)="$event.preventDefault(); fetch()">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>รหัสจุดเก็บ</mat-label>
+      <mat-icon matPrefix>tag</mat-icon>
+      <input
+        matInput
+        placeholder="ค้นหาด้วยรหัส"
+        (input)="onSearchIdChange($any($event.target).value)"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>ชื่อจุดเก็บ</mat-label>
+      <mat-icon matPrefix>location_on</mat-icon>
+      <input
+        matInput
+        placeholder="ค้นหาด้วยชื่อ"
+        (input)="onSearchNameChange($any($event.target).value)"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>ที่อยู่</mat-label>
+      <mat-icon matPrefix>home</mat-icon>
+      <input
+        matInput
+        placeholder="ค้นหาด้วยที่อยู่"
+        (input)="onSearchAddressChange($any($event.target).value)"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="status-field">
+      <mat-label>สถานะ</mat-label>
+      <mat-select (valueChange)="onStatusChange($event)" [value]="status()">
+        <mat-option value="">ทั้งหมด</mat-option>
+        <mat-option value="ACTIVE">พร้อมใช้งาน</mat-option>
+        <mat-option value="INACTIVE">ไม่พร้อมใช้งาน</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button type="submit" mat-flat-button class="btn-primary">
+      <mat-icon>search</mat-icon>
+      <span>ค้นหา</span>
+    </button>
+  </form>
+
+  <!-- Loading -->
+  @if (loading()) {
+  <div class="flex items-center justify-center py-16">
+    <mat-spinner diameter="48" />
+  </div>
+  }
+
+  <!-- Empty state -->
+  @if (!loading() && data().length === 0) {
+  <div class="text-center py-20 text-gray-500">
+    <mat-icon class="!text-5xl !h-14 !w-14 mb-2">delete</mat-icon>
+    <div>ยังไม่มีข้อมูลจุดเก็บขยะในระบบ</div>
+  </div>
+  }
+
+  <!-- Table -->
+  @if (!loading() && data().length > 0) {
+  <div class="table-card">
+    <div class="table-scroll">
+      <table mat-table [dataSource]="data()" class="mat-elevation-z0">
+        <!-- ID -->
+        <ng-container matColumnDef="point_id">
+          <th mat-header-cell *matHeaderCellDef>รหัส</th>
+          <td mat-cell *matCellDef="let row">{{ row.point_id }}</td>
+        </ng-container>
+
+        <!-- Name -->
+        <ng-container matColumnDef="point_name">
+          <th mat-header-cell *matHeaderCellDef>ชื่อจุดเก็บขยะ</th>
+          <td mat-cell *matCellDef="let row">{{ row.point_name }}</td>
+        </ng-container>
+
+        <!-- Coordinates -->
+        <ng-container matColumnDef="coordinates">
+          <th mat-header-cell *matHeaderCellDef>ละติจูด/ลองจิจูด</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.latitude }}, {{ row.longitude }}
+          </td>
+        </ng-container>
+
+        <!-- Address -->
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef>ที่อยู่</th>
+          <td mat-cell *matCellDef="let row">{{ row.address }}</td>
+        </ng-container>
+
+        <!-- General Capacity -->
+        <ng-container matColumnDef="regular_capacity">
+          <th mat-header-cell *matHeaderCellDef>ความจุขยะทั่วไป</th>
+          <td mat-cell *matCellDef="let row">{{ row.regular_capacity }} kg</td>
+        </ng-container>
+
+        <!-- Recycle Capacity -->
+        <ng-container matColumnDef="recycle_capacity">
+          <th mat-header-cell *matHeaderCellDef>ความจุขยะรีไซเคิล</th>
+          <td mat-cell *matCellDef="let row">{{ row.recycle_capacity }} kg</td>
+        </ng-container>
+
+        <!-- Status -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>สถานะ</th>
+          <td mat-cell *matCellDef="let row">
+            <span
+              [class.text-green-600]="row.status === 'ACTIVE'"
+              [class.text-red-600]="row.status === 'INACTIVE'"
+            >
+              {{ statusLabel(row.status) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="text-right">
+            การจัดการ
+          </th>
+          <td mat-cell *matCellDef="let row" class="text-right">
+            <button
+              type="button"
+              mat-flat-button
+              class="btn-primary btn-detail"
+              (click)="view(row)"
+            >
+              <mat-icon>assignment</mat-icon>
+              <span>รายละเอียด</span>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      class="paginator"
+      [length]="total()"
+      [pageIndex]="pageIndex()"
+      [pageSize]="pageSize()"
+      [pageSizeOptions]="[5, 10, 20]"
+      (page)="onPageChange($event)"
+    />
+  </div>
+  }
+</div>

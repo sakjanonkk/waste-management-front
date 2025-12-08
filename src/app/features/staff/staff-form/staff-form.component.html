@@ -1,0 +1,108 @@
+<div class="staff-form-page">
+  <h2 class="staff-form-title">
+    {{ id ? "แก้ไขพนักงาน" : "เพิ่มพนักงานใหม่" }}
+  </h2>
+
+  <form [formGroup]="form" class="staff-form">
+    <!-- avatar + ปุ่มจัดการรูป -->
+    <div class="staff-form-header">
+      <div class="staff-form-header__avatar" aria-hidden="true">
+        <img
+          [src]="form.value.s_image || '/assets/images/worker-avatar.png'"
+          alt="avatar"
+        />
+      </div>
+
+      <div class="staff-form-header__controls">
+        <label class="staff-form-image-upload">
+          <input
+            type="file"
+            accept="image/*"
+            class="staff-form-image-upload__input"
+            (change)="onImageFileSelected($event)"
+          />
+          <span class="staff-form-image-upload__button">
+            <mat-icon class="staff-form-image-upload__icon">
+              add_circle
+            </mat-icon>
+            แก้ไขรูปภาพ
+          </span>
+        </label>
+
+        <button
+          type="button"
+          class="staff-form-image-remove"
+          (click)="removeImage()"
+        >
+          ลบรูปภาพ
+        </button>
+      </div>
+    </div>
+
+    <!-- ฟิลด์ฟอร์ม -->
+    <div class="staff-form-fields">
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>ประเภทพนักงาน</mat-label>
+        <mat-select formControlName="role">
+          <mat-option value="DRIVER">พนักงานขับรถ</mat-option>
+          <mat-option value="COLLECTOR">พนักงานเก็บขยะ</mat-option>
+          <mat-option value="ADMIN">พนักงานวางเเผนเส้นทาง</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>คำนำหน้า*</mat-label>
+        <input matInput formControlName="prefix" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>ชื่อ*</mat-label>
+        <input matInput formControlName="firstname" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>นามสกุล*</mat-label>
+        <input matInput formControlName="lastname" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>อีเมล*</mat-label>
+        <input matInput formControlName="email" />
+      </mat-form-field>
+
+      @if (!id) {
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>รหัสผ่าน*</mat-label>
+        <input matInput type="password" formControlName="password" />
+      </mat-form-field>
+      }
+
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>สถานะ</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="ACTIVE">ACTIVE</mat-option>
+          <mat-option value="INACTIVE">INACTIVE</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>เบอร์โทร</mat-label>
+        <input matInput formControlName="phone_number" />
+      </mat-form-field>
+    </div>
+  </form>
+
+  <div class="staff-form-actions">
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="submit()"
+      [disabled]="loading()"
+    >
+      บันทึก
+    </button>
+    <button mat-stroked-button (click)="cancel()" [disabled]="loading()">
+      ยกเลิก
+    </button>
+  </div>
+</div>
