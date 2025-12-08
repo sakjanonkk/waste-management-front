@@ -1,0 +1,143 @@
+<div class="staff-detail-page">
+  <!-- Action toolbar -->
+  <div
+    class="staff-detail-actions"
+    role="toolbar"
+    aria-label="การทำงานของโปรไฟล์"
+  >
+    <button
+      mat-flat-button
+      color="warn"
+      class="staff-detail-actions__btn staff-detail-actions__btn--delete"
+      type="button"
+      aria-label="ลบข้อมูล"
+      (click)="delete()"
+      [disabled]="loading() || !staff()"
+    >
+      <mat-icon>delete</mat-icon>
+      ลบข้อมูล
+    </button>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="staff-detail-actions__btn staff-detail-actions__btn--edit"
+      type="button"
+      aria-label="แก้ไขโปรไฟล์"
+      [routerLink]="['/staff', staff()?.id, 'edit']"
+      [disabled]="loading() || !staff()"
+    >
+      <mat-icon>edit</mat-icon>
+      แก้ไขโปรไฟล์
+    </button>
+  </div>
+
+  <div class="staff-detail-content">
+    <h3 class="staff-detail-title" id="profile-title">
+      โปรไฟล์ของ {{ staff()?.firstname }}
+    </h3>
+
+    @if (loading()) {
+    <div class="staff-detail-loading">
+      <mat-spinner diameter="48" />
+    </div>
+    } @if (!loading() && staff()) {
+    <mat-card class="staff-detail-card" aria-labelledby="profile-title">
+      <div class="staff-detail-card__avatar" aria-hidden="true">
+        <img [src]="getImageUrl()" alt="avatar" />
+      </div>
+
+      <mat-card-content class="staff-detail-card__content">
+        <div class="staff-detail-card__form-grid">
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>คำนำหน้าชื่อ*</mat-label>
+            <input
+              matInput
+              [value]="staff().prefix"
+              readonly
+              id="prefix"
+              aria-label="คำนำหน้าชื่อ"
+              tabindex="-1"
+              class="no-caret"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>ชื่อ*</mat-label>
+            <input
+              matInput
+              [value]="staff().firstname"
+              readonly
+              id="firstName"
+              aria-label="ชื่อ"
+              tabindex="-1"
+              class="no-caret"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>นามสกุล*</mat-label>
+            <input
+              matInput
+              [value]="staff().lastname"
+              readonly
+              id="lastName"
+              aria-label="นามสกุล"
+              tabindex="-1"
+              class="no-caret"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>ประเภทพนักงาน</mat-label>
+            <input
+              matInput
+              [value]="roleLabel()"
+              readonly
+              id="empType"
+              aria-label="ประเภทพนักงาน"
+              tabindex="-1"
+              class="no-caret"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>อีเมล*</mat-label>
+            <input
+              matInput
+              [value]="staff().email"
+              readonly
+              id="email"
+              aria-label="อีเมล"
+              tabindex="-1"
+              class="no-caret"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>เบอร์โทรศัพท์*</mat-label>
+            <input
+              matInput
+              [value]="staff().phone_number || ''"
+              readonly
+              id="phone"
+              aria-label="เบอร์โทรศัพท์"
+              tabindex="-1"
+              class="no-caret"
+            />
+          </mat-form-field>
+        </div>
+
+        <div class="staff-detail-card__actions">
+          <button mat-stroked-button type="button" (click)="back()">
+            <mat-icon class="staff-detail-card__back-icon">
+              arrow_back
+            </mat-icon>
+            กลับ
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    }
+  </div>
+</div>

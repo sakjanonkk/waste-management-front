@@ -1,0 +1,78 @@
+/* Theme variables (scoped to this page) */
+:host {
+  --brand-900: #1E4D3A; /* header/primary pill */
+  --brand-700: #2F6D54;
+  --brand-100: #F3F6F4; /* zebra */
+  --text-900: #1A1D1A;
+  --text-600: #4A5A50;
+  --border-200: #DCE4DF;
+  --white: #FFFFFF;
+}
+
+.collection-point-list-page { color: var(--text-900); }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+
+  .search-field, .status-field { min-width: 220px; flex: 1 1 240px; }
+
+  .mat-mdc-form-field {
+    --mat-form-field-outlined-outline-color: var(--border-200);
+    --mat-form-field-outlined-hover-outline-color: var(--brand-700);
+    --mat-form-field-outlined-focus-outline-color: var(--brand-900);
+    --mat-form-field-outlined-input-text-color: var(--text-900);
+    --mat-mdc-form-field-label-text-color: var(--text-600);
+  }
+
+  .mat-mdc-text-field-wrapper, .mat-mdc-form-field-infix { border-radius: 9999px !important; }
+
+  .btn-primary {
+    background-color: var(--brand-900);
+    color: var(--white);
+    border-radius: 9999px;
+    height: 40px;
+    padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color .15s ease, box-shadow .15s ease;
+    &:hover { background-color: var(--brand-700); }
+    &:focus-visible { outline: 3px solid color-mix(in oklab, var(--brand-900), white 60%); outline-offset: 2px; }
+  }
+}
+
+/* Table card */
+.table-card { border: 1px solid var(--border-200); border-radius: 12px; background: var(--white); overflow: hidden; }
+.table-scroll { overflow-x: auto; }
+
+table[mat-table] {
+  width: 100%; border-collapse: separate; border-spacing: 0;
+  th[mat-header-cell], td[mat-cell] { padding: 0 16px; height: 56px; vertical-align: middle; white-space: nowrap; }
+  th[mat-header-cell] { position: sticky; top: 0; z-index: 2; background: var(--brand-900); color: var(--white); font-weight: 600; }
+  tr[mat-row]:nth-child(even) td[mat-cell] { background: var(--brand-100); }
+  tr[mat-row]:hover td[mat-cell] { background: color-mix(in oklab, var(--brand-100), white 20%); }
+  .text-right { text-align: right; }
+  .btn-detail { height: 36px; padding: 0 14px; border-radius: 9999px; background: var(--brand-900); color: var(--white); &:hover { background: var(--brand-700); } &:focus-visible { outline: 3px solid color-mix(in oklab, var(--brand-900), white 60%); outline-offset: 2px; } }
+}
+
+.empty-row .empty-cell { text-align: center; padding: 24px; color: var(--text-600); }
+
+.paginator.mat-mdc-paginator {
+  color: var(--text-600); padding-inline: 8px;
+  .mat-mdc-form-field-infix, .mat-mdc-text-field-wrapper { border-radius: 9999px !important; }
+  .mat-mdc-form-field { width: 120px; }
+  .mat-mdc-icon-button { border: 1px solid var(--brand-700); border-radius: 9999px; }
+  .mat-mdc-paginator-range-label { color: var(--text-600); }
+}
+
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid color-mix(in oklab, var(--brand-900), white 60%); outline-offset: 2px; }
+
+@media (max-width: 768px) {
+  .filter-bar { gap: 10px; }
+  table[mat-table] th[mat-header-cell], table[mat-table] td[mat-cell] { padding: 0 12px; }
+}

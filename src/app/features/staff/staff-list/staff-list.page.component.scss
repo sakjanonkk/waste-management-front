@@ -1,0 +1,104 @@
+.staff-list-page {
+  background: #ffffff;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.staff-list-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  &__create-button {
+    align-self: flex-start;
+  }
+}
+
+.staff-list-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  &__search,
+  &__role {
+    min-width: 220px;
+  }
+
+  &__submit {
+    align-self: flex-end;
+  }
+}
+
+.staff-list-state {
+  text-align: center;
+  padding: 4rem 0;
+
+  &--empty {
+    color: rgba(0, 0, 0, 0.54);
+  }
+
+  &__icon {
+    font-size: 3rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.staff-list-table {
+
+  background: #ffffff;
+
+  &__scroll {
+    overflow-x: auto;
+  }
+
+  &__actions-header,
+  &__actions-cell {
+    text-align: right;
+  }
+
+  &__paginator {
+    margin-top: 0.75rem;
+  }
+}
+
+/* ปุ่ม reusable */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  &__icon {
+    font-size: 18px;
+  }
+
+  // .btn--primary ไม่จำเป็นถ้าใช้ color="primary"
+  &--sm {
+    padding-inline: 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+
+.staff-list-table .mat-mdc-table,
+.staff-list-table .mat-mdc-header-row,
+.staff-list-table .mat-mdc-row {
+  background-color: #ffffff;
+}

@@ -1,0 +1,78 @@
+/* ช่องค้นหา */
+.search-container {
+  margin-bottom: 1rem;
+}
+
+.search-field {
+  width: 100%;
+}
+
+/* Loading state */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 2rem 0;
+  color: rgba(0, 0, 0, 0.6);
+
+  &__icon {
+    font-size: 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* ตารางคนขับ */
+.table-container {
+  max-height: 360px;
+  overflow: auto;
+}
+
+.driver-table {
+  width: 100%;
+}
+
+/* ไอคอนเลือก driver */
+.select-icon {
+  cursor: pointer;
+  font-size: 20px;
+  vertical-align: middle;
+  color: rgba(0, 0, 0, 0.38);
+
+  &--selected {
+    color: #1976d2; /* primary-ish */
+  }
+}
+
+/* แถวที่ถูกเลือก */
+.selected-row {
+  background-color: #e3f2fd;
+}
+
+/* badge "ปัจจุบัน" */
+.current-badge {
+  margin-left: 0.5rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* badge ตำแหน่ง */
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  background-color: #ede7f6;
+  color: #5e35b1;
+}

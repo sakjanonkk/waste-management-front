@@ -1,0 +1,146 @@
+<div class="max-w-5xl mx-auto collection-point-detail">
+  <!-- Header -->
+  <div class="detail-header">
+    <div class="flex items-center gap-3 mb-4">
+      <button mat-icon-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h2 class="text-2xl font-semibold">รายละเอียดจุดเก็บขยะ</h2>
+    </div>
+
+    <div class="action-buttons">
+      <button mat-flat-button class="btn-edit" (click)="goEdit()">
+        <mat-icon>edit</mat-icon>
+        แก้ไขข้อมูล
+      </button>
+      <button mat-flat-button class="btn-delete">
+        <mat-icon>delete</mat-icon>
+        ปิดใช้งานจุด
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+  <div class="flex items-center justify-center py-16">
+    <mat-spinner diameter="48" />
+  </div>
+  } @if (!loading() && point()) {
+  <div class="detail-content">
+    <!-- Title Card -->
+    <mat-card class="title-card">
+      <mat-card-content>
+        <div class="title-section">
+          <h3 class="point-title">จุดเก็บขยะ: {{ point()!.point_name }}</h3>
+          <mat-chip [class]="statusClass(point()!.status)">
+            {{ statusLabel(point()!.status) }}
+          </mat-chip>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Main Grid -->
+    <div class="detail-grid">
+      <!-- Left Column: Image & Map -->
+      <div class="left-column">
+        <!-- Image Card -->
+        <mat-card class="image-card">
+          <mat-card-content>
+            @if (point()!.point_image) {
+            <img
+              [src]="point()!.point_image"
+              [alt]="point()!.point_name"
+              class="point-image"
+            />
+            } @else {
+            <div class="no-image">
+              <mat-icon>image</mat-icon>
+              <span>ไม่มีรูปภาพ</span>
+            </div>
+            }
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Address Card -->
+        <mat-card class="info-card address-card">
+          <mat-card-content>
+            <div class="info-row">
+              <mat-icon class="info-icon">location_on</mat-icon>
+              <div class="info-content">
+                <label>ที่อยู่</label>
+                <p>{{ point()!.address || "-" }}</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Right Column: Details -->
+      <div class="right-column">
+        <!-- Google Map Card (Placeholder) -->
+        <mat-card class="info-card map-card">
+          <mat-card-content>
+            <div class="map-placeholder">
+              <mat-icon>map</mat-icon>
+              <div class="map-info">
+                <p><strong>ละติจูด:</strong> {{ point()!.latitude }}</p>
+                <p><strong>ลองจิจูด:</strong> {{ point()!.longitude }}</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Capacity Card -->
+        <mat-card class="info-card capacity-card">
+          <mat-card-content>
+            <div class="capacity-grid">
+              <div class="capacity-item">
+                <div class="capacity-label">ความจุขยะทั่วไป</div>
+                <div class="capacity-value">
+                  {{ point()!.regular_capacity }} Kg.
+                </div>
+              </div>
+              <div class="capacity-item recycle">
+                <div class="capacity-label">ความจุขยะรีไซเคิล</div>
+                <div class="capacity-value">
+                  {{ point()!.recycle_capacity }} Kg.
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Bottom Side -->
+    <div class="bottom-side">
+      <!-- Problem Report Card -->
+      <mat-card class="info-card problem-card">
+        <mat-card-content>
+          <div class="problem-section">
+            <div class="problem-header">
+              <mat-icon class="warning-icon">warning</mat-icon>
+              <label>หมายเหตุปัญหา</label>
+            </div>
+            <p class="problem-text">
+              {{ point()!.problem_reported || "ไม่มีหมายเหตุปัญหาระบุไว้" }}
+            </p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Update Date Card -->
+      <mat-card class="info-card date-card">
+        <mat-card-content>
+          <div class="date-section">
+            <mat-icon class="info-icon">schedule</mat-icon>
+            <div class="date-content">
+              <label>แก้ไขล่าสุด</label>
+              <p class="date-value">18 ต.ค. 2568</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  }
+</div>

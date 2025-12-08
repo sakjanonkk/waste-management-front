@@ -1,0 +1,198 @@
+<div class="vehicle-list-page">
+  <!-- Header / Actions -->
+  <div class="vehicle-list-header">
+    <h2 class="vehicle-list-header__title">ข้อมูลยานพาหนะ</h2>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="btn vehicle-list-header__create-button"
+      (click)="goCreate()"
+    >
+      <mat-icon class="btn__icon">add</mat-icon>
+      เพิ่มรถ
+    </button>
+  </div>
+
+  <!-- Filter bar -->
+  <form
+    class="vehicle-list-filters"
+    (submit)="$event.preventDefault(); fetch()"
+  >
+    <mat-form-field
+      appearance="outline"
+      class="vehicle-list-filters__field vehicle-list-filters__field--search"
+    >
+      <mat-label>ค้นหาทะเบียนรถ</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        placeholder="ค้นหาทะเบียนรถ"
+        [(ngModel)]="searchReg"
+        name="searchReg"
+      />
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="outline"
+      class="vehicle-list-filters__field vehicle-list-filters__field--search"
+    >
+      <mat-label>ชื่อคนขับ</mat-label>
+      <mat-icon matPrefix>person</mat-icon>
+      <input
+        matInput
+        placeholder="ชื่อคนขับ"
+        [(ngModel)]="searchDriver"
+        name="searchDriver"
+      />
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="outline"
+      class="vehicle-list-filters__field vehicle-list-filters__field--status"
+    >
+      <mat-label>สถานะการใช้งาน</mat-label>
+      <mat-select [(ngModel)]="status" name="status">
+        <mat-option value="">ทั้งหมด</mat-option>
+        <mat-option value="AVAILABLE">พร้อมใช้งาน</mat-option>
+        <mat-option value="IN_USE">กำลังใช้งาน</mat-option>
+        <mat-option value="MAINTENANCE">ซ่อมบำรุง</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="outline"
+      class="vehicle-list-filters__field vehicle-list-filters__field--status"
+    >
+      <mat-label>ชนิดน้ำมัน</mat-label>
+      <mat-select [(ngModel)]="fuelCategory" name="fuelCategory">
+        <mat-option value="">ทั้งหมด</mat-option>
+        <mat-option value="DIESEL">ดีเซล</mat-option>
+        <mat-option value="GASOLINE">เบนซิน</mat-option>
+        <mat-option value="NGV">NGV</mat-option>
+        <mat-option value="ELECTRIC">ไฟฟ้า</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button
+      type="submit"
+      mat-flat-button
+      color="primary"
+      class="btn vehicle-list-filters__submit"
+    >
+      <mat-icon class="btn__icon">search</mat-icon>
+      <span>ค้นหา</span>
+    </button>
+  </form>
+
+  <!-- Loading -->
+  @if (loading()) {
+  <div class="vehicle-list-state vehicle-list-state--loading">
+    <mat-spinner diameter="48" />
+  </div>
+  }
+
+  <!-- Empty state -->
+  @if (!loading() && data().length === 0) {
+  <div class="vehicle-list-state vehicle-list-state--empty">
+    <mat-icon class="vehicle-list-state__icon">local_shipping</mat-icon>
+    <div>ยังไม่มีข้อมูลยานพาหนะในระบบ</div>
+  </div>
+  }
+
+  <!-- Table -->
+  @if (!loading() && data().length > 0) {
+  <div class="vehicle-list-table">
+    <div class="vehicle-list-table__scroll">
+      <table mat-table [dataSource]="data()" class="mat-elevation-z0">
+        <!-- Registration number -->
+        <ng-container matColumnDef="reg">
+          <th mat-header-cell *matHeaderCellDef>ทะเบียน</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.registration_number || row.vehicle_reg_num || '-' }}
+          </td>
+        </ng-container>
+
+        <!-- Driver -->
+        <ng-container matColumnDef="driver">
+          <th mat-header-cell *matHeaderCellDef>คนขับ</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.current_driver ? row.current_driver.prefix + ' ' +
+            row.current_driver.firstname + ' ' + row.current_driver.lastname :
+            '-' }}
+          </td>
+        </ng-container>
+
+        <!-- Regular capacity -->
+        <ng-container matColumnDef="regular">
+          <th mat-header-cell *matHeaderCellDef>ความจุขยะทั่วไป</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.regular_waste_capacity_kg || row.regular_capacity || 0 }}
+          </td>
+        </ng-container>
+
+        <!-- Recycle capacity -->
+        <ng-container matColumnDef="recycle">
+          <th mat-header-cell *matHeaderCellDef>ความจุขยะรีไซเคิล</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.recyclable_waste_capacity_kg || row.recycle_capacity || 0 }}
+          </td>
+        </ng-container>
+
+        <!-- Fuel -->
+        <ng-container matColumnDef="fuel">
+          <th mat-header-cell *matHeaderCellDef>ชนิดน้ำมัน</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.fuel_type || row.fuel_category || '-' }}
+          </td>
+        </ng-container>
+
+        <!-- Status -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>สถานะ</th>
+          <td mat-cell *matCellDef="let row">{{ statusLabel(row.status) }}</td>
+        </ng-container>
+
+        <!-- Actions -->
+        <ng-container matColumnDef="actions">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="vehicle-list-table__actions-header"
+          >
+            รายละเอียด
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let row"
+            class="vehicle-list-table__actions-cell"
+          >
+            <button
+              type="button"
+              mat-flat-button
+              color="primary"
+              class="btn btn--sm vehicle-list-table__detail-button"
+              (click)="view(row)"
+            >
+              <mat-icon class="btn__icon">assignment</mat-icon>
+              <span>รายละเอียด</span>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      class="vehicle-list-table__paginator"
+      [length]="total()"
+      [pageIndex]="pageIndex()"
+      [pageSize]="pageSize()"
+      [pageSizeOptions]="[5, 10, 20]"
+      (page)="onPageChange($event)"
+    />
+  </div>
+  }
+</div>

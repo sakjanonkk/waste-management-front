@@ -4,24 +4,24 @@
 @use "sass:map";
 @use "@angular/material" as mat;
 
-// Note: Color palettes are generated from primary: #6f528a, secondary: #665a6f, tertiary: #805157
+// Note: Color palettes are generated from primary: #0b6b3a (green theme matching home button)
 $_palettes: (
   primary: (
     0: #000000,
-    10: #280c42,
-    20: #3f2458,
-    25: #4a2f64,
-    30: #563a71,
-    35: #62467d,
-    40: #6f528a,
-    50: #896ba4,
-    60: #a484c0,
-    70: #bf9edc,
-    80: #dbb9f9,
-    90: #f0dbff,
-    95: #faecff,
-    98: #fff7fe,
-    99: #fffbff,
+    10: #002110,
+    20: #00381d,
+    25: #004325,
+    30: #0b6b3a,
+    35: #1a7d47,
+    40: #2a8f54,
+    50: #3fa865,
+    60: #55c177,
+    70: #6bda89,
+    80: #a3edba,
+    90: #c8f9d5,
+    95: #e6ffed,
+    98: #f5fff8,
+    99: #fafffe,
     100: #ffffff,
   ),
   secondary: (

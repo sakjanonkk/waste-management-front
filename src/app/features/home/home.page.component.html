@@ -1,0 +1,41 @@
+<section class="home">
+  <main class="home__main">
+    <section class="home__hero">
+      <div class="home__hero-inner">
+        <div class="home__hero-left">
+          <h1 class="home__title">ยินดีต้อนรับ เข้าสู่ WasteRoute</h1>
+          <button class="home__primary" (click)="onCalculateTodayRoute()">
+            คำนวณเส้นทางวันนี้
+          </button>
+        </div>
+
+        <div class="home__hero-right" aria-hidden="true">
+          <img
+            src="https://s359.thaicdn.net/pagebuilder/e58d050b-31ad-4f84-9ced-b6ed5e8bc5db.jpg"
+            alt="Waste sorting illustration"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="home__menu" aria-label="quick actions">
+      <div class="home__menu-scroll">
+        <button class="home__menu-item" (click)="onStaffList()">
+          รายชื่อพนักงาน
+        </button>
+        <button class="home__menu-item" (click)="onVehicleList()">
+          รายชื่อรถเก็บขยะ
+        </button>
+        <button class="home__menu-item" (click)="onCollectionPoints()">
+          รายชื่อจุดเก็บขยะ
+        </button>
+        <button class="home__menu-item" (click)="onCitizenRequests()">
+          คำร้องขอจากประชาชน
+        </button>
+        <button class="home__menu-item" (click)="onHistoryReports()">
+          รายงานการเก็บขยะย้อนหลัง
+        </button>
+      </div>
+    </section>
+  </main>
+</section>
