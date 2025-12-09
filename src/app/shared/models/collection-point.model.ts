@@ -1,20 +1,28 @@
 export interface CollectionPoint {
-  point_id: number;
-  point_name: string;
+  id: number;
+  name: string;
   latitude: number;
   longitude: number;
-  status: 'ACTIVE' | 'INACTIVE';
-  point_image?: string;
+  status: 'active' | 'inactive';
+  image?: string;
   address?: string;
   problem_reported?: string;
   regular_capacity: number;
   recycle_capacity: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface CollectionPointListResponse {
   success: boolean;
-  data: CollectionPoint[];
-  total: number;
+  data: {
+    collection_points: CollectionPoint[];
+    pagination: {
+      page: number;
+      per_page: number;
+      total: number;
+    };
+  };
 }
 
 export interface CollectionPointResponse {
