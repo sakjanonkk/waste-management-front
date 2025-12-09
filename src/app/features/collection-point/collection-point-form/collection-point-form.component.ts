@@ -70,19 +70,19 @@ export class CollectionPointFormComponent implements OnInit {
       next: (response) => {
         const point = response.data;
         this.pointForm.patchValue({
-          point_name: point.point_name,
+          point_name: point.name,
           address: point.address,
           latitude: point.latitude,
           longitude: point.longitude,
           regular_capacity: point.regular_capacity,
           recycle_capacity: point.recycle_capacity,
           problem_reported: point.problem_reported,
-          status: point.status,
-          point_image: point.point_image
+          status: point.status.toUpperCase(),
+          point_image: point.image
         });
         
-        if (point.point_image) {
-          this.imagePreview.set(point.point_image);
+        if (point.image) {
+          this.imagePreview.set(point.image);
         }
         
         this.loading.set(false);
@@ -125,15 +125,22 @@ export class CollectionPointFormComponent implements OnInit {
 
     const formData = this.pointForm.value;
 
-    // If there's a selected file, you might want to upload it first
-    // For now, we'll just use the preview URL or existing image URL
-    if (this.imagePreview()) {
-      formData.point_image = this.imagePreview();
-    }
+    // สร้าง payload ให้ตรงกับ server
+    const payload = {
+      address: formData.address,
+      image: this.imagePreview() || formData.point_image || '',
+      latitude: formData.latitude,
+      longitude: formData.longitude,
+      name: formData.point_name,
+      problem_reported: formData.problem_reported || '',
+      recycle_capacity: formData.recycle_capacity,
+      regular_capacity: formData.regular_capacity,
+      status: formData.status.toLowerCase() // แปลง 'ACTIVE' -> 'active'
+    };
 
     const request$ = this.isEditMode && this.pointId
-      ? this.collectionPointService.update(this.pointId, formData)
-      : this.collectionPointService.create(formData);
+      ? this.collectionPointService.update(this.pointId, payload)
+      : this.collectionPointService.create(payload);
 
     request$.subscribe({
       next: () => {

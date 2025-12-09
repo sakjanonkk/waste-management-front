@@ -1,14 +1,14 @@
-<div class="max-w-5xl mx-auto collection-point-detail">
+<div class="collection-point-detail">
   <!-- Header -->
-  <div class="detail-header">
-    <div class="flex items-center gap-3 mb-4">
+  <div class="collection-point-detail__header">
+    <div class="collection-point-detail__header-content">
       <button mat-icon-button (click)="goBack()">
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <h2 class="text-2xl font-semibold">รายละเอียดจุดเก็บขยะ</h2>
+      <h2 class="collection-point-detail__title">รายละเอียดจุดเก็บขยะ</h2>
     </div>
 
-    <div class="action-buttons">
+    <div class="collection-point-detail__actions">
       <button mat-flat-button class="btn-edit" (click)="goEdit()">
         <mat-icon>edit</mat-icon>
         แก้ไขข้อมูล
@@ -21,16 +21,16 @@
   </div>
 
   @if (loading()) {
-  <div class="flex items-center justify-center py-16">
+  <div class="collection-point-detail__loading">
     <mat-spinner diameter="48" />
   </div>
   } @if (!loading() && point()) {
-  <div class="detail-content">
+  <div class="collection-point-detail__content">
     <!-- Title Card -->
     <mat-card class="title-card">
       <mat-card-content>
         <div class="title-section">
-          <h3 class="point-title">จุดเก็บขยะ: {{ point()!.point_name }}</h3>
+          <h3 class="point-title">จุดเก็บขยะ: {{ point()!.name }}</h3>
           <mat-chip [class]="statusClass(point()!.status)">
             {{ statusLabel(point()!.status) }}
           </mat-chip>
@@ -45,10 +45,10 @@
         <!-- Image Card -->
         <mat-card class="image-card">
           <mat-card-content>
-            @if (point()!.point_image) {
+            @if (point()!.image) {
             <img
-              [src]="point()!.point_image"
-              [alt]="point()!.point_name"
+              [src]="point()!.image"
+              [alt]="point()!.name"
               class="point-image"
             />
             } @else {
@@ -135,7 +135,7 @@
             <mat-icon class="info-icon">schedule</mat-icon>
             <div class="date-content">
               <label>แก้ไขล่าสุด</label>
-              <p class="date-value">18 ต.ค. 2568</p>
+              <p class="date-value">{{ formatDate(point()!.updated_at) }}</p>
             </div>
           </div>
         </mat-card-content>
