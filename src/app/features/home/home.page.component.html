@@ -1,38 +1,60 @@
-<section class="home">
-  <main class="home__main">
-    <section class="home__hero">
-      <div class="home__hero-inner">
-        <div class="home__hero-left">
-          <h1 class="home__title">ยินดีต้อนรับ เข้าสู่ WasteRoute</h1>
-          <button class="home__primary" (click)="onCalculateTodayRoute()">
-            คำนวณเส้นทางวันนี้
-          </button>
-        </div>
+<div class="home-container">
 
-        <div class="home__hero-right" aria-hidden="true">
-          <img src="image/image_homepage.jpg" alt="Waste sorting illustration" />
-        </div>
-      </div>
-    </section>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>ยินดีต้อนรับสู่ <br><span>Waste Route</span></h1>
+      <p>ระบบจัดการเส้นทางสำหรับการจัดเก็บขยะที่มีประสิทธิภาพ</p>
 
-    <section class="home__menu" aria-label="quick actions">
-      <div class="home__menu-scroll">
-        <button class="home__menu-item" (click)="onStaffList()">
-          รายชื่อพนักงาน
-        </button>
-        <button class="home__menu-item" (click)="onVehicleList()">
-          รายชื่อรถเก็บขยะ
-        </button>
-        <button class="home__menu-item" (click)="onCollectionPoints()">
-          รายชื่อจุดเก็บขยะ
-        </button>
-        <button class="home__menu-item" (click)="onCitizenRequests()">
-          คำร้องขอจากประชาชน
-        </button>
-        <button class="home__menu-item" (click)="onHistoryReports()">
-          รายงานการเก็บขยะย้อนหลัง
-        </button>
+      <button class="cta-button" (click)="onCalculateTodayRoute()">
+        <mat-icon>route</mat-icon>
+        คำนวณเส้นทางวันนี้
+      </button>
+    </div>
+
+    <div class="hero-image">
+      <img src="image/image_homepage.jpg" alt="Waste Management Illustration">
+    </div>
+  </section>
+
+  <!-- Quick Actions Grid -->
+  <section class="menu-grid">
+
+    <div class="menu-card" (click)="onStaffList()">
+      <div class="icon-wrapper">
+        <mat-icon>people</mat-icon>
       </div>
-    </section>
-  </main>
-</section>
+      <span class="card-title">รายชื่อพนักงาน</span>
+    </div>
+
+    <div class="menu-card" (click)="onVehicleList()">
+      <div class="icon-wrapper">
+        <mat-icon>local_shipping</mat-icon>
+      </div>
+      <span class="card-title">รถเก็บขยะ</span>
+    </div>
+
+    <div class="menu-card" (click)="onCollectionPoints()">
+      <div class="icon-wrapper">
+        <mat-icon>location_on</mat-icon>
+      </div>
+      <span class="card-title">จุดเก็บขยะ</span>
+    </div>
+
+    <div class="menu-card" (click)="onCitizenRequests()">
+      <div class="icon-wrapper">
+        <mat-icon>assignment</mat-icon>
+      </div>
+      <span class="card-title">คำร้องเรียน</span>
+    </div>
+
+    <div class="menu-card" (click)="onHistoryReports()">
+      <div class="icon-wrapper">
+        <mat-icon>history</mat-icon>
+      </div>
+      <span class="card-title">ประวัติการทำงาน</span>
+    </div>
+
+  </section>
+
+</div>
