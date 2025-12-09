@@ -1,7 +1,34 @@
 .collection-point-form {
+  max-width: 80rem;
+  margin: 0 auto;
   padding: 1.5rem;
 
   // Header Section
+  &__header {
+    margin-bottom: 1.5rem;
+  }
+
+  &__header-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 0;
+  }
+
+  // Header Section (old)
   .form-header {
     margin-bottom: 1.5rem;
   }

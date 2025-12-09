@@ -1,7 +1,66 @@
 .collection-point-detail {
+  max-width: 80rem;
+  margin: 0 auto;
   padding: 1.5rem;
 
-  // Header Section
+  // Header Section (BEM)
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  &__header-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+
+    .btn-edit {
+      background-color: #f59e0b;
+      color: white;
+      
+      &:hover {
+        background-color: #d97706;
+      }
+    }
+
+    .btn-delete {
+      background-color: #ef4444;
+      color: white;
+      
+      &:hover {
+        background-color: #dc2626;
+      }
+    }
+  }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 0;
+  }
+
+  &__content {
+    // Content styles
+  }
+
+  // Header Section (old - keep for compatibility)
   .detail-header {
     display: flex;
     justify-content: space-between;

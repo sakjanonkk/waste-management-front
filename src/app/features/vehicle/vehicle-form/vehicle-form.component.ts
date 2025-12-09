@@ -41,6 +41,9 @@ export class VehicleFormComponent {
     image_url: [''],
   });
 
+  // เก็บไฟล์จริงไว้ส่งไป backend
+  selectedImageFile: File | null = null;
+
   constructor() {
     if (this.isBrowser && this.id) {
       this.loading.set(true);
@@ -120,5 +123,32 @@ export class VehicleFormComponent {
 
   cancel() {
     this.router.navigate(['/vehicle']);
+  }
+
+  // ----- Image handlers -----
+  onImageFileSelected(evt: Event) {
+    const input = evt.target as HTMLInputElement;
+    const file = input?.files?.[0];
+    if (!file) return;
+    
+    // เก็บไฟล์จริงไว้ส่งไป backend
+    this.selectedImageFile = file;
+    
+    // แปลงเป็น data URL เพื่อแสดง preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.form.patchValue({ image_url: reader.result as string });
+      this.form.markAsDirty();
+    };
+    reader.readAsDataURL(file);
+    
+    // reset ค่าเดิมของ input เพื่อให้เลือกไฟล์เดิมซ้ำได้
+    input.value = '';
+  }
+
+  removeImage() {
+    this.selectedImageFile = null;
+    this.form.patchValue({ image_url: '' });
+    this.form.markAsDirty();
   }
 }
