@@ -57,17 +57,31 @@ export class CollectionPointDetailComponent implements OnInit {
   }
 
   goEdit() {
-    const id = this.point()?.point_id;
+    const id = this.point()?.id;
     if (id) {
       this.router.navigate(['/collection-point', id, 'edit']);
     }
   }
 
   statusLabel(status: string): string {
-    return status === 'ACTIVE' ? 'พร้อมใช้งาน' : 'ไม่พร้อมใช้งาน';
+    return status === 'active' ? 'พร้อมใช้งาน' : 'ไม่พร้อมใช้งาน';
   }
 
   statusClass(status: string): string {
-    return status === 'ACTIVE' ? 'status-active' : 'status-inactive';
+    return status === 'active' ? 'status-active' : 'status-inactive';
+  }
+
+  formatDate(dateString?: string): string {
+    if (!dateString) return '-';
+    
+    const date = new Date(dateString);
+    const thaiMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 
+                        'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+    
+    const day = date.getDate();
+    const month = thaiMonths[date.getMonth()];
+    const year = date.getFullYear() + 543; // แปลงเป็น พ.ศ.
+    
+    return `${day} ${month} ${year}`;
   }
 }

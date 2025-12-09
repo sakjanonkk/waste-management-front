@@ -15,14 +15,18 @@ export class HomePageComponent {
   private router = inject(Router);
 
   // click handlers (empty by design)
-  onCalculateTodayRoute(): void {}
+  onCalculateTodayRoute(): void {
+    this.router.navigate(['/daily-route']);
+  }
   onStaffList(): void {
     this.router.navigate(['/staff']);
   }
   onVehicleList(): void {
     this.router.navigate(['/vehicle']);
   }
-  onCollectionPoints(): void {}
+  onCollectionPoints(): void {
+    this.router.navigate(['/collection-point']);
+  }
   onCitizenRequests(): void {}
   onHistoryReports(): void {}
 }

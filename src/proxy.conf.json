@@ -11,9 +11,9 @@
     "changeOrigin": true,
     "logLevel": "debug"
   },
-  "/api/v1/collection_point": {
-    "target": "http://localhost:4000",
-    "secure": false,
+  "/api/v1/collection-points": {
+    "target": "https://waste.mysterchat.com",
+    "secure": true,
     "changeOrigin": true,
     "logLevel": "debug"
   },
