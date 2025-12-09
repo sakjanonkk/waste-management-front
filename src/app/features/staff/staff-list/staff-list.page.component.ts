@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 
 import { StaffService } from '../../../core/services/staff/staff.service';
 import { Staff, StaffRole } from '../../../shared/models/staff.model';
+import { FormsModule } from '@angular/forms';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -36,6 +37,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatSelectModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    FormsModule,
   ],
   templateUrl: './staff-list.page.component.html',
   styleUrl: './staff-list.page.component.scss',
