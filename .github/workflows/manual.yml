@@ -21,7 +21,7 @@ jobs:
               "branch": "${{ github.ref_name }}",
               "commit": "${{ github.sha }}",
               "author": "${{ github.actor }}",
-              `message": "Build Frontend`
+              "message": "Build Frontend"
             }' \
             http://43.229.135.49:8888/deploy
 
