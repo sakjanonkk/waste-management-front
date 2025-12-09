@@ -3,29 +3,24 @@
   <div class="staff-list-header">
     <h2 class="staff-list-header__title">ข้อมูลพนักงาน</h2>
 
-    <button
-      mat-flat-button
-      color="primary"
-      class="btn staff-list-header__create-button"
-      (click)="goCreate()"
-      type="button"
-    >
+    <button mat-flat-button color="primary" class="btn staff-list-header__create-button" (click)="goCreate()"
+      type="button">
       <mat-icon class="btn__icon">add</mat-icon>
       เพิ่มพนักงาน
     </button>
   </div>
 
   <!-- Filter bar -->
-  <form class="staff-list-filters" (submit)="$event.preventDefault()">
+  <div class="staff-list-filters">
     <mat-form-field appearance="outline" class="staff-list-filters__search">
       <mat-label>ค้นหาพนักงาน</mat-label>
       <mat-icon matPrefix>search</mat-icon>
-      <input matInput (input)="onSearchChange($any($event.target).value)" />
+      <input matInput [ngModel]="search()" (ngModelChange)="onSearchChange($event)" placeholder="ค้นหาชื่อ..." />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="staff-list-filters__role">
       <mat-label>ประเภทพนักงาน</mat-label>
-      <mat-select (valueChange)="onRoleChange($event)" [value]="role()">
+      <mat-select [ngModel]="role()" (ngModelChange)="onRoleChange($event)">
         <mat-option value="">ทั้งหมด</mat-option>
         <mat-option value="DRIVER">พนักงานขับรถ</mat-option>
         <mat-option value="COLLECTOR">พนักงานเก็บขยะ</mat-option>
@@ -33,16 +28,11 @@
       </mat-select>
     </mat-form-field>
 
-    <button
-      type="submit"
-      mat-flat-button
-      color="primary"
-      class="btn staff-list-filters__submit"
-    >
+    <button type="button" mat-flat-button color="primary" class="btn staff-list-filters__submit" (click)="fetch()">
       <mat-icon class="btn__icon">search</mat-icon>
       <span>ค้นหา</span>
     </button>
-  </form>
+  </div>
 
   <!-- Loading -->
   @if (loading()) {
@@ -100,25 +90,12 @@
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="staff-list-table__actions-header"
-          >
+          <th mat-header-cell *matHeaderCellDef class="staff-list-table__actions-header">
             การจัดการ
           </th>
-          <td
-            mat-cell
-            *matCellDef="let row"
-            class="staff-list-table__actions-cell"
-          >
-            <button
-              type="button"
-              mat-flat-button
-              color="primary"
-              class="btn btn--sm staff-list-table__detail-button"
-              (click)="view(row)"
-            >
+          <td mat-cell *matCellDef="let row" class="staff-list-table__actions-cell">
+            <button type="button" mat-flat-button color="primary" class="btn btn--sm staff-list-table__detail-button"
+              (click)="view(row)">
               <mat-icon class="btn__icon">assignment</mat-icon>
               <span>รายละเอียด</span>
             </button>
@@ -130,14 +107,8 @@
       </table>
     </div>
 
-    <mat-paginator
-      class="staff-list-table__paginator"
-      [length]="total()"
-      [pageIndex]="pageIndex()"
-      [pageSize]="pageSize()"
-      [pageSizeOptions]="[5, 10, 20]"
-      (page)="onPageChange($event)"
-    ></mat-paginator>
+    <mat-paginator class="staff-list-table__paginator" [length]="total()" [pageIndex]="pageIndex()"
+      [pageSize]="pageSize()" [pageSizeOptions]="[5, 10, 20]" (page)="onPageChange($event)"></mat-paginator>
   </div>
   }
 </div>
