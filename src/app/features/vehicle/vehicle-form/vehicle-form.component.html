@@ -1,72 +1,138 @@
 <div class="vehicle-form-page">
   <h2 class="vehicle-form-title">
-    {{ id ? "แก้ไขข้อมูลรถ" : "เพิ่มรถใหม่" }}
+    {{ id ? "แก้ไขรายละเอียดของรถเก็บขยะ" : "เพิ่มรายละเอียดของรถเก็บขยะ" }}
   </h2>
 
   <form [formGroup]="form" class="vehicle-form">
-    <mat-form-field appearance="outline" floatLabel="always">
-      <mat-label>ทะเบียนรถ*</mat-label>
-      <input matInput formControlName="vehicle_reg_num" placeholder="กข-1234" />
-    </mat-form-field>
+    <!-- Main Grid: Left + Right columns -->
+    <div class="vehicle-form-grid">
+      <!-- Left Column: Image Upload -->
+      <div class="vehicle-form-left">
+        <div class="vehicle-form-image-section">
+          <label class="vehicle-form-image-label">อัพโหลดรูปถุงรถเก็บขยะ</label>
 
-    <mat-form-field appearance="outline" floatLabel="always">
-      <mat-label>รุ่นรถ</mat-label>
-      <input
-        matInput
-        formControlName="vehicle_type"
-        placeholder="เช่น Isuzu NQR"
-      />
-    </mat-form-field>
+          <div class="vehicle-form-image-preview">
+            @if (form.value.image_url) {
+            <img
+              [src]="form.value.image_url"
+              alt="Vehicle preview"
+              class="vehicle-image"
+            />
+            } @else {
+            <div class="vehicle-image-placeholder">
+              <mat-icon>image</mat-icon>
+              <span>อัพโหลดไฟล์</span>
+            </div>
+            }
+          </div>
 
-    <mat-form-field appearance="outline" floatLabel="always">
-      <mat-label>สถานะ*</mat-label>
-      <mat-select formControlName="status">
-        <mat-option value="active">พร้อมใช้งาน</mat-option>
-        <mat-option value="in_maintenance">ซ่อมบำรุง</mat-option>
-        <mat-option value="decommissioned">ปลดประจำการ</mat-option>
-      </mat-select>
-    </mat-form-field>
+          <button
+            type="button"
+            mat-stroked-button
+            class="vehicle-form-upload-btn"
+            (click)="fileInput.click()"
+          >
+            <mat-icon>upload</mat-icon>
+            เลือกไฟล์รูปใหม่
+          </button>
+          <input
+            #fileInput
+            type="file"
+            accept="image/*"
+            style="display: none"
+            (change)="onImageFileSelected($event)"
+          />
+        </div>
+      </div>
 
-    <mat-form-field appearance="outline" floatLabel="always">
-      <mat-label>ประเภทเชื้อเพลิง*</mat-label>
-      <mat-select formControlName="fuel_category">
-        <mat-option value="DIESEL">ดีเซล</mat-option>
-        <mat-option value="GASOLINE">เบนซิน</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <!-- Right Column: Form Fields -->
+      <div class="vehicle-form-right">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>เลขทะเบียนรถ</mat-label>
+          <input
+            matInput
+            formControlName="vehicle_reg_num"
+            placeholder="กข-1234"
+          />
+        </mat-form-field>
 
-    <mat-form-field appearance="outline" floatLabel="always">
-      <mat-label>ความจุขยะทั่วไป (ลบ.ม.)*</mat-label>
-      <input matInput type="number" formControlName="regular_capacity" />
-    </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>รุ่นรถ</mat-label>
+          <input
+            matInput
+            formControlName="vehicle_type"
+            placeholder="เช่น Isuzu NQR"
+          />
+        </mat-form-field>
 
-    <mat-form-field appearance="outline" floatLabel="always">
-      <mat-label>ความจุขยะรีไซเคิล (ลบ.ม.)*</mat-label>
-      <input matInput type="number" formControlName="recycle_capacity" />
-    </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>ประเภทเชื้อเพลิง</mat-label>
+          <mat-select formControlName="fuel_category">
+            <mat-option value="DIESEL">ดีเซล</mat-option>
+            <mat-option value="GASOLINE">เบนซิน</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-    <mat-form-field appearance="outline" floatLabel="always">
-      <mat-label>ค่าเสื่อมราคา/ปี (บาท)*</mat-label>
-      <input matInput type="number" formControlName="depreciation_thb" />
-    </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>ค่าเสื่อมราคา/ปี (บาท)</mat-label>
+          <input matInput type="number" formControlName="depreciation_thb" />
+        </mat-form-field>
+      </div>
+    </div>
 
-    <mat-form-field appearance="outline" floatLabel="always">
-      <mat-label>URL รูปภาพ</mat-label>
-      <input matInput formControlName="image_url" placeholder="https://..." />
-    </mat-form-field>
+    <!-- Bottom Section: Full-width fields -->
+    <div class="vehicle-form-bottom">
+      <h3 class="vehicle-form-section-title">รายละเอียดคนขั้น</h3>
+
+      <div class="vehicle-form-capacity-grid">
+        <div class="capacity-field capacity-field--regular">
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>ความจุขยะทั่วไป</mat-label>
+            <input matInput type="number" formControlName="regular_capacity" />
+            <span matTextSuffix>ลบ.</span>
+          </mat-form-field>
+        </div>
+
+        <div class="capacity-field capacity-field--recycle">
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>ความจุขยะรีไซเคิล</mat-label>
+            <input matInput type="number" formControlName="recycle_capacity" />
+            <span matTextSuffix>ลบ.</span>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <mat-form-field
+        appearance="outline"
+        floatLabel="always"
+        class="status-field"
+      >
+        <mat-label>สถานะ</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="active">พร้อมใช้งาน</mat-option>
+          <mat-option value="in_maintenance">ซ่อมบำรุง</mat-option>
+          <mat-option value="decommissioned">ปลดประจำการ</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </form>
 
   <div class="vehicle-form-actions">
     <button
       mat-flat-button
-      color="primary"
+      class="btn-cancel"
+      (click)="cancel()"
+      [disabled]="loading()"
+    >
+      ยกเลิก
+    </button>
+    <button
+      mat-flat-button
+      class="btn-submit"
       (click)="submit()"
       [disabled]="loading()"
     >
-      บันทึก
-    </button>
-    <button mat-stroked-button (click)="cancel()" [disabled]="loading()">
-      ยกเลิก
+      ยืนยัน
     </button>
   </div>
 </div>

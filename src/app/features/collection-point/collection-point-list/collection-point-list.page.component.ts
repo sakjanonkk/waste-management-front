@@ -52,7 +52,7 @@ export class CollectionPointListPageComponent {
   pageIndex = signal<number>(0);
   pageSize = signal<number>(10);
 
-  displayedColumns = ['point_id', 'point_name', 'coordinates', 'address', 'regular_capacity', 'recycle_capacity', 'status', 'actions'];
+  displayedColumns = ['name', 'coordinates', 'address', 'regular_capacity', 'recycle_capacity', 'status', 'actions'];
 
   constructor() {
     if (this.isBrowser) {
@@ -98,20 +98,21 @@ export class CollectionPointListPageComponent {
   this.loading.set(true);
   this.error.set(null);
 
-  this.collectionPointService.getAll().subscribe({
+  // ส่ง page และ per_page ไปด้วย (page เริ่มจาก 1)
+  this.collectionPointService.getAll(this.pageIndex() + 1, this.pageSize()).subscribe({
     next: (response) => {
-      // กรองข้อมูลตาม filter
-      let filteredData: CollectionPoint[] = response.data;
+      // ดึงข้อมูลจาก collection_points
+      let filteredData: CollectionPoint[] = response.data.collection_points;
 
       if (this.searchId()) {
         filteredData = filteredData.filter((item: CollectionPoint) =>
-          item.point_id.toString().includes(this.searchId())
+          item.id.toString().includes(this.searchId())
         );
       }
 
       if (this.searchName()) {
         filteredData = filteredData.filter((item: CollectionPoint) =>
-          item.point_name.toLowerCase().includes(this.searchName().toLowerCase())
+          item.name.toLowerCase().includes(this.searchName().toLowerCase())
         );
       }
 
@@ -128,7 +129,7 @@ export class CollectionPointListPageComponent {
       }
 
       this.data.set(filteredData);
-      this.total.set(filteredData.length);
+      this.total.set(response.data.pagination.total);
       this.loading.set(false);
     },
     error: () => {
@@ -144,24 +145,24 @@ export class CollectionPointListPageComponent {
 
   // ฟังก์ชันสำหรับแก้ไข
   goEdit(row: CollectionPoint) {
-    this.router.navigate(["/collection-point", row.point_id, "edit"]);
+    this.router.navigate(["/collection-point", row.id, "edit"]);
   }
 
   // ฟังก์ชันสำหรับดูรายละเอียด
   view(row: CollectionPoint) {
-    this.router.navigate(["/collection-point", row.point_id]);
+    this.router.navigate(["/collection-point", row.id]);
   }
 
   // ฟังก์ชันสำหรับลบ
   delete(row: CollectionPoint) {
-    if (!confirm(`ต้องการลบจุดเก็บขยะ ${row.point_name}?`)) return;
+    if (!confirm(`ต้องการลบจุดเก็บขยะ ${row.name}?`)) return;
     // TODO: เรียก service ลบข้อมูล
     this.snack.open("ลบสำเร็จ", "ปิด", { duration: 2000 });
     this.fetch();
   }
 
   // mapping status code to Thai label
-  statusLabel(status: 'ACTIVE' | 'INACTIVE'): string {
-    return status === 'ACTIVE' ? 'พร้อมใช้งาน' : 'ไม่พร้อมใช้งาน';
+  statusLabel(status: 'active' | 'inactive'): string {
+    return status === 'active' ? 'พร้อมใช้งาน' : 'ไม่พร้อมใช้งาน';
   }
 }

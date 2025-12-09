@@ -126,7 +126,7 @@ export class VehicleListPage {
 
   statusLabel(s: VehicleStatus | string | ''): string {
     const statusUpper = (s || '').toUpperCase();
-    if (statusUpper === 'AVAILABLE') return 'พร้อมใช้งาน';
+    if (statusUpper === 'AVAILABLE' || statusUpper === 'ACTIVE') return 'พร้อมใช้งาน';
     if (statusUpper === 'IN_USE') return 'กำลังใช้งาน';
     if (statusUpper === 'MAINTENANCE') return 'ซ่อมบำรุง';
     return '-';
