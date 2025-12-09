@@ -1,35 +1,22 @@
-<div class="max-w-5xl mx-auto collection-point-form">
+<div class="collection-point-form">
   <!-- Header -->
-  <div class="form-header">
-    <div class="flex items-center gap-3 mb-4">
+  <div class="collection-point-form__header">
+    <div class="collection-point-form__header-content">
       <button mat-icon-button (click)="goBack()">
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <h2 class="text-2xl font-semibold">
+      <h2 class="collection-point-form__title">
         {{ isEditMode ? "แก้ไขข้อมูลจุดเก็บขยะ" : "เพิ่มจุดเก็บขยะใหม่" }}
       </h2>
     </div>
   </div>
 
   @if (loading()) {
-  <div class="flex items-center justify-center py-16">
+  <div class="collection-point-form__loading">
     <mat-spinner diameter="48" />
   </div>
   } @else {
   <form [formGroup]="pointForm" (ngSubmit)="onSubmit()">
-    <!-- Title Card -->
-    <mat-card class="title-card">
-      <mat-card-content>
-        <div class="title-section">
-          <h3 class="point-title">
-            {{
-              isEditMode ? "หน้าหมู้บ้านประชาไปใส" : "ทำให้หมู้บ้านประชาไปใส"
-            }}
-          </h3>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
     <!-- Main Grid -->
     <div class="form-grid">
       <!-- Left Column: Image & Map -->

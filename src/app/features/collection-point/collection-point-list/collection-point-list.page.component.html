@@ -1,18 +1,27 @@
-<div class="max-w-7xl mx-auto collection-point-list-page">
+<div class="collection-point-list-page">
   <!-- Header / Actions -->
-  <div
-    class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4"
-  >
-    <h2 class="text-xl md:text-2xl font-semibold">ข้อมูลจุดเก็บขยะ</h2>
-    <button mat-flat-button class="btn-primary" (click)="goCreate()">
-      <mat-icon class="me-2">add</mat-icon>
+  <div class="collection-point-list-header">
+    <h2 class="collection-point-list-header__title">ข้อมูลจุดเก็บขยะ</h2>
+    <button
+      mat-flat-button
+      color="primary"
+      class="btn collection-point-list-header__create-button"
+      (click)="goCreate()"
+    >
+      <mat-icon class="btn__icon">add</mat-icon>
       เพิ่มจุดเก็บขยะ
     </button>
   </div>
 
-  <!-- Filter bar: search + status + action button -->
-  <form class="filter-bar" (submit)="$event.preventDefault(); fetch()">
-    <mat-form-field appearance="outline" class="search-field">
+  <!-- Filter bar -->
+  <form
+    class="collection-point-list-filters"
+    (submit)="$event.preventDefault(); fetch()"
+  >
+    <mat-form-field
+      appearance="outline"
+      class="collection-point-list-filters__field"
+    >
       <mat-label>รหัสจุดเก็บ</mat-label>
       <mat-icon matPrefix>tag</mat-icon>
       <input
@@ -22,7 +31,10 @@
       />
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="search-field">
+    <mat-form-field
+      appearance="outline"
+      class="collection-point-list-filters__field"
+    >
       <mat-label>ชื่อจุดเก็บ</mat-label>
       <mat-icon matPrefix>location_on</mat-icon>
       <input
@@ -32,7 +44,10 @@
       />
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="search-field">
+    <mat-form-field
+      appearance="outline"
+      class="collection-point-list-filters__field"
+    >
       <mat-label>ที่อยู่</mat-label>
       <mat-icon matPrefix>home</mat-icon>
       <input
@@ -42,7 +57,10 @@
       />
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="status-field">
+    <mat-form-field
+      appearance="outline"
+      class="collection-point-list-filters__field"
+    >
       <mat-label>สถานะ</mat-label>
       <mat-select (valueChange)="onStatusChange($event)" [value]="status()">
         <mat-option value="">ทั้งหมด</mat-option>
@@ -51,42 +69,41 @@
       </mat-select>
     </mat-form-field>
 
-    <button type="submit" mat-flat-button class="btn-primary">
-      <mat-icon>search</mat-icon>
+    <button
+      type="submit"
+      mat-flat-button
+      color="primary"
+      class="btn collection-point-list-filters__submit"
+    >
+      <mat-icon class="btn__icon">search</mat-icon>
       <span>ค้นหา</span>
     </button>
   </form>
 
   <!-- Loading -->
   @if (loading()) {
-  <div class="flex items-center justify-center py-16">
+  <div class="collection-point-list-state collection-point-list-state--loading">
     <mat-spinner diameter="48" />
   </div>
   }
 
   <!-- Empty state -->
   @if (!loading() && data().length === 0) {
-  <div class="text-center py-20 text-gray-500">
-    <mat-icon class="!text-5xl !h-14 !w-14 mb-2">delete</mat-icon>
+  <div class="collection-point-list-state collection-point-list-state--empty">
+    <mat-icon class="collection-point-list-state__icon">delete</mat-icon>
     <div>ยังไม่มีข้อมูลจุดเก็บขยะในระบบ</div>
   </div>
   }
 
   <!-- Table -->
   @if (!loading() && data().length > 0) {
-  <div class="table-card">
-    <div class="table-scroll">
+  <div class="collection-point-list-table">
+    <div class="collection-point-list-table__scroll">
       <table mat-table [dataSource]="data()" class="mat-elevation-z0">
-        <!-- ID -->
-        <ng-container matColumnDef="point_id">
-          <th mat-header-cell *matHeaderCellDef>รหัส</th>
-          <td mat-cell *matCellDef="let row">{{ row.point_id }}</td>
-        </ng-container>
-
         <!-- Name -->
-        <ng-container matColumnDef="point_name">
+        <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>ชื่อจุดเก็บขยะ</th>
-          <td mat-cell *matCellDef="let row">{{ row.point_name }}</td>
+          <td mat-cell *matCellDef="let row">{{ row.name }}</td>
         </ng-container>
 
         <!-- Coordinates -->
@@ -118,29 +135,31 @@
         <!-- Status -->
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef>สถานะ</th>
-          <td mat-cell *matCellDef="let row">
-            <span
-              [class.text-green-600]="row.status === 'ACTIVE'"
-              [class.text-red-600]="row.status === 'INACTIVE'"
-            >
-              {{ statusLabel(row.status) }}
-            </span>
-          </td>
+          <td mat-cell *matCellDef="let row">{{ statusLabel(row.status) }}</td>
         </ng-container>
 
         <!-- Actions -->
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef class="text-right">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            class="collection-point-list-table__actions-header"
+          >
             การจัดการ
           </th>
-          <td mat-cell *matCellDef="let row" class="text-right">
+          <td
+            mat-cell
+            *matCellDef="let row"
+            class="collection-point-list-table__actions-cell"
+          >
             <button
               type="button"
               mat-flat-button
-              class="btn-primary btn-detail"
+              color="primary"
+              class="btn btn--sm collection-point-list-table__detail-button"
               (click)="view(row)"
             >
-              <mat-icon>assignment</mat-icon>
+              <mat-icon class="btn__icon">assignment</mat-icon>
               <span>รายละเอียด</span>
             </button>
           </td>
@@ -152,7 +171,7 @@
     </div>
 
     <mat-paginator
-      class="paginator"
+      class="collection-point-list-table__paginator"
       [length]="total()"
       [pageIndex]="pageIndex()"
       [pageSize]="pageSize()"

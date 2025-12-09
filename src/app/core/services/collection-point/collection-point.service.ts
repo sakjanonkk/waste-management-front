@@ -7,12 +7,17 @@ import { CollectionPoint, CollectionPointListResponse, CollectionPointResponse }
   providedIn: 'root'
 })
 export class CollectionPointService {
-  private apiUrl = '/api/v1/collection_point';
+  private apiUrl = '/api/v1/collection-points';
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<CollectionPointListResponse> {
-    return this.http.get<CollectionPointListResponse>(this.apiUrl);
+  getAll(page: number = 1, perPage: number = 100): Observable<CollectionPointListResponse> {
+    return this.http.get<CollectionPointListResponse>(this.apiUrl, {
+      params: {
+        page: page.toString(),
+        per_page: perPage.toString()
+      }
+    });
   }
 
   getById(id: number): Observable<CollectionPointResponse> {
@@ -26,4 +31,8 @@ export class CollectionPointService {
   update(id: number, data: Partial<CollectionPoint>): Observable<CollectionPointResponse> {
     return this.http.put<CollectionPointResponse>(`${this.apiUrl}/${id}`, data);
   }
+
+  delete(id: number): Observable<CollectionPointResponse> {
+  return this.http.delete<CollectionPointResponse>(`${this.apiUrl}/${id}`);
+}
 }
