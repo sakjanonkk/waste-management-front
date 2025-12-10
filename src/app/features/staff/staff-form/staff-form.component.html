@@ -2,47 +2,60 @@
   <div class="form-content">
 
     <div class="header-section">
-      <h2>ระบบวางแผนเส้นทางจัดการเก็บขยะ</h2>
-      <p>สมัครสมาชิก หรือ สร้างบัญชีใหม่</p>
+      @if (isView) {
+      <h2>ข้อมูลพนักงาน</h2>
+      <p>รายละเอียดข้อมูลพนักงาน</p>
+      } @else if (isEdit) {
+      <h2>แก้ไขข้อมูลพนักงาน</h2>
+      <p>แก้ไขรายละเอียดข้อมูลพนักงาน</p>
+      } @else {
+      <h2>สร้างบัญชีใหม่</h2>
+      <p>เพิ่มข้อมูลพนักงานใหม่เข้าสู่ระบบ</p>
+      }
     </div>
 
     <form [formGroup]="form" class="staff-form">
 
       <div class="avatar-section">
-        <div class="avatar-wrapper">
-          <img [src]="form.value.s_image || 'image/13.svg'" alt="avatar" />
+        <div class="avatar-wrapper" [class.readonly]="isView">
+          <img [src]="getImageUrl()" alt="avatar" />
+          @if (!isView) {
           <label class="upload-btn" matRipple>
             <input type="file" accept="image/*" (change)="onImageFileSelected($event)" />
             <mat-icon>photo_camera</mat-icon>
           </label>
+          }
         </div>
+        @if (!isView) {
         <p>อัพโหลดรูปประจำตัวพนักงาน</p>
+        }
       </div>
 
       <div class="input-group">
 
-        <mat-form-field appearance="outline">
+        <!-- Prefix (Hidden in View if preferred, or shown as disabled) -->
+        <mat-form-field appearance="outline" [class.readonly-field]="isView">
           <mat-label>คำนำหน้า*</mat-label>
           <input matInput formControlName="prefix" placeholder="คำนำหน้า" />
         </mat-form-field>
 
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" [class.readonly-field]="isView">
           <mat-label>ชื่อ*</mat-label>
           <input matInput formControlName="firstname" placeholder="ชื่อ" />
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" [class.readonly-field]="isView">
           <mat-label>นามสกุล*</mat-label>
           <input matInput formControlName="lastname" placeholder="นามสกุล" />
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" [class.readonly-field]="isView">
           <mat-label>อีเมล*</mat-label>
           <input matInput formControlName="email" placeholder="email@mail.com" />
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" [class.readonly-field]="isView">
           <mat-label>ตำแหน่ง*</mat-label>
           <mat-select formControlName="role" placeholder="ตำแหน่ง ">
             <mat-option value="DRIVER">พนักงานขับรถ</mat-option>
@@ -51,7 +64,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" [class.readonly-field]="isView">
           <mat-label>สถานะ*</mat-label>
           <mat-select formControlName="status" placeholder="สถานะ">
             <mat-option value="ACTIVE">ใช้งาน</mat-option>
@@ -59,32 +72,47 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" [class.readonly-field]="isView">
           <mat-label>เบอร์โทรศัพท์*</mat-label>
           <input matInput formControlName="phone_number" placeholder="xxxxxxxxxx" />
         </mat-form-field>
 
-        @if (!id) {
+        <!-- Password Field: Hide in View Mode -->
+        @if (!isView) {
+        @if (!id || isEdit) {
         <mat-form-field appearance="outline">
-          <mat-label>รหัสผ่าน*</mat-label>
+          <mat-label>{{ isEdit ? 'เปลี่ยนรหัสผ่าน (ถ้าต้องการ)' : 'รหัสผ่าน*' }}</mat-label>
           <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
           <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
             <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
         </mat-form-field>
-
         }
-
-        <mat-form-field appearance="outline" [class.d-none]="true"> <mat-label>คำนำหน้า</mat-label>
-          <input matInput formControlName="prefix" />
-        </mat-form-field>
+        }
 
       </div>
 
-      <button mat-flat-button class="submit-btn" (click)="submit()" [disabled]="loading()">
-        @if (!loading()) { <span>สมัครสมาชิก</span> }
-        @else { <span>กำลังบันทึก...</span> }
-      </button>
+      <div class="actions-section">
+        @if (isView) {
+        <div class="view-actions">
+          <button mat-stroked-button color="warn" class="action-btn" (click)="delete()" [disabled]="loading()">
+            <mat-icon>delete</mat-icon>
+            ลบข้อมูล
+          </button>
+          <button mat-flat-button color="primary" class="action-btn" (click)="goToEdit()" [disabled]="loading()">
+            <mat-icon>edit</mat-icon>
+            แก้ไขข้อมูล
+          </button>
+        </div>
+        <button mat-button class="back-btn" (click)="cancel()">กลับหน้ารายการ</button>
+        } @else {
+        <button mat-flat-button class="submit-btn" (click)="submit()" [disabled]="loading()">
+          @if (!loading()) { <span>{{ id ? 'บันทึกการแก้ไข' : 'ยืนยันการเพิ่ม' }}</span> }
+          @else { <span>กำลังบันทึก...</span> }
+        </button>
+        <button mat-button class="cancel-btn" (click)="cancel()" [disabled]="loading()">ยกเลิก</button>
+        }
+      </div>
 
     </form>
   </div>
