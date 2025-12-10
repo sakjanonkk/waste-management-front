@@ -1,32 +1,15 @@
 <div class="staff-detail-page">
   <!-- Action toolbar -->
-  <div
-    class="staff-detail-actions"
-    role="toolbar"
-    aria-label="การทำงานของโปรไฟล์"
-  >
-    <button
-      mat-flat-button
-      color="warn"
-      class="staff-detail-actions__btn staff-detail-actions__btn--delete"
-      type="button"
-      aria-label="ลบข้อมูล"
-      (click)="delete()"
-      [disabled]="loading() || !staff()"
-    >
+  <div class="staff-detail-actions" role="toolbar" aria-label="การทำงานของโปรไฟล์">
+    <button mat-flat-button color="warn" class="staff-detail-actions__btn staff-detail-actions__btn--delete"
+      type="button" aria-label="ลบข้อมูล" (click)="delete()" [disabled]="loading() || !staff()">
       <mat-icon>delete</mat-icon>
       ลบข้อมูล
     </button>
 
-    <button
-      mat-flat-button
-      color="primary"
-      class="staff-detail-actions__btn staff-detail-actions__btn--edit"
-      type="button"
-      aria-label="แก้ไขโปรไฟล์"
-      [routerLink]="['/staff', staff()?.id, 'edit']"
-      [disabled]="loading() || !staff()"
-    >
+    <button mat-flat-button color="primary" class="staff-detail-actions__btn staff-detail-actions__btn--edit"
+      type="button" aria-label="แก้ไขโปรไฟล์" [routerLink]="['/staff', staff()?.id, 'edit']"
+      [disabled]="loading() || !staff()">
       <mat-icon>edit</mat-icon>
       แก้ไขโปรไฟล์
     </button>
@@ -38,8 +21,14 @@
     </h3>
 
     @if (loading()) {
-    <div class="staff-detail-loading">
-      <mat-spinner diameter="48" />
+    <div class="staff-detail-loading" style="display: flex; justify-content: center; width: 100%;">
+      <mat-card class="staff-detail-card" style="width: 100%; max-width: 600px; padding: 2rem;">
+        <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
+          <ngx-skeleton-loader appearance="circle" [theme]="{ width: '120px', height: '120px' }"></ngx-skeleton-loader>
+        </div>
+        <ngx-skeleton-loader count="6" appearance="line"
+          [theme]="{ height: '50px', width: '100%', 'margin-bottom': '1rem', 'border-radius': '8px' }"></ngx-skeleton-loader>
+      </mat-card>
     </div>
     } @if (!loading() && staff()) {
     <mat-card class="staff-detail-card" aria-labelledby="profile-title">
@@ -51,80 +40,38 @@
         <div class="staff-detail-card__form-grid">
           <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>คำนำหน้าชื่อ*</mat-label>
-            <input
-              matInput
-              [value]="staff().prefix"
-              readonly
-              id="prefix"
-              aria-label="คำนำหน้าชื่อ"
-              tabindex="-1"
-              class="no-caret"
-            />
+            <input matInput [value]="staff().prefix" readonly id="prefix" aria-label="คำนำหน้าชื่อ" tabindex="-1"
+              class="no-caret" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>ชื่อ*</mat-label>
-            <input
-              matInput
-              [value]="staff().firstname"
-              readonly
-              id="firstName"
-              aria-label="ชื่อ"
-              tabindex="-1"
-              class="no-caret"
-            />
+            <input matInput [value]="staff().firstname" readonly id="firstName" aria-label="ชื่อ" tabindex="-1"
+              class="no-caret" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>นามสกุล*</mat-label>
-            <input
-              matInput
-              [value]="staff().lastname"
-              readonly
-              id="lastName"
-              aria-label="นามสกุล"
-              tabindex="-1"
-              class="no-caret"
-            />
+            <input matInput [value]="staff().lastname" readonly id="lastName" aria-label="นามสกุล" tabindex="-1"
+              class="no-caret" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>ประเภทพนักงาน</mat-label>
-            <input
-              matInput
-              [value]="roleLabel()"
-              readonly
-              id="empType"
-              aria-label="ประเภทพนักงาน"
-              tabindex="-1"
-              class="no-caret"
-            />
+            <input matInput [value]="roleLabel()" readonly id="empType" aria-label="ประเภทพนักงาน" tabindex="-1"
+              class="no-caret" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>อีเมล*</mat-label>
-            <input
-              matInput
-              [value]="staff().email"
-              readonly
-              id="email"
-              aria-label="อีเมล"
-              tabindex="-1"
-              class="no-caret"
-            />
+            <input matInput [value]="staff().email" readonly id="email" aria-label="อีเมล" tabindex="-1"
+              class="no-caret" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>เบอร์โทรศัพท์*</mat-label>
-            <input
-              matInput
-              [value]="staff().phone_number || ''"
-              readonly
-              id="phone"
-              aria-label="เบอร์โทรศัพท์"
-              tabindex="-1"
-              class="no-caret"
-            />
+            <input matInput [value]="staff().phone_number || ''" readonly id="phone" aria-label="เบอร์โทรศัพท์"
+              tabindex="-1" class="no-caret" />
           </mat-form-field>
         </div>
 
