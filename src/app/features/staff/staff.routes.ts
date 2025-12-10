@@ -18,8 +18,8 @@ export const STAFF_ROUTES: Routes = [
   {
     path: ':id',
     loadComponent: () =>
-      import('./staff-detail/staff-detail.component').then(
-        (m) => m.StaffDetailPageComponent
+      import('./staff-form/staff-form.component').then(
+        (m) => m.StaffFormPageComponent
       ),
   },
   {
