@@ -84,7 +84,7 @@ $shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0,
     gap: 0.5rem;
 
     &:hover {
-      background-color: darken($primary-green, 5%);
+      background-color: $primary-green;
       transform: translateY(-2px);
       box-shadow: $shadow-hover;
     }
@@ -138,7 +138,7 @@ $shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0,
     &:hover {
       transform: translateY(-5px);
       box-shadow: $shadow-hover;
-      border-color: lighten($primary-green, 40%);
+      // border-color: lighten($primary-green, 40%);
 
       .icon-wrapper {
         background-color: $primary-green;

@@ -2,65 +2,34 @@
   <!-- Header / Actions -->
   <div class="collection-point-list-header">
     <h2 class="collection-point-list-header__title">ข้อมูลจุดเก็บขยะ</h2>
-    <button
-      mat-flat-button
-      color="primary"
-      class="btn collection-point-list-header__create-button"
-      (click)="goCreate()"
-    >
+    <button mat-flat-button color="primary" class="btn collection-point-list-header__create-button"
+      (click)="goCreate()">
       <mat-icon class="btn__icon">add</mat-icon>
       เพิ่มจุดเก็บขยะ
     </button>
   </div>
 
   <!-- Filter bar -->
-  <form
-    class="collection-point-list-filters"
-    (submit)="$event.preventDefault(); fetch()"
-  >
-    <mat-form-field
-      appearance="outline"
-      class="collection-point-list-filters__field"
-    >
+  <form class="collection-point-list-filters" (submit)="$event.preventDefault(); fetch()">
+    <mat-form-field appearance="outline" class="collection-point-list-filters__field">
       <mat-label>รหัสจุดเก็บ</mat-label>
       <mat-icon matPrefix>tag</mat-icon>
-      <input
-        matInput
-        placeholder="ค้นหาด้วยรหัส"
-        (input)="onSearchIdChange($any($event.target).value)"
-      />
+      <input matInput placeholder="ค้นหาด้วยรหัส" (input)="onSearchIdChange($any($event.target).value)" />
     </mat-form-field>
 
-    <mat-form-field
-      appearance="outline"
-      class="collection-point-list-filters__field"
-    >
+    <mat-form-field appearance="outline" class="collection-point-list-filters__field">
       <mat-label>ชื่อจุดเก็บ</mat-label>
       <mat-icon matPrefix>location_on</mat-icon>
-      <input
-        matInput
-        placeholder="ค้นหาด้วยชื่อ"
-        (input)="onSearchNameChange($any($event.target).value)"
-      />
+      <input matInput placeholder="ค้นหาด้วยชื่อ" (input)="onSearchNameChange($any($event.target).value)" />
     </mat-form-field>
 
-    <mat-form-field
-      appearance="outline"
-      class="collection-point-list-filters__field"
-    >
+    <mat-form-field appearance="outline" class="collection-point-list-filters__field">
       <mat-label>ที่อยู่</mat-label>
       <mat-icon matPrefix>home</mat-icon>
-      <input
-        matInput
-        placeholder="ค้นหาด้วยที่อยู่"
-        (input)="onSearchAddressChange($any($event.target).value)"
-      />
+      <input matInput placeholder="ค้นหาด้วยที่อยู่" (input)="onSearchAddressChange($any($event.target).value)" />
     </mat-form-field>
 
-    <mat-form-field
-      appearance="outline"
-      class="collection-point-list-filters__field"
-    >
+    <mat-form-field appearance="outline" class="collection-point-list-filters__field">
       <mat-label>สถานะ</mat-label>
       <mat-select (valueChange)="onStatusChange($event)" [value]="status()">
         <mat-option value="">ทั้งหมด</mat-option>
@@ -69,12 +38,7 @@
       </mat-select>
     </mat-form-field>
 
-    <button
-      type="submit"
-      mat-flat-button
-      color="primary"
-      class="btn collection-point-list-filters__submit"
-    >
+    <button type="submit" mat-flat-button color="primary" class="btn collection-point-list-filters__submit">
       <mat-icon class="btn__icon">search</mat-icon>
       <span>ค้นหา</span>
     </button>
@@ -103,13 +67,13 @@
         <!-- Name -->
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>ชื่อจุดเก็บขยะ</th>
-          <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+          <td mat-cell *matCellDef="let row" data-label="ชื่อจุดเก็บขยะ">{{ row.name }}</td>
         </ng-container>
 
         <!-- Coordinates -->
         <ng-container matColumnDef="coordinates">
           <th mat-header-cell *matHeaderCellDef>ละติจูด/ลองจิจูด</th>
-          <td mat-cell *matCellDef="let row">
+          <td mat-cell *matCellDef="let row" data-label="ละติจูด/ลองจิจูด">
             {{ row.latitude }}, {{ row.longitude }}
           </td>
         </ng-container>
@@ -117,49 +81,38 @@
         <!-- Address -->
         <ng-container matColumnDef="address">
           <th mat-header-cell *matHeaderCellDef>ที่อยู่</th>
-          <td mat-cell *matCellDef="let row">{{ row.address }}</td>
+          <td mat-cell *matCellDef="let row" data-label="ที่อยู่">{{ row.address }}</td>
         </ng-container>
 
         <!-- General Capacity -->
         <ng-container matColumnDef="regular_capacity">
           <th mat-header-cell *matHeaderCellDef>ความจุขยะทั่วไป</th>
-          <td mat-cell *matCellDef="let row">{{ row.regular_capacity }} kg</td>
+          <td mat-cell *matCellDef="let row" data-label="ความจุขยะทั่วไป">{{ row.regular_capacity }} kg</td>
         </ng-container>
 
         <!-- Recycle Capacity -->
         <ng-container matColumnDef="recycle_capacity">
           <th mat-header-cell *matHeaderCellDef>ความจุขยะรีไซเคิล</th>
-          <td mat-cell *matCellDef="let row">{{ row.recycle_capacity }} kg</td>
+          <td mat-cell *matCellDef="let row" data-label="ความจุขยะรีไซเคิล">{{ row.recycle_capacity }} kg</td>
         </ng-container>
 
         <!-- Status -->
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef>สถานะ</th>
-          <td mat-cell *matCellDef="let row">{{ statusLabel(row.status) }}</td>
+          <td mat-cell *matCellDef="let row" data-label="สถานะ">
+            <span class="status-badge">{{ statusLabel(row.status) }}</span>
+          </td>
         </ng-container>
 
         <!-- Actions -->
         <ng-container matColumnDef="actions">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="collection-point-list-table__actions-header"
-          >
+          <th mat-header-cell *matHeaderCellDef class="collection-point-list-table__actions-header">
             การจัดการ
           </th>
-          <td
-            mat-cell
-            *matCellDef="let row"
-            class="collection-point-list-table__actions-cell"
-          >
-            <button
-              type="button"
-              mat-flat-button
-              color="primary"
-              class="btn btn--sm collection-point-list-table__detail-button"
-              (click)="view(row)"
-            >
-              <mat-icon class="btn__icon">assignment</mat-icon>
+          <td mat-cell *matCellDef="let row" class="collection-point-list-table__actions-cell">
+            <button type="button" mat-flat-button class="btn btn--sm collection-point-list-table__detail-button"
+              (click)="view(row)">
+              <mat-icon class="btn__icon">visibility</mat-icon>
               <span>รายละเอียด</span>
             </button>
           </td>
@@ -170,14 +123,8 @@
       </table>
     </div>
 
-    <mat-paginator
-      class="collection-point-list-table__paginator"
-      [length]="total()"
-      [pageIndex]="pageIndex()"
-      [pageSize]="pageSize()"
-      [pageSizeOptions]="[5, 10, 20]"
-      (page)="onPageChange($event)"
-    />
+    <mat-paginator class="collection-point-list-table__paginator" [length]="total()" [pageIndex]="pageIndex()"
+      [pageSize]="pageSize()" [pageSizeOptions]="[5, 10, 20]" (page)="onPageChange($event)" />
   </div>
   }
 </div>
