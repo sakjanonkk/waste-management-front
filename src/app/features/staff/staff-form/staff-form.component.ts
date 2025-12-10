@@ -10,11 +10,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-staff-form-page',
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatSnackBarModule, MatIconModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatSnackBarModule, MatIconModule, NgxSkeletonLoaderModule],
   templateUrl: './staff-form.component.html',
   styleUrls: ['./staff-form.component.scss']
 })
@@ -31,6 +32,7 @@ export class StaffFormPageComponent {
   isEdit = false;
   isView = false;
   loading = signal(false);
+  isFetching = signal(false);
   hidePassword = true;
 
   form = this.fb.group({
@@ -64,7 +66,7 @@ export class StaffFormPageComponent {
 
   initForm() {
     if (this.isBrowser && this.id) {
-      this.loading.set(true);
+      this.isFetching.set(true);
       this.staffService.get(this.id).subscribe({
         next: (res) => {
           this.currentStaffData = res.data;
@@ -88,9 +90,9 @@ export class StaffFormPageComponent {
             // Password validation logic update handled in submit or dynamic validators if needed
           }
 
-          this.loading.set(false);
+          this.isFetching.set(false);
         },
-        error: () => this.loading.set(false),
+        error: () => this.isFetching.set(false),
       });
     } else {
         // Reset for New mode

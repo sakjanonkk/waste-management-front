@@ -14,6 +14,19 @@
       }
     </div>
 
+    @if (isFetching()) {
+    <div class="staff-form">
+      <div class="avatar-section">
+        <ngx-skeleton-loader appearance="circle"
+          [theme]="{ width: '100px', height: '100px', 'margin-bottom': '1rem' }"></ngx-skeleton-loader>
+        <ngx-skeleton-loader count="1" [theme]="{ width: '150px', height: '14px', margin: '0' }"></ngx-skeleton-loader>
+      </div>
+      <div class="input-group">
+        <ngx-skeleton-loader count="8" appearance="line"
+          [theme]="{ height: '56px', width: '100%', 'margin-bottom': '0.5rem', 'border-radius': '12px' }"></ngx-skeleton-loader>
+      </div>
+    </div>
+    } @else {
     <form [formGroup]="form" class="staff-form">
 
       <div class="avatar-section">
@@ -115,5 +128,6 @@
       </div>
 
     </form>
+    }
   </div>
 </div>
