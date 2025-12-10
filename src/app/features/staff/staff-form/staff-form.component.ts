@@ -30,17 +30,18 @@ export class StaffFormPageComponent {
   id = Number(this.route.snapshot.paramMap.get('id')) || null;
   isEdit = this.route.snapshot.routeConfig?.path?.includes('edit') || false;
   loading = signal(false);
+  hidePassword = true;
 
   form = this.fb.group({
-    prefix: ['นาย', Validators.required],
+    prefix: ['', Validators.required],
     firstname: ['', Validators.required],
     lastname: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     password: ['', this.id ? [] : [Validators.required, Validators.minLength(6)]],
-    role: ['DRIVER', Validators.required],
-    status: ['ACTIVE'],
-    phone_number: [''],
-    s_image: [''], // โปรไฟล์รูปภาพ (URL/Base64)
+    role: ['', Validators.required],
+    status: [''],
+    phone_number: ['' , Validators.required , Validators.pattern(/^\d{10}$/)],
+    s_image: [''], 
   });
 
   // เก็บไฟล์จริงไว้ส่งไป backend
@@ -70,49 +71,31 @@ export class StaffFormPageComponent {
   }
 
   submit() {
+    if (this.form.get('prefix')?.invalid && this.form.get('prefix')?.errors?.['required']) {
+      this.form.patchValue({ prefix: '-' });
+    }
+
     if (this.form.invalid) return this.form.markAllAsTouched();
     const raw = this.form.getRawValue();
-    
-    
-    // ========== ถ้ามีรูปใหม่ ใช้ FormData / ถ้าไม่มีใช้ JSON ==========
-    let payload: any;
-    
-    if (this.selectedImageFile) {
-      // มีรูปใหม่ → ใช้ FormData
-      const formData = new FormData();
-      formData.append('prefix', raw.prefix ?? '');
-      formData.append('firstname', raw.firstname ?? '');
-      formData.append('lastname', raw.lastname ?? '');
-      formData.append('email', raw.email ?? '');
-      formData.append('role', (raw.role ?? 'driver').toLowerCase());
-      formData.append('status', (raw.status ?? 'active').toLowerCase());
-      formData.append('phone_number', raw.phone_number ?? '');
-      
-      if (!this.id && raw.password) {
-        formData.append('password', raw.password);
-      }
-      
-      formData.append('picture', this.selectedImageFile);
-      payload = formData;
-    } else {
-      // ไม่มีรูปใหม่ → ใช้ JSON
-      payload = {
-        prefix: raw.prefix ?? '',
-        firstname: raw.firstname ?? '',
-        lastname: raw.lastname ?? '',
-        email: raw.email ?? '',
-        role: (raw.role ?? 'driver').toLowerCase(),
-        status: (raw.status ?? 'active').toLowerCase(),
-        phone_number: raw.phone_number ?? '',
-      };
-      
-      // เพิ่ม password สำหรับทั้ง create และ edit (ถ้ามี)
-      if (raw.password) {
-        payload.password = raw.password;
-      }
+
+    const formData = new FormData();
+    formData.append('prefix', raw.prefix ?? '-');
+    formData.append('firstname', raw.firstname ?? '');
+    formData.append('lastname', raw.lastname ?? '');
+    formData.append('email', raw.email ?? '');
+    formData.append('role', (raw.role ?? 'driver').toLowerCase());
+    formData.append('status', (raw.status ?? 'active').toLowerCase());
+    formData.append('phone_number', raw.phone_number ?? '');
+
+    if (!this.id && raw.password) {
+      formData.append('password', raw.password);
     }
     
-    console.log('Sending payload:', payload);
+    if (this.selectedImageFile) {
+      formData.append('picture', this.selectedImageFile);
+    }
+
+    const payload = formData;
 
     this.loading.set(true);
     const req = this.id
@@ -122,7 +105,6 @@ export class StaffFormPageComponent {
     req.subscribe({
       next: (response) => {
         this.loading.set(false);
-        console.log('Save success:', response);
         this.snack.open('บันทึกสำเร็จ', 'ปิด', { duration: 2000 });
         this.router.navigate(['/staff']);
       },
@@ -135,6 +117,8 @@ export class StaffFormPageComponent {
           errorMsg = err.error.errors[0].message;
         } else if (err.error?.message) {
           errorMsg = err.error.message;
+        } else if (err.error?.error) {
+           errorMsg = err.error.error;
         }
         
         this.snack.open(errorMsg, 'ปิด', { duration: 3000 });
