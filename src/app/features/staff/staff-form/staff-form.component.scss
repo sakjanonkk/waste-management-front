@@ -2,6 +2,7 @@ $primary-green: #295938;
 $text-color: #333333;
 $subtext-color: #666666;
 $border-radius-field: 12px;
+$warn-color: #d32f2f;
 
 :host {
   display: block;
@@ -61,6 +62,12 @@ $border-radius-field: 12px;
       border-radius: 50%;
       object-fit: cover;
       background-color: #dd7e6b;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    &.readonly img {
+      border: 2px solid $primary-green;
+      padding: 2px;
     }
 
     .upload-btn {
@@ -100,6 +107,7 @@ $border-radius-field: 12px;
 
 .staff-form {
   width: 100%;
+  padding-bottom: 2rem;
 }
 
 .input-group {
@@ -124,6 +132,26 @@ mat-form-field {
   ::placeholder {
     color: #a0a0a0;
   }
+
+  // Custom Readonly Style
+  &.readonly-field {
+    pointer-events: none; // Disables interaction
+
+    .mat-mdc-text-field-wrapper {
+      background-color: #f9f9f9; // Slight background to indicate readonly
+    }
+
+    // Ensure text is readable
+    .mat-mdc-input-element:disabled {
+      color: $text-color !important;
+      -webkit-text-fill-color: $text-color !important;
+    }
+
+    .mat-mdc-select-value-text {
+      color: $text-color !important;
+      -webkit-text-fill-color: $text-color !important;
+    }
+  }
 }
 
 ::ng-deep .mat-mdc-text-field-wrapper {
@@ -138,9 +166,29 @@ mat-form-field {
   }
 }
 
-.submit-btn {
+.actions-section {
   width: 100%;
   margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.view-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+
+  .action-btn {
+    flex: 1;
+    border-radius: 30px !important;
+    padding: 1.2rem !important;
+    font-size: 1rem;
+  }
+}
+
+.submit-btn {
+  width: 100%;
   padding: 1.2rem;
   background-color: $primary-green !important;
   color: white !important;
@@ -149,13 +197,16 @@ mat-form-field {
   font-weight: 500;
   box-shadow: none !important;
 
-  // &:hover {
-  //   background-color: ($primary-green, 5%) !important;
-  // }
-
   &:disabled {
     background-color: #ccc !important;
   }
+}
+
+.cancel-btn,
+.back-btn {
+  width: 100%;
+  color: $subtext-color !important;
+  border-radius: 30px !important;
 }
 
 .d-none {
