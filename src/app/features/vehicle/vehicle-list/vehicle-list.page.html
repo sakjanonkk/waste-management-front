@@ -3,54 +3,27 @@
   <div class="vehicle-list-header">
     <h2 class="vehicle-list-header__title">ข้อมูลยานพาหนะ</h2>
 
-    <button
-      mat-flat-button
-      color="primary"
-      class="btn vehicle-list-header__create-button"
-      (click)="goCreate()"
-    >
+    <button mat-flat-button color="primary" class="btn vehicle-list-header__create-button" (click)="goCreate()">
       <mat-icon class="btn__icon">add</mat-icon>
       เพิ่มรถ
     </button>
   </div>
 
   <!-- Filter bar -->
-  <form
-    class="vehicle-list-filters"
-    (submit)="$event.preventDefault(); fetch()"
-  >
-    <mat-form-field
-      appearance="outline"
-      class="vehicle-list-filters__field vehicle-list-filters__field--search"
-    >
+  <form class="vehicle-list-filters" (submit)="$event.preventDefault(); fetch()">
+    <mat-form-field appearance="outline" class="vehicle-list-filters__field vehicle-list-filters__field--search">
       <mat-label>ค้นหาทะเบียนรถ</mat-label>
       <mat-icon matPrefix>search</mat-icon>
-      <input
-        matInput
-        placeholder="ค้นหาทะเบียนรถ"
-        [(ngModel)]="searchReg"
-        name="searchReg"
-      />
+      <input matInput placeholder="ค้นหาทะเบียนรถ" [(ngModel)]="searchReg" name="searchReg" />
     </mat-form-field>
 
-    <mat-form-field
-      appearance="outline"
-      class="vehicle-list-filters__field vehicle-list-filters__field--search"
-    >
+    <mat-form-field appearance="outline" class="vehicle-list-filters__field vehicle-list-filters__field--search">
       <mat-label>ชื่อคนขับ</mat-label>
       <mat-icon matPrefix>person</mat-icon>
-      <input
-        matInput
-        placeholder="ชื่อคนขับ"
-        [(ngModel)]="searchDriver"
-        name="searchDriver"
-      />
+      <input matInput placeholder="ชื่อคนขับ" [(ngModel)]="searchDriver" name="searchDriver" />
     </mat-form-field>
 
-    <mat-form-field
-      appearance="outline"
-      class="vehicle-list-filters__field vehicle-list-filters__field--status"
-    >
+    <mat-form-field appearance="outline" class="vehicle-list-filters__field vehicle-list-filters__field--status">
       <mat-label>สถานะการใช้งาน</mat-label>
       <mat-select [(ngModel)]="status" name="status">
         <mat-option value="">ทั้งหมด</mat-option>
@@ -60,10 +33,7 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field
-      appearance="outline"
-      class="vehicle-list-filters__field vehicle-list-filters__field--status"
-    >
+    <mat-form-field appearance="outline" class="vehicle-list-filters__field vehicle-list-filters__field--status">
       <mat-label>ชนิดน้ำมัน</mat-label>
       <mat-select [(ngModel)]="fuelCategory" name="fuelCategory">
         <mat-option value="">ทั้งหมด</mat-option>
@@ -74,12 +44,7 @@
       </mat-select>
     </mat-form-field>
 
-    <button
-      type="submit"
-      mat-flat-button
-      color="primary"
-      class="btn vehicle-list-filters__submit"
-    >
+    <button type="submit" mat-flat-button color="primary" class="btn vehicle-list-filters__submit">
       <mat-icon class="btn__icon">search</mat-icon>
       <span>ค้นหา</span>
     </button>
@@ -108,7 +73,7 @@
         <!-- Registration number -->
         <ng-container matColumnDef="reg">
           <th mat-header-cell *matHeaderCellDef>ทะเบียน</th>
-          <td mat-cell *matCellDef="let row">
+          <td mat-cell *matCellDef="let row" data-label="ทะเบียน">
             {{ row.registration_number || row.vehicle_reg_num || '-' }}
           </td>
         </ng-container>
@@ -116,7 +81,7 @@
         <!-- Driver -->
         <ng-container matColumnDef="driver">
           <th mat-header-cell *matHeaderCellDef>คนขับ</th>
-          <td mat-cell *matCellDef="let row">
+          <td mat-cell *matCellDef="let row" data-label="คนขับ">
             {{ row.driver ? row.driver.prefix + ' ' + row.driver.firstname + ' '
             + row.driver.lastname : '-' }}
           </td>
@@ -125,23 +90,23 @@
         <!-- Regular capacity -->
         <ng-container matColumnDef="regular">
           <th mat-header-cell *matHeaderCellDef>ความจุขยะทั่วไป</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.regular_waste_capacity_kg || row.regular_capacity || 0 }}
+          <td mat-cell *matCellDef="let row" data-label="ความจุขยะทั่วไป">
+            {{ row.regular_waste_capacity_kg || row.regular_capacity || 0 }} กก.
           </td>
         </ng-container>
 
         <!-- Recycle capacity -->
         <ng-container matColumnDef="recycle">
           <th mat-header-cell *matHeaderCellDef>ความจุขยะรีไซเคิล</th>
-          <td mat-cell *matCellDef="let row">
-            {{ row.recyclable_waste_capacity_kg || row.recycle_capacity || 0 }}
+          <td mat-cell *matCellDef="let row" data-label="ความจุขยะรีไซเคิล">
+            {{ row.recyclable_waste_capacity_kg || row.recycle_capacity || 0 }} กก.
           </td>
         </ng-container>
 
         <!-- Fuel -->
         <ng-container matColumnDef="fuel">
           <th mat-header-cell *matHeaderCellDef>ชนิดน้ำมัน</th>
-          <td mat-cell *matCellDef="let row">
+          <td mat-cell *matCellDef="let row" data-label="ชนิดน้ำมัน">
             {{ row.fuel_type || row.fuel_category || '-' }}
           </td>
         </ng-container>
@@ -149,31 +114,20 @@
         <!-- Status -->
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef>สถานะ</th>
-          <td mat-cell *matCellDef="let row">{{ statusLabel(row.status) }}</td>
+          <td mat-cell *matCellDef="let row" data-label="สถานะ">
+            <span class="status-badge">{{ statusLabel(row.status) }}</span>
+          </td>
         </ng-container>
 
         <!-- Actions -->
         <ng-container matColumnDef="actions">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            class="vehicle-list-table__actions-header"
-          >
+          <th mat-header-cell *matHeaderCellDef class="vehicle-list-table__actions-header">
             รายละเอียด
           </th>
-          <td
-            mat-cell
-            *matCellDef="let row"
-            class="vehicle-list-table__actions-cell"
-          >
-            <button
-              type="button"
-              mat-flat-button
-              color="primary"
-              class="btn btn--sm vehicle-list-table__detail-button"
-              (click)="view(row)"
-            >
-              <mat-icon class="btn__icon">assignment</mat-icon>
+          <td mat-cell *matCellDef="let row" class="vehicle-list-table__actions-cell">
+            <button type="button" mat-flat-button class="btn btn--sm vehicle-list-table__detail-button"
+              (click)="view(row)">
+              <mat-icon class="btn__icon">visibility</mat-icon>
               <span>รายละเอียด</span>
             </button>
           </td>
@@ -184,14 +138,8 @@
       </table>
     </div>
 
-    <mat-paginator
-      class="vehicle-list-table__paginator"
-      [length]="total()"
-      [pageIndex]="pageIndex()"
-      [pageSize]="pageSize()"
-      [pageSizeOptions]="[5, 10, 20]"
-      (page)="onPageChange($event)"
-    />
+    <mat-paginator class="vehicle-list-table__paginator" [length]="total()" [pageIndex]="pageIndex()"
+      [pageSize]="pageSize()" [pageSizeOptions]="[5, 10, 20]" (page)="onPageChange($event)" />
   </div>
   }
 </div>
