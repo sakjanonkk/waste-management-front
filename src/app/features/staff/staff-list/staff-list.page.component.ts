@@ -22,6 +22,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-staff-list-page',
@@ -38,6 +39,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     FormsModule,
+    NgxSkeletonLoaderModule,
   ],
   templateUrl: './staff-list.page.component.html',
   styleUrl: './staff-list.page.component.scss',

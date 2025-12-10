@@ -36,8 +36,16 @@
 
   <!-- Loading -->
   @if (loading()) {
-  <div class="staff-list-state staff-list-state--loading">
-    <mat-spinner diameter="48" />
+  <div class="staff-list-state staff-list-state--loading" style="display: block; width: 100%;">
+    <!-- Header Skeleton -->
+    <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+      <ngx-skeleton-loader count="1"
+        [theme]="{ height: '50px', width: '100%', 'border-radius': '8px' }"></ngx-skeleton-loader>
+    </div>
+
+    <!-- Table Rows Skeleton -->
+    <ngx-skeleton-loader count="5" appearance="line"
+      [theme]="{ height: '60px', width: '100%', 'margin-bottom': '10px', 'border-radius': '8px' }"></ngx-skeleton-loader>
   </div>
   }
 
