@@ -34,9 +34,9 @@ export class StaffDetailPageComponent {
     if (this.isBrowser && id) {
       this.staffService.get(id).subscribe({
         next: (res) => {
-          console.log('📸 Staff data from backend:', res.data);
-          console.log('📸 Picture field:', res.data.picture);
-          console.log('📸 s_image field:', res.data.s_image);
+          console.log('Staff data from backend:', res.data);
+          console.log('Picture field:', res.data.picture);
+          console.log('s_image field:', res.data.s_image);
           this.staff.set(res.data);
           this.loading.set(false);
         },
@@ -60,14 +60,31 @@ export class StaffDetailPageComponent {
   getImageUrl(): string {
     const s = this.staff();
     const picture = s?.picture || s?.s_image;
-    if (!picture) return '/assets/images/worker-avatar.png';
+    
+    console.log('Picture value:', picture);
+    
+    if (!picture) {
+      console.log('No picture, using default avatar');
+      return '/assets/images/worker-avatar.png';
+    }
     
     // ถ้าเป็น relative path (/uploads/...) ให้เติม backend URL
     if (picture.startsWith('/uploads/')) {
-      return 'https://waste.mysterchat.com' + picture;
+      const fullUrl = 'https://waste.mysterchat.com' + picture;
+      console.log('Full URL:', fullUrl);
+      return fullUrl;
     }
     
+    console.log('Using picture as-is:', picture);
     return picture;
+  }
+
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    console.error('Image failed to load:', img.src);
+    
+    // Fallback to default avatar
+    img.src = '/assets/images/worker-avatar.png';
   }
 
   roleLabel(): string {
