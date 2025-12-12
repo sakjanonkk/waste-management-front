@@ -1,0 +1,91 @@
+.navbar-toolbar {
+    background-color: #ffffff !important;
+    color: #333333 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #f0f0f0;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+
+    @media (max-width: 600px) {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.brand-text {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    color: #2d7a2e;
+    font-size: 1.25rem;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    @media (max-width: 600px) {
+        font-size: 1.125rem;
+    }
+}
+
+.mat-icon-button {
+    color: #666666 !important;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+    }
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    transition: background-color 0.2s;
+    border: 1px solid transparent;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    @media (max-width: 600px) {
+        padding: 0.25rem;
+        gap: 0;
+        border-color: transparent; // Clean look on mobile
+
+        &:hover {
+            background-color: transparent;
+        }
+    }
+
+    .profile-image {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid #e5e7eb;
+    }
+
+    .profile-icon {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+        color: #4b5563;
+    }
+
+    .profile-name {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #374151;
+
+        @media (max-width: 600px) {
+            display: none;
+        }
+    }
+}
