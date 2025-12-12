@@ -1,25 +1,24 @@
-<mat-toolbar
-  color="primary"
-  class="!px-4"
-  style="background-color: #2d7a2e; color: #ffffff"
->
-  <span
-    class="font-semibold tracking-wide cursor-pointer hover:opacity-80 transition-opacity"
-    (click)="navigateToHome()"
-    >Waste Route</span
-  >
-  <span class="flex-1"></span>
+<mat-toolbar class="navbar-toolbar">
+  <span class="brand-text" (click)="navigateToHome()">
+    Waste Route
+  </span>
+  <span class="spacer"></span>
 
-  <button
-    mat-icon-button
-    [matMenuTriggerFor]="menu"
-    aria-label="Open menu"
-    style="width: 48px; height: 48px; margin-left: auto; color: #ffffff"
-  >
-    <mat-icon style="font-size: 32px; width: 32px; height: 32px"
-      >account_circle</mat-icon
-    >
+  @if (userData(); as user) {
+  <div [matMenuTriggerFor]="menu" class="user-profile">
+    @if (user.picture) {
+    <img [src]="user.picture" alt="Profile" class="profile-image">
+    } @else {
+    <mat-icon class="profile-icon">account_circle</mat-icon>
+    }
+    <span class="profile-name">{{ user.firstname }} {{ user.lastname }}</span>
+  </div>
+  } @else {
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Open menu">
+    <mat-icon>account_circle</mat-icon>
   </button>
+  }
+
   <mat-menu #menu="matMenu">
     <button mat-menu-item>โปรไฟล์</button>
     <button mat-menu-item (click)="logout()">ออกจากระบบ</button>

@@ -4,14 +4,14 @@
     --mat-table-row-item-outline-color: color-mix(in srgb, var(--mat-sys-surface), var(--mat-sys-surface-tint) 4%);
     border-collapse: collapse;
 
-    .mat-mdc-row:nth-child(even){
+    .mat-mdc-row:nth-child(even) {
       background-color:
-      color-mix(in srgb, var(--mat-sys-surface), var(--mat-sys-surface-tint) 4%);
-  }
+        color-mix(in srgb, var(--mat-sys-surface), var(--mat-sys-surface-tint) 4%);
+    }
 
-  .mat-mdc-row:nth-child(odd){
+    .mat-mdc-row:nth-child(odd) {
       background-color: var(--mat-sys-surface-container-lowest);
-  }
+    }
 
     .mat-mdc-row {
       &:hover {
@@ -19,10 +19,12 @@
       }
     }
 
-    .mdc-data-table__cell, .mdc-data-table__header-cell {
+    .mdc-data-table__cell,
+    .mdc-data-table__header-cell {
       padding: 0 8px;
     }
-    .mdc-data-table__header-cell{
+
+    .mdc-data-table__header-cell {
       text-align: center;
     }
 
@@ -32,6 +34,7 @@
     }
 
   }
+
   ::ng-deep .data-table.mat-mdc-table thead {
     inset-block-start: var(--table-header-sticky-offset);
     background-color: var(--mat-sys-primary);

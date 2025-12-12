@@ -1,125 +1,255 @@
+// Variables matching minimal white/green theme
+$primary-green: #2d7a2e;
+$light-green-bg: #ecfdf5;
+$text-dark: #1f2937;
+$text-secondary: #6b7280;
+$white: #ffffff;
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
 .vehicle-list-page {
-  background: #ffffff;
-  max-width: 72rem;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 1.5rem 1rem;
+  font-family: 'Inter', sans-serif;
+  color: $text-dark;
+
+  @media (min-width: 768px) {
+    padding: 2rem;
+  }
 }
 
-/* Header */
+// Header
 .vehicle-list-header {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: 1rem;
+  margin-bottom: 2rem;
 
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
   }
 
   &__title {
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: $text-dark;
+    margin: 0;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background-color: $primary-green;
+      border-radius: 2px;
+      margin-top: 0.5rem;
+    }
   }
 
   &__create-button {
-    align-self: flex-start;
+    background-color: $primary-green !important;
+    color: $white !important;
+    border-radius: 8px !important;
+    padding: 0 1.5rem !important;
+    height: 48px !important;
+    font-weight: 600 !important;
+    box-shadow: $shadow-sm;
+    transition: all 0.2s ease;
+
+    &:hover {
+      box-shadow: $shadow-md;
+      transform: translateY(-1px);
+    }
+
+    .btn__icon {
+      margin-right: 0.5rem;
+    }
   }
 }
 
-/* Filter bar */
+// Filters
 .vehicle-list-filters {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
-  margin-bottom: 1rem;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  background-color: $white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: $shadow-sm;
+  border: 1px solid #f3f4f6;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap; // Allow wrapping for multiple filters
+  }
 
   &__field {
-    min-width: 220px;
+    width: 100%;
+
+    @media (min-width: 768px) {
+      width: auto;
+      min-width: 220px;
+      flex: 1; // Distribute space
+    }
   }
 
   &__submit {
-    align-self: flex-end;
+    width: 100%;
+    height: 56px !important;
+    background-color: $primary-green !important;
+    color: $white !important;
+    border-radius: 4px !important;
+    font-weight: 600 !important;
+
+    @media (min-width: 768px) {
+      width: auto;
+      padding: 0 2rem !important;
+    }
   }
 }
 
-/* Loading & empty states */
-.vehicle-list-state {
-  text-align: center;
-  padding: 4rem 0;
-
-  &--empty {
-    color: rgba(0, 0, 0, 0.54);
-  }
-
-  &__icon {
-    font-size: 3rem;
-    width: 3.5rem;
-    height: 3.5rem;
-    margin-bottom: 0.5rem;
-  }
-}
-
-/* Table card */
+// Table Container
 .vehicle-list-table {
-  background: #ffffff;
+  background: $white;
+  border-radius: 12px;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+  border: 1px solid #f3f4f6;
 
   &__scroll {
     overflow-x: auto;
+
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 4px;
+    }
   }
 
-  &__actions-header,
-  &__actions-cell {
-    text-align: right;
+  table {
+    width: 100%;
+    min-width: 800px;
   }
 
-  &__paginator {
-    margin-top: 0.75rem;
+  // Table Styles
+  .mat-mdc-header-row {
+    background-color: #f9fafb !important;
+    height: 56px;
+  }
+
+  .mat-mdc-header-cell {
+    color: $text-secondary !important;
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .mat-mdc-cell {
+    color: $text-dark !important;
+    font-size: 0.95rem !important;
+    border-bottom-color: #f3f4f6 !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .mat-mdc-row:hover {
+    background-color: $light-green-bg !important;
+  }
+
+  &__detail-button {
+    color: $primary-green !important;
+    background-color: transparent !important;
+    border: 1px solid $primary-green !important;
+    box-shadow: none !important;
+
+    &:hover {
+      background-color: $primary-green !important;
+      color: $white !important;
+    }
   }
 }
 
-/* ให้ตัว mat-table/row เป็นสีขาว ไม่อมม่วงจาก theme */
-.vehicle-list-table .mat-mdc-table {
-  background-color: #ffffff;
+// Paginator
+.vehicle-list-table__paginator {
+  background-color: transparent !important;
+  border-top: 1px solid #f3f4f6;
 }
 
-.vehicle-list-table .mat-mdc-header-row {
-  background-color: #2d5a2e;
-}
-
-.vehicle-list-table .mat-mdc-header-cell {
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.vehicle-list-table .mat-mdc-row:nth-child(odd) {
-  background-color: #ffffff;
-}
-
-.vehicle-list-table .mat-mdc-row:nth-child(even) {
-  background-color: #f5f5f5;
-}
-
-.vehicle-list-header__create-button,
-.vehicle-list-filters__submit,
-.vehicle-list-table__detail-button {
-  background-color: #2d5a2e !important;
-}
-
-/* ปุ่ม reusable */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
+// Empty State
+.vehicle-list-state {
+  text-align: center;
+  padding: 4rem 1rem;
+  background-color: $white;
+  border-radius: 12px;
+  border: 1 dashed #e5e7eb;
 
   &__icon {
-    font-size: 18px;
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: $text-secondary;
+    margin-bottom: 1rem;
   }
 
-  &--sm {
-    padding-inline: 0.75rem;
-    font-size: 0.875rem;
+  div {
+    color: $text-secondary;
+    font-size: 1.125rem;
+  }
+}
+
+// Responsive "Card" View
+@media (max-width: 600px) {
+  .mat-mdc-table {
+    display: block !important;
+  }
+
+  .mat-mdc-header-row {
+    display: none !important;
+  }
+
+  .mat-mdc-row {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 1rem !important;
+    border-bottom: 8px solid #f3f4f6 !important;
+    background-color: $white !important;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .mat-mdc-cell {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 0.5rem 0 !important;
+    border: none !important;
+    font-size: 1rem !important;
+
+    &:before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: $text-secondary;
+      margin-right: 1rem;
+    }
+  }
+
+  .vehicle-list-table__actions-cell {
+    justify-content: flex-end !important;
+    margin-top: 1rem;
+    padding-top: 1rem !important;
+    border-top: 1px solid #f3f4f6 !important;
+
+    &:before {
+      display: none;
+    }
   }
 }

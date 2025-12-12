@@ -1,139 +1,214 @@
+$primary-green: #295938;
+$text-color: #333333;
+$subtext-color: #666666;
+$border-radius-field: 12px;
+$warn-color: #d32f2f;
+
+:host {
+  display: block;
+  background-color: #ffffff;
+}
+
 .staff-form-page {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+  font-family: 'Prompt', sans-serif;
+  background-color: #ffffff;
+  min-height: 100vh;
 }
 
-.staff-form-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-/* การ์ดฟอร์มหลัก */
-.staff-form {
-  background: #ffffff;
-  border-radius: 1.5rem;
-  padding: 2rem 2.5rem;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+.form-content {
+  width: 100%;
+  max-width: 450px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  align-items: center;
 }
 
-/* ส่วนบน: avatar + ปุ่มจัดการรูป */
-.staff-form-header {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  align-items: flex-start;
+.header-section {
+  text-align: center;
+  margin-bottom: 2rem;
 
-  &__avatar {
-    flex: 0 0 auto;
-    width: 128px;
-    height: 128px;
-    border-radius: 50%;
-    overflow: hidden;
-    background: #f5f5f5;
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: $text-color;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: $subtext-color;
+    margin: 0;
+  }
+}
+
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  .avatar-wrapper {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 1rem;
 
     img {
       width: 100%;
       height: 100%;
+      border-radius: 50%;
       object-fit: cover;
+      background-color: #dd7e6b;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    &.readonly img {
+      border: 2px solid $primary-green;
+      padding: 2px;
+    }
+
+    .upload-btn {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: #ffffff;
+      border: 1px solid #e0e0e0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        color: #555;
+      }
+
+      input {
+        display: none;
+      }
     }
   }
 
-  &__controls {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    max-width: 260px;
-    margin-top: 0.75rem;
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: $text-color;
   }
 }
 
-/* ปุ่มอัปโหลดรูป */
-.staff-form-image-upload {
-  display: inline-block;
+.staff-form {
   width: 100%;
-  cursor: pointer;
-
-  &__input {
-    display: none;
-  }
-
-  &__button {
-    display: inline-flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    padding: 0.6rem 1.5rem;
-    border-radius: 999px;
-    background: #2e7d32; /* ใช้โทนเขียวแบบระบบเดิม */
-    color: #fff;
-    font-weight: 500;
-    user-select: none;
-  }
-
-  &__icon {
-    margin-right: 0.5rem;
-    font-size: 20px;
-  }
+  padding-bottom: 2rem;
 }
 
-/* ปุ่มลบรูป */
-.staff-form-image-remove {
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+mat-form-field {
   width: 100%;
-  padding: 0.6rem 1.5rem;
-  border-radius: 999px;
-  border: none;
-  background: #e0e0e0;
-  color: #424242;
-  font-weight: 500;
-  cursor: pointer;
+
+  --mdc-outlined-text-field-container-shape: #{$border-radius-field};
+  --mdc-outlined-text-field-outline-color: #cfcfcf;
+  --mdc-outlined-text-field-focus-outline-color: #{$primary-green};
+  --mdc-outlined-text-field-focus-label-text-color: #{$primary-green};
+
+  .mat-mdc-input-element {
+    font-size: 1rem;
+    color: $text-color;
+  }
+
+  ::placeholder {
+    color: #a0a0a0;
+  }
+
+  // Custom Readonly Style
+  &.readonly-field {
+    pointer-events: none; // Disables interaction
+
+    .mat-mdc-text-field-wrapper {
+      background-color: #f9f9f9; // Slight background to indicate readonly
+    }
+
+    // Ensure text is readable
+    .mat-mdc-input-element:disabled {
+      color: $text-color !important;
+      -webkit-text-fill-color: $text-color !important;
+    }
+
+    .mat-mdc-select-value-text {
+      color: $text-color !important;
+      -webkit-text-fill-color: $text-color !important;
+    }
+  }
 }
 
-/* ฟิลด์ฟอร์ม: เรียงลงมาเต็มกว้าง */
-.staff-form-fields {
+::ng-deep .mat-mdc-text-field-wrapper {
+  .mdc-notched-outline__leading {
+    border-top-left-radius: $border-radius-field !important;
+    border-bottom-left-radius: $border-radius-field !important;
+  }
+
+  .mdc-notched-outline__trailing {
+    border-top-right-radius: $border-radius-field !important;
+    border-bottom-right-radius: $border-radius-field !important;
+  }
+}
+
+.actions-section {
+  width: 100%;
+  margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-/* ปุ่มด้านล่าง */
-.staff-form-actions {
-  margin-top: 1.5rem;
+.view-actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
+  gap: 1rem;
+  justify-content: space-between;
+
+  .action-btn {
+    flex: 1;
+    border-radius: 30px !important;
+    padding: 1.2rem !important;
+    font-size: 1rem;
+  }
 }
 
-/* ปรับ layout สำหรับจอเล็ก */
-@media (max-width: 768px) {
-  .staff-form {
-    padding: 1.5rem;
+.submit-btn {
+  width: 100%;
+  padding: 1.2rem;
+  background-color: $primary-green !important;
+  color: white !important;
+  border-radius: 30px !important;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: none !important;
+
+  &:disabled {
+    background-color: #ccc !important;
   }
+}
 
-  .staff-form-header {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+.cancel-btn,
+.back-btn {
+  width: 100%;
+  color: $subtext-color !important;
+  border-radius: 30px !important;
+}
 
-    &__controls {
-      width: 100%;
-      max-width: 320px;
-      margin-top: 0.5rem;
-    }
-  }
-
-  .staff-form-actions {
-    flex-direction: column-reverse;
-    align-items: stretch;
-
-    button {
-      width: 100%;
-    }
-  }
+.d-none {
+  display: none;
 }
