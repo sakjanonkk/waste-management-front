@@ -44,7 +44,11 @@
     } @if (!loading() && staff()) {
     <mat-card class="staff-detail-card" aria-labelledby="profile-title">
       <div class="staff-detail-card__avatar" aria-hidden="true">
-        <img [src]="getImageUrl()" alt="avatar" />
+        <img
+          [src]="getImageUrl()"
+          alt="avatar"
+          (error)="onImageError($event)"
+        />
       </div>
 
       <mat-card-content class="staff-detail-card__content">
