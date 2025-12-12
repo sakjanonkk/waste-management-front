@@ -10,11 +10,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-staff-detail-page',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatCardModule, MatProgressSpinnerModule, MatFormFieldModule, MatInputModule, MatSnackBarModule, RouterLink],
+  imports: [MatButtonModule, MatIconModule, MatCardModule, MatProgressSpinnerModule, MatFormFieldModule, MatInputModule, MatSnackBarModule, RouterLink, NgxSkeletonLoaderModule],
   templateUrl: './staff-detail.component.html',
   styleUrls: ['./staff-detail.component.scss']
 })

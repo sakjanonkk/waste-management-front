@@ -4,10 +4,22 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [
+    ReactiveFormsModule, 
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule
+  ],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
@@ -19,7 +31,7 @@ export class Login {
   loginForm: FormGroup;
   loading = false;
   errorMessage = '';
-  showPassword = false;
+  hidePassword = true;
 
   constructor() {
     this.loginForm = this.fb.group({
@@ -29,7 +41,7 @@ export class Login {
   }
 
   togglePasswordVisibility(): void {
-    this.showPassword = !this.showPassword;
+    this.hidePassword = !this.hidePassword;
   }
 
   onSubmit(): void {

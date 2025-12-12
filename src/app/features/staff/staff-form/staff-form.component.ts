@@ -10,11 +10,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @Component({
   selector: 'app-staff-form-page',
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatSnackBarModule, MatIconModule],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule, MatSnackBarModule, MatIconModule, NgxSkeletonLoaderModule],
   templateUrl: './staff-form.component.html',
   styleUrls: ['./staff-form.component.scss']
 })
@@ -27,92 +28,122 @@ export class StaffFormPageComponent {
   private platformId = inject(PLATFORM_ID);
   private isBrowser = isPlatformBrowser(this.platformId);
 
-  id = Number(this.route.snapshot.paramMap.get('id')) || null;
-  isEdit = this.route.snapshot.routeConfig?.path?.includes('edit') || false;
+  id: number | null = null;
+  isEdit = false;
+  isView = false;
   loading = signal(false);
+  isFetching = signal(false);
+  hidePassword = true;
 
   form = this.fb.group({
-    prefix: ['นาย', Validators.required],
+    prefix: ['', Validators.required],
     firstname: ['', Validators.required],
     lastname: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     password: ['', this.id ? [] : [Validators.required, Validators.minLength(6)]],
-    role: ['DRIVER', Validators.required],
-    status: ['ACTIVE'],
-    phone_number: [''],
-    s_image: [''], // โปรไฟล์รูปภาพ (URL/Base64)
+    role: ['', Validators.required],
+    status: [''],
+    phone_number: ['' , [Validators.required, Validators.pattern(/^\d{10}$/)]],
+    s_image: [''], 
   });
 
   // เก็บไฟล์จริงไว้ส่งไป backend
   selectedImageFile: File | null = null;
+  currentStaffData: any = null;
 
   constructor() {
+    this.route.paramMap.subscribe(params => {
+        const idStr = params.get('id');
+        this.id = idStr ? Number(idStr) : null;
+        
+        const path = this.route.snapshot.routeConfig?.path || '';
+        this.isEdit = path.includes('edit');
+        this.isView = !!this.id && !this.isEdit; // Has ID but not editing
+
+        this.initForm();
+    });
+  }
+
+  initForm() {
     if (this.isBrowser && this.id) {
-      this.loading.set(true);
+      this.isFetching.set(true);
       this.staffService.get(this.id).subscribe({
         next: (res) => {
+          this.currentStaffData = res.data;
           const d = res.data;
           this.form.patchValue({
             prefix: d.prefix,
             firstname: d.firstname,
             lastname: d.lastname,
             email: d.email,
-            role: (d.role || 'DRIVER').toUpperCase(), // แปลง role เป็น uppercase สำหรับ form
-            status: (d.status || 'ACTIVE').toUpperCase(), // แปลง status เป็น uppercase สำหรับ form
+            role: (d.role || 'DRIVER').toUpperCase(), 
+            status: (d.status || 'ACTIVE').toUpperCase(),
             phone_number: d.phone_number || '',
             s_image: d.s_image || '',
           });
-          this.loading.set(false);
+
+          // Disable form in View mode
+          if (this.isView) {
+            this.form.disable();
+          } else {
+            this.form.enable();
+            // Password validation logic update handled in submit or dynamic validators if needed
+          }
+
+          this.isFetching.set(false);
         },
-        error: () => this.loading.set(false),
+        error: () => this.isFetching.set(false),
       });
+    } else {
+        // Reset for New mode
+        this.form.enable();
     }
   }
 
   submit() {
-    if (this.form.invalid) return this.form.markAllAsTouched();
-    const raw = this.form.getRawValue();
-    
-    
-    // ========== ถ้ามีรูปใหม่ ใช้ FormData / ถ้าไม่มีใช้ JSON ==========
-    let payload: any;
-    
-    if (this.selectedImageFile) {
-      // มีรูปใหม่ → ใช้ FormData
-      const formData = new FormData();
-      formData.append('prefix', raw.prefix ?? '');
-      formData.append('firstname', raw.firstname ?? '');
-      formData.append('lastname', raw.lastname ?? '');
-      formData.append('email', raw.email ?? '');
-      formData.append('role', (raw.role ?? 'driver').toLowerCase());
-      formData.append('status', (raw.status ?? 'active').toLowerCase());
-      formData.append('phone_number', raw.phone_number ?? '');
-      
-      if (!this.id && raw.password) {
-        formData.append('password', raw.password);
-      }
-      
-      formData.append('picture', this.selectedImageFile);
-      payload = formData;
-    } else {
-      // ไม่มีรูปใหม่ → ใช้ JSON
-      payload = {
-        prefix: raw.prefix ?? '',
-        firstname: raw.firstname ?? '',
-        lastname: raw.lastname ?? '',
-        email: raw.email ?? '',
-        role: (raw.role ?? 'driver').toLowerCase(),
-        status: (raw.status ?? 'active').toLowerCase(),
-        phone_number: raw.phone_number ?? '',
-      };
-      
-      // เพิ่ม password สำหรับทั้ง create และ edit (ถ้ามี)
-      if (raw.password) {
-        payload.password = raw.password;
-      }
+    if (this.isView) return; // Should not happen but safety check
+
+    // Fix prefix
+    if (this.form.get('prefix')?.invalid && this.form.get('prefix')?.errors?.['required']) {
+      this.form.patchValue({ prefix: '-' });
+    }
+
+    if (this.form.invalid) {
+        console.log('Form Invalid:', this.form.errors);
+        Object.keys(this.form.controls).forEach(key => {
+            const control = this.form.get(key);
+            if(control?.invalid) {
+                console.log(`${key} invalid:`, control.errors);
+            }
+        });
+        return this.form.markAllAsTouched();
     }
     
-    console.log('Sending payload:', payload);
+    const raw = this.form.getRawValue();
+
+    const formData = new FormData();
+    formData.append('prefix', raw.prefix ?? '-');
+    formData.append('firstname', raw.firstname ?? '');
+    formData.append('lastname', raw.lastname ?? '');
+    formData.append('email', raw.email ?? '');
+    formData.append('role', (raw.role ?? 'driver').toLowerCase());
+    formData.append('status', (raw.status ?? 'active').toLowerCase());
+    
+    // Ensure phone number is clean (though validator checks digits)
+    formData.append('phone_number', raw.phone_number ?? '');
+
+    if (!this.id && raw.password) {
+      formData.append('password', raw.password);
+    } else if (this.isEdit && raw.password) {
+        // Optional: allow password update in edit if needed, commonly backend ignores empty or check logic
+        formData.append('password', raw.password);
+    }
+    
+    if (this.selectedImageFile) {
+      formData.append('picture', this.selectedImageFile);
+    }
+
+    const payload = formData;
 
     this.loading.set(true);
     const req = this.id
@@ -122,7 +153,6 @@ export class StaffFormPageComponent {
     req.subscribe({
       next: (response) => {
         this.loading.set(false);
-        console.log('Save success:', response);
         this.snack.open('บันทึกสำเร็จ', 'ปิด', { duration: 2000 });
         this.router.navigate(['/staff']);
       },
@@ -135,6 +165,8 @@ export class StaffFormPageComponent {
           errorMsg = err.error.errors[0].message;
         } else if (err.error?.message) {
           errorMsg = err.error.message;
+        } else if (err.error?.error) {
+           errorMsg = err.error.error;
         }
         
         this.snack.open(errorMsg, 'ปิด', { duration: 3000 });
@@ -145,10 +177,36 @@ export class StaffFormPageComponent {
   cancel() {
     this.router.navigate(['/staff']);
   }
+  
+  // Navigation for Edit button in View mode
+  goToEdit() {
+      if (this.id) {
+        this.router.navigate(['/staff', this.id, 'edit']);
+      }
+  }
+
+  delete() {
+    if (!this.id || !this.currentStaffData) return;
+    const s = this.currentStaffData;
+    
+    if (!confirm(`ลบพนักงาน ${s.firstname} ${s.lastname}?`)) return;
+    
+    this.loading.set(true);
+    this.staffService.delete(this.id).subscribe({
+      next: () => {
+        this.snack.open('ลบสำเร็จ', 'ปิด', { duration: 2000 });
+        this.router.navigate(['/staff']);
+      },
+      error: (err) => {
+        this.loading.set(false);
+        this.snack.open('ลบไม่สำเร็จ', 'ปิด', { duration: 3000 });
+      },
+    });
+  }
 
   // Used by CanDeactivate guard to warn on unsaved changes
   hasPendingChanges(): boolean {
-    return this.form.dirty;
+    return this.form.dirty && !this.isView;
   }
 
   // Display helper for read-only employee code shown in the form header field
@@ -160,6 +218,7 @@ export class StaffFormPageComponent {
 
   // ----- Image handlers (เฉพาะส่วนโปรไฟล์รูปภาพ) -----
   onImageFileSelected(evt: Event) {
+    if (this.isView) return; // Prevent upload in view mode
     const input = evt.target as HTMLInputElement;
     const file = input?.files?.[0];
     if (!file) return;
@@ -180,8 +239,26 @@ export class StaffFormPageComponent {
   }
 
   removeImage() {
+    if (this.isView) return;
     this.selectedImageFile = null;
     this.form.patchValue({ s_image: '' });
     this.form.markAsDirty();
+  }
+  
+  getImageUrl(): string {
+      const picture = this.form.value.s_image || this.currentStaffData?.picture;
+      if (!picture) return 'image/13.svg'; // Default placeholder
+      
+      // Check absolute path/data URI
+      if (picture.startsWith('data:') || picture.startsWith('http')) {
+          return picture;
+      }
+      
+      // If relative from backend
+      if (picture.startsWith('/uploads/')) {
+          return 'https://waste.mysterchat.com' + picture;
+      }
+      
+      return picture;
   }
 }

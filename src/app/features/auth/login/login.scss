@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
   background: #f5f5f5;
+  padding: 16px; // Added padding to prevent edge touching on small screens
 }
 
 .login-content {
@@ -27,7 +28,7 @@
 
 .logo {
   margin-bottom: 30px;
-  
+
   .logo-placeholder {
     width: 120px;
     height: 60px;
@@ -36,22 +37,35 @@
   }
 }
 
-h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin: 0 0 8px 0;
+.header-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  .title {
+
+    font: var(--mat-sys-title-large);
+    margin: 0;
+  }
+
+  .subtitle {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
 }
 
-.subtitle {
-  color: #666;
-  font-size: 0.9rem;
-  margin: 0 0 30px 0;
-}
 
 .form-group {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 20px;
-  
+  margin-top: 20px;
+  gap: 8px;
+
   label {
     display: block;
     font-size: 0.85rem;
@@ -59,34 +73,15 @@ h1 {
     margin-bottom: 6px;
     font-weight: 500;
   }
-  
-  input {
+
+  mat-form-field {
     width: 100%;
-    padding: 12px 16px;
-    border: 1px solid #d0d0d0;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    transition: all 0.2s;
-    box-sizing: border-box;
-    
-    &:focus {
-      outline: none;
-      border-color: #2d5016;
-    }
-    
-    &.error {
-      border-color: #d32f2f;
-    }
   }
 }
 
 .password-input-wrapper {
   position: relative;
-  
-  input {
-    padding-right: 45px;
-  }
-  
+
   .toggle-password {
     position: absolute;
     right: 12px;
@@ -113,32 +108,9 @@ h1 {
   font-size: 0.85rem;
   margin-top: 6px;
   text-decoration: none;
-  
+
   &:hover {
     text-decoration: underline;
-  }
-}
-
-.btn-login {
-  width: 100%;
-  padding: 14px;
-  background: #2d5016;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-top: 10px;
-  
-  &:hover:not(:disabled) {
-    background: #1f3a0f;
-  }
-  
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
   }
 }
 
@@ -156,7 +128,7 @@ h1 {
   text-align: center;
   margin: 24px 0;
   position: relative;
-  
+
   &::before,
   &::after {
     content: '';
@@ -166,15 +138,15 @@ h1 {
     height: 1px;
     background: #e0e0e0;
   }
-  
+
   &::before {
     left: 0;
   }
-  
+
   &::after {
     right: 0;
   }
-  
+
   span {
     background: white;
     padding: 0 12px;
@@ -183,51 +155,56 @@ h1 {
   }
 }
 
-.btn-register {
+.w-100 {
   width: 100%;
-  padding: 14px;
-  background: white;
-  color: #2d5016;
-  border: 2px solid #2d5016;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  
-  &:hover {
-    background: #f5f5f5;
-  }
+}
+
+.mt-3 {
+  margin-top: 1rem;
 }
 
 .login-illustration {
-  background: linear-gradient(135deg, #a8c48a 0%, #8fb573 100%);
+  background: #B9CE9E;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px;
-  
+
   .illustration-content {
     width: 100%;
     max-width: 400px;
-    
-    svg {
-      width: 100%;
-      height: auto;
-    }
   }
 }
 
+// Responsive Styles
 @media (max-width: 968px) {
   .login-content {
     grid-template-columns: 1fr;
+    min-height: auto;
+    max-width: 500px;
   }
-  
+
   .login-illustration {
     display: none;
   }
-  
+
   .login-form-section {
     padding: 40px 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 16px;
+    align-items: center;
+    padding-top: 40px;
+  }
+
+  .login-form-section {
+    padding: 30px 20px;
+  }
+
+  .header-text .title {
+    font-size: 1.5rem;
   }
 }
