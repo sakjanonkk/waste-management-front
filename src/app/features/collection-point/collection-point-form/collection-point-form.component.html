@@ -88,6 +88,20 @@
         <!-- Coordinates Card -->
         <mat-card class="info-card">
           <mat-card-content>
+            <div class="coordinates-header">
+              <label class="section-label">พิกัดตำแหน่ง</label>
+              <button
+                type="button"
+                mat-stroked-button
+                color="primary"
+                (click)="openMapPicker()"
+                class="map-picker-btn"
+              >
+                <mat-icon>map</mat-icon>
+                เลือกจากแผนที่
+              </button>
+            </div>
+
             <div class="coordinates-grid">
               <mat-form-field appearance="outline">
                 <mat-label>ละติจูด</mat-label>
