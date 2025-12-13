@@ -154,6 +154,25 @@
       width: 100%;
     }
 
+    .coordinates-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+
+      .section-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #374151;
+      }
+
+      .map-picker-btn {
+        mat-icon {
+          margin-right: 0.5rem;
+        }
+      }
+    }
+
     .coordinates-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
