@@ -1,54 +1,26 @@
 <div class="vehicle-detail-page">
   <!-- Action toolbar -->
   <div class="vehicle-detail-actions" role="toolbar" aria-label="การทำงานของรถ">
-    <button
-      mat-flat-button
-      color="primary"
-      class="vehicle-detail-actions__btn vehicle-detail-actions__btn--edit"
-      type="button"
-      aria-label="แก้ไขข้อมูลรถ"
-      (click)="editVehicle()"
-      [disabled]="loading() || !vehicle()"
-    >
+    <button mat-flat-button color="primary" class="vehicle-detail-actions__btn vehicle-detail-actions__btn--edit"
+      type="button" aria-label="แก้ไขข้อมูลรถ" (click)="editVehicle()" [disabled]="loading() || !vehicle()">
       <mat-icon>edit</mat-icon>
       แก้ไขข้อมูลรถ
     </button>
 
-    <button
-      mat-flat-button
-      color="primary"
-      class="vehicle-detail-actions__btn vehicle-detail-actions__btn--edit-driver"
-      type="button"
-      aria-label="แก้ไขคนขับ"
-      (click)="editDriver()"
-      [disabled]="loading() || !vehicle()"
-    >
+    <button mat-flat-button color="primary" class="vehicle-detail-actions__btn vehicle-detail-actions__btn--edit-driver"
+      type="button" aria-label="แก้ไขคนขับ" (click)="editDriver()" [disabled]="loading() || !vehicle()">
       <mat-icon>person</mat-icon>
       แก้ไขคนขับรถ
     </button>
 
-    <button
-      mat-flat-button
-      color="warn"
-      class="vehicle-detail-actions__btn vehicle-detail-actions__btn--delete"
-      type="button"
-      aria-label="ลบข้อมูลรถ"
-      (click)="delete()"
-      [disabled]="loading() || !vehicle()"
-    >
+    <button mat-flat-button color="warn" class="vehicle-detail-actions__btn vehicle-detail-actions__btn--delete"
+      type="button" aria-label="ลบข้อมูลรถ" (click)="delete()" [disabled]="loading() || !vehicle()">
       <mat-icon>delete</mat-icon>
       ลบข้อมูล
     </button>
 
-    <button
-      mat-flat-button
-      color="warn"
-      class="vehicle-detail-actions__btn vehicle-detail-actions__btn--deactivate"
-      type="button"
-      aria-label="ปิดใช้งานรถ"
-      (click)="deactivate()"
-      [disabled]="loading() || !vehicle()"
-    >
+    <button mat-flat-button color="warn" class="vehicle-detail-actions__btn vehicle-detail-actions__btn--deactivate"
+      type="button" aria-label="ปิดใช้งานรถ" (click)="deactivate()" [disabled]="loading() || !vehicle()">
       <mat-icon>block</mat-icon>
       ปิดใช้งานรถคันนี้
     </button>
@@ -69,16 +41,11 @@
           <div class="vehicle-detail-main">
             <div class="badge">
               <div class="code">{{ getRegNum() }}</div>
-              <div
-                class="status"
-                [class.available]="
+              <div class="status" [class.available]="
                   vehicle()?.status?.toUpperCase() === 'AVAILABLE'
-                "
-                [class.inuse]="vehicle()?.status?.toUpperCase() === 'IN_USE'"
-                [class.maint]="
+                " [class.inuse]="vehicle()?.status?.toUpperCase() === 'IN_USE'" [class.maint]="
                   vehicle()?.status?.toUpperCase() === 'MAINTENANCE'
-                "
-              >
+                ">
                 <span class="dot"></span>
                 {{ statusLabel(vehicle()?.status) }}
               </div>
@@ -132,8 +99,8 @@
           <!-- ด้านขวา: รูปรถ + คนขับ -->
           <div class="vehicle-detail-side">
             <div class="vehicle-photo">
-              @if (vehicle()?.image_url) {
-              <img [src]="vehicle()?.image_url" alt="รถเก็บขยะ" />
+              @if (vehicle()?.image || vehicle()?.image_url) {
+              <img [src]="vehicle()?.image || vehicle()?.image_url" alt="รถเก็บขยะ" />
               }
             </div>
 
@@ -141,13 +108,9 @@
             <div class="driver-card">
               <div class="driver-title">รายละเอียดคนขับ</div>
               <div class="driver">
-                <img
-                  class="avatar"
-                  [src]="
-                    driver()?.s_image || '/assets/images/worker-avatar.png'
-                  "
-                  alt="driver"
-                />
+                <img class="avatar" [src]="
+                    driver()?.s_image || driver()?.picture || '/assets/images/worker-avatar.png'
+                  " alt="driver" />
                 <div>
                   <div class="name">
                     {{ driver()?.firstname }}
