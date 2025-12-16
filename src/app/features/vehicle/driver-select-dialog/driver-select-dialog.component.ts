@@ -3,7 +3,6 @@ import { Component, inject, signal, effect } from '@angular/core';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -25,7 +24,6 @@ export interface DriverSelectDialogResult {
     MatDialogModule,
     MatButtonModule,
     MatIconModule,
-    MatTableModule,
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule
@@ -43,8 +41,6 @@ export class DriverSelectDialogComponent {
   filteredDrivers = signal<Staff[]>([]);
   searchText = signal<string>('');
   selectedDriver = signal<Staff | null>(null);
-
-  displayedColumns = ['select', 'code', 'name', 'role', 'phone'];
 
   constructor() {
     // Load all drivers (staff with role = 'driver')

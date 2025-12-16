@@ -1,216 +1,282 @@
+$primary-green: #295938;
+$text-color: #333333;
+$subtext-color: #666666;
+$border-radius-field: 12px;
+$border-color: #cfcfcf;
+
+:host {
+  display: block;
+  background-color: #ffffff;
+}
+
 .vehicle-form-page {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 1.5rem;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+  min-height: 100vh;
+  background-color: #ffffff;
 }
 
-.vehicle-form-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: #1f2937;
+.form-content {
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* การ์ดฟอร์มหลัก */
-.vehicle-form {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* Main Grid Layout */
-.vehicle-form-grid {
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 2rem;
+// Header Section
+.header-section {
+  text-align: center;
   margin-bottom: 2rem;
 
-  @media (max-width: 968px) {
-    grid-template-columns: 1fr;
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: $text-color;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: $subtext-color;
+    margin: 0;
   }
 }
 
-/* Left Column: Image Section */
-.vehicle-form-left {
-  .vehicle-form-image-section {
-    .vehicle-form-image-label {
-      display: block;
-      font-weight: 600;
-      color: #1f2937;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
+// Vehicle Form
+.vehicle-form {
+  width: 100%;
+  padding-bottom: 2rem;
 
-    .vehicle-form-image-preview {
-      width: 100%;
-      height: 250px;
-      margin-bottom: 1rem;
-      border-radius: 8px;
-      overflow: hidden;
-      background-color: #f3f4f6;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      .vehicle-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+  &.skeleton-form {
+    .avatar-section {
+      .skeleton-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 16px;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        margin-bottom: 1rem;
       }
 
-      .vehicle-image-placeholder {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: #9ca3af;
+      .skeleton-line {
+        height: 16px;
+        border-radius: 4px;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
 
-        mat-icon {
-          font-size: 64px;
-          width: 64px;
-          height: 64px;
-          margin-bottom: 0.5rem;
-        }
-
-        span {
-          font-size: 0.95rem;
+        &.w-40 {
+          width: 40%;
+          margin: 0 auto;
         }
       }
     }
 
-    .vehicle-form-upload-btn {
-      width: 100%;
+    .skeleton-field {
+      height: 56px;
+      border-radius: $border-radius-field;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Avatar Section
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: $text-color;
+  }
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 1rem;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    object-fit: cover;
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
       height: 48px;
-      border: 2px solid #2d5a2e;
-      color: #2d5a2e;
-      font-weight: 500;
+      color: #bdbdbd;
+    }
+  }
 
-      &:hover {
-        background-color: #e0f2e9;
-      }
+  .upload-btn {
+    position: absolute;
+    bottom: -8px;
+    right: -8px;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 
-      mat-icon {
-        margin-right: 0.5rem;
-      }
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: $primary-green;
+    }
+  }
+
+  &:hover .upload-btn {
+    background: $primary-green;
+
+    mat-icon {
+      color: #ffffff;
     }
   }
 }
 
-/* Right Column: Form Fields */
-.vehicle-form-right {
+// Input Group
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+mat-form-field {
+  width: 100%;
+
+  --mdc-outlined-text-field-container-shape: #{$border-radius-field};
+  --mdc-outlined-text-field-outline-color: #{$border-color};
+  --mdc-outlined-text-field-focus-outline-color: #{$primary-green};
+  --mdc-outlined-text-field-focus-label-text-color: #{$primary-green};
+
+  .mat-mdc-input-element {
+    font-size: 1rem;
+    color: $text-color;
+  }
+
+  ::placeholder {
+    color: #a0a0a0;
+  }
+}
+
+::ng-deep .mat-mdc-text-field-wrapper {
+  .mdc-notched-outline__leading {
+    border-top-left-radius: $border-radius-field !important;
+    border-bottom-left-radius: $border-radius-field !important;
+  }
+
+  .mdc-notched-outline__trailing {
+    border-top-right-radius: $border-radius-field !important;
+    border-bottom-right-radius: $border-radius-field !important;
+  }
+}
+
+// Capacity Row
+.capacity-row {
+  display: flex;
+  gap: 0.75rem;
+
+  .capacity-field {
+    flex: 1;
+
+    &.regular {
+      ::ng-deep .mat-mdc-text-field-wrapper {
+        background-color: rgba(232, 245, 233, 0.5);
+      }
+    }
+
+    &.recycle {
+      ::ng-deep .mat-mdc-text-field-wrapper {
+        background-color: rgba(255, 248, 225, 0.5);
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+// Actions Section
+.actions-section {
+  width: 100%;
+  margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
 
-  mat-form-field {
-    width: 100%;
+.submit-btn {
+  width: 100%;
+  padding: 1.2rem;
+  background-color: $primary-green !important;
+  color: white !important;
+  border-radius: 30px !important;
+  font-size: 1rem;
+  font-weight: 500;
+  box-shadow: none !important;
+
+  &:disabled {
+    background-color: #ccc !important;
   }
 }
 
-/* Bottom Section */
-.vehicle-form-bottom {
-  .vehicle-form-section-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 1rem;
-  }
-
-  .vehicle-form-capacity-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-    }
-
-    .capacity-field {
-      mat-form-field {
-        width: 100%;
-      }
-
-      &--regular {
-        ::ng-deep {
-          .mat-mdc-text-field-wrapper {
-            background-color: #e0f2e9;
-          }
-        }
-      }
-
-      &--recycle {
-        ::ng-deep {
-          .mat-mdc-text-field-wrapper {
-            background-color: #fef3c7;
-          }
-        }
-      }
-    }
-  }
-
-  .status-field {
-    width: 300px;
-
-    @media (max-width: 768px) {
-      width: 100%;
-    }
-  }
+.cancel-btn {
+  width: 100%;
+  color: $subtext-color !important;
+  border-radius: 30px !important;
 }
 
-/* Action Buttons */
-.vehicle-form-actions {
-  margin-top: 2rem;
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
-
-  button {
-    min-width: 120px;
-    height: 48px;
-    font-weight: 500;
-    font-size: 1rem;
+// Responsive
+@media (max-width: 480px) {
+  .vehicle-form-page {
+    padding: 1.5rem 1rem;
   }
 
-  .btn-cancel {
-    background-color: #ef4444;
-    color: white;
-
-    &:hover:not(:disabled) {
-      background-color: #dc2626;
-    }
-  }
-
-  .btn-submit {
-    background-color: #2d5a2e;
-    color: white;
-
-    &:hover:not(:disabled) {
-      background-color: #1f4020;
-    }
-
-    &:disabled {
-      background-color: #9ca3af;
-      color: #e5e7eb;
-    }
-  }
-}
-
-/* จอเล็ก */
-@media (max-width: 768px) {
-  .vehicle-form {
-    padding: 1.5rem;
-  }
-
-  .vehicle-form-actions {
-    flex-direction: column-reverse;
-    align-items: stretch;
-
-    button {
-      width: 100%;
-    }
+  .avatar-wrapper {
+    width: 100px;
+    height: 100px;
   }
 }

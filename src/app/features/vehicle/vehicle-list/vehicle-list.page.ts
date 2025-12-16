@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, effect, inject, signal } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgClass } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -21,6 +21,7 @@ import { Vehicle, VehicleStatus } from '../../../shared/models/vehicle.model';
   standalone: true,
   imports: [
     FormsModule,
+    NgClass,
     MatTableModule,
     MatPaginatorModule,
     MatIconModule,
@@ -125,10 +126,20 @@ export class VehicleListPage {
   }
 
   statusLabel(s: VehicleStatus | string | ''): string {
-    const statusUpper = (s || '').toUpperCase();
-    if (statusUpper === 'AVAILABLE' || statusUpper === 'ACTIVE') return 'พร้อมใช้งาน';
-    if (statusUpper === 'IN_USE') return 'กำลังใช้งาน';
-    if (statusUpper === 'MAINTENANCE') return 'ซ่อมบำรุง';
+    const statusLower = (s || '').toLowerCase();
+    if (statusLower === 'available' || statusLower === 'active') return 'พร้อมใช้งาน';
+    if (statusLower === 'in_use') return 'กำลังใช้งาน';
+    if (statusLower === 'maintenance' || statusLower === 'in_maintenance') return 'ซ่อมบำรุง';
+    if (statusLower === 'decommissioned') return 'ปลดประจำการ';
     return '-';
+  }
+
+  statusClass(s: VehicleStatus | string | ''): string {
+    const statusLower = (s || '').toLowerCase();
+    if (statusLower === 'available' || statusLower === 'active') return 'status--active';
+    if (statusLower === 'in_use') return 'status--inuse';
+    if (statusLower === 'maintenance' || statusLower === 'in_maintenance') return 'status--maintenance';
+    if (statusLower === 'decommissioned') return 'status--decommissioned';
+    return '';
   }
 }
