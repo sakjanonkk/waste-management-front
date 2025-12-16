@@ -58,7 +58,7 @@ export class VehicleFormComponent {
             regular_capacity: d.regular_waste_capacity_kg ?? d.regular_capacity ?? 0,
             recycle_capacity: d.recyclable_waste_capacity_kg ?? d.recycle_capacity ?? 0,
             depreciation_thb: d.depreciation_value_per_year ?? d.depreciation_thb ?? 0,
-            image_url: d.image_url || '',
+            image_url: d.image || d.image_url || '',
           });
           this.loading.set(false);
         },
@@ -75,28 +75,27 @@ export class VehicleFormComponent {
     }
     const raw = this.form.getRawValue();
     console.log('Raw form values:', raw);
-    
-    // ========== Payload สำหรับ Server จริง (Backend) ==========
-    // Backend ใช้ field names ต่างจาก frontend!
-    const payload: any = {
-      registration_number: raw.vehicle_reg_num || '',
-      status: raw.status ?? 'active', // dropdown ส่งมาเป็น lowercase อยู่แล้ว
-      fuel_type: (raw.fuel_category ?? 'diesel').toLowerCase(),
-      regular_waste_capacity_kg: raw.regular_capacity ?? 0,
-      recyclable_waste_capacity_kg: raw.recycle_capacity ?? 0,
-      depreciation_value_per_year: raw.depreciation_thb ?? 0,
-    };
 
-    // เพิ่มเฉพาะฟิลด์ optional ที่มีค่า
-    if (raw.vehicle_type) payload.vehicle_type = raw.vehicle_type;
-    if (raw.image_url) payload.image_url = raw.image_url;
+    // ========== Payload สำหรับ Server จริง (Backend) แบบ FormData ==========
+    const formData = new FormData();
+    formData.append('registration_number', raw.vehicle_reg_num || '');
+    formData.append('vehicle_type', raw.vehicle_type || 'Unknown'); 
+    formData.append('status', raw.status ?? 'active');
+    formData.append('regular_waste_capacity_kg', String(raw.regular_capacity ?? 0));
+    formData.append('recyclable_waste_capacity_kg', String(raw.recycle_capacity ?? 0));
+    const fuel = (raw.fuel_category ?? 'diesel').toLowerCase();
+    formData.append('fuel_type', fuel);
+    formData.append('depreciation_value_per_year', String(raw.depreciation_thb ?? 0));
+    if (this.selectedImageFile) {
+      formData.append('image', this.selectedImageFile);
+    }
 
-    console.log('Sending payload:', payload);
+    console.log('Sending FormData...');
 
     this.loading.set(true);
     const req = this.id
-      ? this.vehicleService.update(this.id, payload)
-      : this.vehicleService.create(payload);
+      ? this.vehicleService.update(this.id, formData)
+      : this.vehicleService.create(formData);
 
     req.subscribe({
       next: (response) => {
