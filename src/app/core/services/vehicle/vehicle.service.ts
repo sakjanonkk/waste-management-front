@@ -31,11 +31,11 @@ export class VehicleService {
     return this.http.get<VehicleResponse>(`${this.baseUrl}/${id}`);
   }
 
-  create(payload: Partial<Vehicle>): Observable<VehicleResponse> {
+  create(payload: Partial<Vehicle> | FormData): Observable<VehicleResponse> {
     return this.http.post<VehicleResponse>(this.baseUrl, payload);
   }
 
-  update(id: number, payload: Partial<Vehicle>): Observable<VehicleResponse> {
+  update(id: number, payload: Partial<Vehicle> | FormData): Observable<VehicleResponse> {
     return this.http.put<VehicleResponse>(`${this.baseUrl}/${id}`, payload);
   }
 
