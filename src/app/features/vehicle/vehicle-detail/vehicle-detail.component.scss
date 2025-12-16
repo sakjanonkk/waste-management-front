@@ -1,98 +1,178 @@
+$primary-green: #295938;
+$text-color: #333333;
+$subtext-color: #666666;
+$border-color: #e0e0e0;
+$bg-light: #f9f9f9;
+
+:host {
+  display: block;
+  background-color: #ffffff;
+}
+
 .vehicle-detail-page {
-  padding: 1rem;
-}
-
-/* แถบปุ่มด้านบน */
-.vehicle-detail-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-
-  &__btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-  }
-}
-
-/* เนื้อหาหลัก + title */
-.vehicle-detail-content {
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-.vehicle-detail-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-/* Loading */
-.vehicle-detail-loading {
   display: flex;
   justify-content: center;
-  padding: 4rem 0;
+  padding: 2rem 1rem;
+  min-height: 100vh;
+  background-color: #ffffff;
 }
 
-/* การ์ดหลัก */
-.vehicle-detail-card {
-  padding: 2rem 2.5rem;
-  border-radius: 1.5rem;
-  background: #ffffff;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+.detail-content {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  &__content {
-    padding: 0;
+// Header Section
+.header-section {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: $text-color;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: $subtext-color;
+    margin: 0;
   }
 }
 
-/* แบ่ง layout ซ้าย/ขวา */
-.vehicle-detail-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-}
-
-.vehicle-detail-main {
-  flex: 1 1 280px;
-}
-
-.vehicle-detail-side {
-  flex: 1 1 260px;
+// Skeleton Loading
+.skeleton-container {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  align-items: center;
+  gap: 1.5rem;
+
+  .skeleton-image {
+    width: 200px;
+    height: 150px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .skeleton-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .skeleton-line {
+    height: 20px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+
+    &.w-40 {
+      width: 40%;
+    }
+
+    &.w-50 {
+      width: 50%;
+    }
+
+    &.w-60 {
+      width: 60%;
+    }
+
+    &.w-70 {
+      width: 70%;
+    }
+
+    &.w-80 {
+      width: 80%;
+    }
+  }
 }
 
-/* Badge ทะเบียน + สถานะ */
-.badge {
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Vehicle Hero
+.vehicle-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.vehicle-image-wrapper {
+  width: 100%;
+  max-width: 280px;
+  height: 180px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: $bg-light;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  .vehicle-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .vehicle-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #bdbdbd;
+
+    mat-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+    }
+  }
+}
+
+.vehicle-badge {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 0.5rem;
 
-  .code {
+  .reg-number {
     font-size: 1.25rem;
     font-weight: 600;
-    padding: 0.25rem 0.75rem;
-    border-radius: 999px;
-    background: #e3f2fd;
+    padding: 0.35rem 1rem;
+    border-radius: 20px;
+    background: #e8f5e9;
+    color: $primary-green;
   }
 }
 
-.status {
+.status-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.875rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
   font-weight: 500;
   background: #eeeeee;
-  color: #424242;
+  color: #616161;
 
   .dot {
     width: 8px;
@@ -101,153 +181,246 @@
     background: #9e9e9e;
   }
 
-  &.available {
-    background: #e8f5e9;
-    color: #2e7d32;
+  &.active {
+    background: #dcfce7;
+    color: #16a34a;
 
     .dot {
-      background: #2e7d32;
+      background: #16a34a;
     }
   }
 
   &.inuse {
-    background: #fff8e1;
-    color: #f9a825;
+    background: #fef3c7;
+    color: #d97706;
 
     .dot {
-      background: #f9a825;
+      background: #d97706;
     }
   }
 
   &.maint {
-    background: #ffebee;
-    color: #c62828;
+    background: #fee2e2;
+    color: #dc2626;
 
     .dot {
-      background: #c62828;
+      background: #dc2626;
+    }
+  }
+
+  &.decommissioned {
+    background: #e5e7eb;
+    color: #6b7280;
+
+    .dot {
+      background: #6b7280;
     }
   }
 }
 
-.desc {
-  margin-bottom: 1rem;
-  color: #616161;
+// Info Section
+.info-section {
+  width: 100%;
+  margin-bottom: 1.5rem;
+
+  .section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text-color;
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid $border-color;
+  }
 }
 
-/* สเป็กของรถ */
-.spec {
-  border-top: 1px solid #e0e0e0;
-  padding-top: 1rem;
-  margin-top: 1rem;
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.info-item {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
 
-  .row {
-    display: flex;
-    gap: 0.5rem;
+  .info-label {
+    font-size: 0.8rem;
+    color: $subtext-color;
   }
 
-  .label {
-    width: 150px;
-    color: #757575;
-  }
-
-  .value {
+  .info-value {
+    font-size: 1rem;
     font-weight: 500;
+    color: $text-color;
   }
 }
 
-/* ปุ่มกลับ */
-.card-actions {
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.vehicle-detail-back-icon {
-  margin-right: 0.5rem;
-  font-size: 20px;
-}
-
-/* รูปรถ */
-.vehicle-photo {
-  width: 100%;
-  min-height: 160px;
-  border-radius: 0.75rem;
-  overflow: hidden;
-  background: #f5f5f5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-/* การ์ดคนขับ */
+// Driver Card
 .driver-card {
-  padding: 1rem 1.25rem;
-  border-radius: 1rem;
-  background: #fafafa;
-
-  &.empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 80px;
-    font-size: 0.95rem;
-    color: #757575;
-  }
-}
-
-.driver-title {
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-}
-
-.driver {
   display: flex;
-  gap: 0.75rem;
   align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: $bg-light;
+  border-radius: 12px;
 
-  .avatar {
-    width: 56px;
-    height: 56px;
+  .driver-avatar {
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     object-fit: cover;
     background: #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
-  .name {
+  .driver-info {
+    flex: 1;
+  }
+
+  .driver-name {
+    font-size: 1rem;
     font-weight: 600;
+    color: $text-color;
+    margin-bottom: 0.25rem;
   }
 
-  .role {
-    font-size: 0.875rem;
-    color: #616161;
+  .driver-role {
+    font-size: 0.85rem;
+    color: $primary-green;
+    margin-bottom: 0.25rem;
   }
 
-  .meta {
-    font-size: 0.875rem;
-    color: #757575;
+  .driver-meta {
+    font-size: 0.8rem;
+    color: $subtext-color;
   }
 }
 
-/* จอเล็ก: ให้ซ้อนเป็นคอลัมน์ */
-@media (max-width: 768px) {
-  .vehicle-detail-card {
-    padding: 1.5rem;
+.empty-driver {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: $bg-light;
+  border-radius: 12px;
+  color: $subtext-color;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
   }
 
-  .vehicle-detail-grid {
+  span {
+    font-size: 0.9rem;
+  }
+}
+
+// Actions Section
+.actions-section {
+  width: 100%;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.action-buttons,
+.danger-buttons {
+  display: flex;
+  gap: 0.75rem;
+
+  @media (max-width: 480px) {
     flex-direction: column;
   }
+}
 
-  .card-actions {
-    justify-content: flex-start;
+.action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 30px !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  &.edit-btn {
+    border-color: $primary-green !important;
+    color: $primary-green !important;
+
+    &:hover {
+      background: rgba(41, 89, 56, 0.08);
+    }
+  }
+
+  &.driver-btn {
+    border-color: #1976d2 !important;
+    color: #1976d2 !important;
+
+    &:hover {
+      background: rgba(25, 118, 210, 0.08);
+    }
+  }
+
+  &.status-btn {
+    border-color: #7b1fa2 !important;
+    color: #7b1fa2 !important;
+
+    &:hover {
+      background: rgba(123, 31, 162, 0.08);
+    }
+  }
+
+  &.delete-btn {
+    border-color: #c62828 !important;
+    color: #c62828 !important;
+
+    &:hover {
+      background: rgba(198, 40, 40, 0.08);
+    }
+  }
+}
+
+.back-btn {
+  width: 100%;
+  color: $subtext-color !important;
+  border-radius: 30px !important;
+  margin-top: 0.5rem;
+
+  mat-icon {
+    margin-right: 0.5rem;
+  }
+}
+
+// Responsive
+@media (max-width: 480px) {
+  .vehicle-detail-page {
+    padding: 1.5rem 1rem;
+  }
+
+  .vehicle-image-wrapper {
+    max-width: 100%;
+    height: 160px;
+  }
+
+  .vehicle-badge {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }
