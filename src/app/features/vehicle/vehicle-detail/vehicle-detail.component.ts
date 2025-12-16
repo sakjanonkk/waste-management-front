@@ -15,6 +15,7 @@ import { VehicleService } from '../../../core/services/vehicle/vehicle.service';
 import { Vehicle, FuelCategory, VehicleStatus } from '../../../shared/models/vehicle.model';
 import { StaffService } from '../../../core/services/staff/staff.service';
 import { DriverSelectDialogComponent, DriverSelectDialogData, DriverSelectDialogResult } from '../driver-select-dialog/driver-select-dialog.component';
+import { StatusSelectDialogComponent, StatusSelectDialogData, StatusSelectDialogResult } from '../status-select-dialog/status-select-dialog.component';
 
 @Component({
   selector: 'app-vehicle-detail',
@@ -91,9 +92,10 @@ export class VehicleDetailComponent {
     };
 
     const dialogRef = this.dialog.open(DriverSelectDialogComponent, {
-      width: '800px',
-      maxWidth: '90vw',
+      width: '420px',
+      maxWidth: '95vw',
       panelClass: 'driver-select-dialog',
+      autoFocus: false,
       data: dialogData
     });
 
@@ -158,18 +160,54 @@ export class VehicleDetailComponent {
     });
   }
 
-  deactivate() {
+  changeStatus() {
     const v = this.vehicle();
     if (!v) return;
-    const currentStatus = (v.status?.toUpperCase() || 'AVAILABLE') as VehicleStatus;
-    const to = currentStatus === 'MAINTENANCE' ? 'AVAILABLE' : 'MAINTENANCE';
-    const label = to === 'MAINTENANCE' ? 'ปิดใช้งานรถคันนี้' : 'เปิดใช้งานรถคันนี้';
-    if (!confirm(`${label}?`)) return;
-    
-    // ส่ง lowercase ให้ backend
-    this.vehicleService.update(v.id, { status: to.toLowerCase() }).subscribe({
-      next: (res) => this.vehicle.set(res.data),
-      error: () => {/* noop */},
+
+    const dialogData: StatusSelectDialogData = {
+      currentStatus: v.status?.toLowerCase() || 'active',
+      vehicleRegNum: v.registration_number || v.vehicle_reg_num || '-'
+    };
+
+    const dialogRef = this.dialog.open(StatusSelectDialogComponent, {
+      width: '360px',
+      maxWidth: '95vw',
+      panelClass: 'status-select-dialog',
+      autoFocus: false,
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe((result: StatusSelectDialogResult | undefined) => {
+      if (!result) return;
+
+      const newStatus = result.selectedStatus;
+      console.log('Updating vehicle status:', { vehicleId: v.id, newStatus });
+
+      // Backend ต้องการฟิลด์หลักๆ ทั้งหมดเมื่อ update
+      const updatePayload = {
+        registration_number: v.registration_number || v.vehicle_reg_num,
+        vehicle_type: v.vehicle_type || '',
+        fuel_type: v.fuel_type || v.fuel_category || 'diesel',
+        regular_waste_capacity_kg: v.regular_waste_capacity_kg || v.regular_capacity || 0,
+        recyclable_waste_capacity_kg: v.recyclable_waste_capacity_kg || v.recycle_capacity || 0,
+        depreciation_value_per_year: v.depreciation_value_per_year || v.depreciation_thb || 0,
+        status: newStatus,
+        current_driver_id: v.current_driver_id || null
+      };
+
+      console.log('Update payload:', updatePayload);
+
+      this.vehicleService.update(v.id, updatePayload).subscribe({
+        next: (res) => {
+          this.vehicle.set(res.data);
+          this.snack.open('เปลี่ยนสถานะสำเร็จ', 'ปิด', { duration: 3000 });
+        },
+        error: (err) => {
+          console.error('Failed to update status:', err);
+          const errorMsg = err.error?.errors?.[0]?.message || err.error?.message || 'เกิดข้อผิดพลาดในการเปลี่ยนสถานะ';
+          this.snack.open(errorMsg, 'ปิด', { duration: 3000 });
+        }
+      });
     });
   }
 
@@ -208,10 +246,11 @@ export class VehicleDetailComponent {
 
   statusLabel(s: VehicleStatus | string | undefined): string {
     if (!s) return '-';
-    const upper = s.toUpperCase();
-    if (upper === 'AVAILABLE') return 'พร้อมใช้งาน';
-    if (upper === 'IN_USE') return 'กำลังใช้งาน';
-    if (upper === 'MAINTENANCE') return 'ซ่อมบำรุง';
+    const lower = s.toLowerCase();
+    if (lower === 'available' || lower === 'active') return 'พร้อมใช้งาน';
+    if (lower === 'in_use') return 'กำลังใช้งาน';
+    if (lower === 'maintenance' || lower === 'in_maintenance') return 'ซ่อมบำรุง';
+    if (lower === 'decommissioned') return 'ปลดประจำการ';
     return '-';
   }
 

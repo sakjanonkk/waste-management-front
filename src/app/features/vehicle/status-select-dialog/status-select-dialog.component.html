@@ -1,0 +1,38 @@
+<div class="status-dialog">
+    <div class="dialog-header">
+        <mat-icon class="header-icon">swap_horiz</mat-icon>
+        <div class="header-text">
+            <h2>เปลี่ยนสถานะรถ</h2>
+            <p class="vehicle-reg">{{ data.vehicleRegNum }}</p>
+        </div>
+    </div>
+
+    <mat-dialog-content>
+        <div class="status-options">
+            @for (option of statusOptions; track option.value) {
+            <button type="button" class="status-option" [class.selected]="selectedStatus === option.value"
+                [class.active]="option.value === 'active'" [class.maintenance]="option.value === 'in_maintenance'"
+                [class.decommissioned]="option.value === 'decommissioned'" (click)="selectedStatus = option.value">
+                <div class="option-icon">
+                    <mat-icon>{{ option.icon }}</mat-icon>
+                </div>
+                <div class="option-content">
+                    <div class="option-label">{{ option.label }}</div>
+                    <div class="option-desc">{{ option.description }}</div>
+                </div>
+                @if (selectedStatus === option.value) {
+                <mat-icon class="check-icon">check_circle</mat-icon>
+                }
+            </button>
+            }
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions>
+        <button mat-button class="cancel-btn" (click)="onCancel()">ยกเลิก</button>
+        <button mat-flat-button class="confirm-btn" [disabled]="selectedStatus === data.currentStatus"
+            (click)="onConfirm()">
+            ยืนยัน
+        </button>
+    </mat-dialog-actions>
+</div>
