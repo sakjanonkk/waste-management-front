@@ -26,7 +26,8 @@
 
 /* เนื้อหาหน้า + title */
 .staff-detail-content {
-  max-width: 800px;      /* ทำให้กรอบโปรไฟล์ใหญ่ขึ้น */
+  max-width: 800px;
+  /* ทำให้กรอบโปรไฟล์ใหญ่ขึ้น */
   margin: 0 auto;
 }
 
@@ -49,14 +50,17 @@
   background: #ffffff;
   padding: 2rem 2.5rem;
   display: flex;
-  flex-direction: column;     /* avatar อยู่บน ฟอร์มอยู่ด้านล่าง */
+  flex-direction: column;
+  /* avatar อยู่บน ฟอร์มอยู่ด้านล่าง */
   align-items: center;
   gap: 1.5rem;
-  border-radius: 1.5rem;      /* ทำให้การ์ดดูใหญ่/นุ่มขึ้นแบบดีไซน์เดิม */
+  border-radius: 1.5rem;
+  /* ทำให้การ์ดดูใหญ่/นุ่มขึ้นแบบดีไซน์เดิม */
 
   &__avatar {
     flex: 0 0 auto;
-    width: 128px;             /* avatar ใหญ่ขึ้น */
+    width: 128px;
+    /* avatar ใหญ่ขึ้น */
     height: 128px;
     border-radius: 50%;
     overflow: hidden;
@@ -71,7 +75,8 @@
   }
 
   &__content {
-    width: 100%;              /* ให้เนื้อหาเต็มการ์ด */
+    width: 100%;
+    /* ให้เนื้อหาเต็มการ์ด */
   }
 
   &__form-grid {
