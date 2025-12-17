@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { TruckLoaderComponent } from '../../../shared/components/truck-loader/truck-loader.component';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    TruckLoaderComponent
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss'
@@ -30,6 +32,7 @@ export class Login {
 
   loginForm: FormGroup;
   loading = false;
+  showLoader = false;
   errorMessage = '';
   hidePassword = true;
 
@@ -54,7 +57,8 @@ export class Login {
       this.authService.login(credentials).subscribe({
         next: () => {
           this.loading = false;
-          this.router.navigate(['/home']);
+          this.showLoader = true;
+          // Navigation will happen when loader animation completes
         },
         error: (error: any) => {
           this.loading = false;
@@ -73,6 +77,10 @@ export class Login {
         this.loginForm.get(key)?.markAsTouched();
       });
     }
+  }
+
+  onLoaderComplete(): void {
+    this.router.navigate(['/home']);
   }
 }
 
