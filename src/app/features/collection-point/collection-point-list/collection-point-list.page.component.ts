@@ -1,5 +1,5 @@
 import { Component, effect, inject, signal } from "@angular/core";
-import { isPlatformBrowser } from "@angular/common";
+import { isPlatformBrowser, NgClass } from "@angular/common";
 import { PLATFORM_ID } from '@angular/core';
 import { Router } from "@angular/router";
 import { CollectionPoint } from '../../../shared/models/collection-point.model';
@@ -19,6 +19,7 @@ import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
   selector: "app-collection-point-list-page",
   standalone: true,
   imports: [
+    NgClass,
     MatTableModule,
     MatPaginatorModule,
     MatIconModule,
@@ -162,7 +163,13 @@ export class CollectionPointListPageComponent {
   }
 
   // mapping status code to Thai label
-  statusLabel(status: 'active' | 'inactive'): string {
-    return status === 'active' ? 'พร้อมใช้งาน' : 'ไม่พร้อมใช้งาน';
+  statusLabel(status: 'active' | 'inactive' | string): string {
+    const lower = (status || '').toLowerCase();
+    return lower === 'active' ? 'พร้อมใช้งาน' : 'ไม่พร้อมใช้งาน';
+  }
+
+  statusClass(status: 'active' | 'inactive' | string): string {
+    const lower = (status || '').toLowerCase();
+    return lower === 'active' ? 'status--active' : 'status--inactive';
   }
 }
