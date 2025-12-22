@@ -1,380 +1,374 @@
-.collection-point-detail {
-  max-width: 80rem;
-  margin: 0 auto;
-  padding: 1.5rem;
+$primary-green: #295938;
+$text-color: #333333;
+$subtext-color: #666666;
+$border-color: #e0e0e0;
+$bg-light: #f9f9f9;
 
-  // Header Section (BEM)
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-    gap: 1rem;
+:host {
+  display: block;
+  background-color: #ffffff;
+}
+
+.collection-point-detail-page {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+  min-height: 100vh;
+  background-color: #ffffff;
+}
+
+.detail-content {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// Header Section
+.header-section {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: $text-color;
+    margin: 0 0 0.5rem 0;
   }
 
-  &__header-content {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-  }
-
-  &__title {
-    font-size: 1.5rem;
-    font-weight: 600;
+  p {
+    font-size: 0.9rem;
+    color: $subtext-color;
     margin: 0;
   }
+}
 
-  &__actions {
-    display: flex;
-    gap: 0.75rem;
+// Skeleton Loading
+.skeleton-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
 
-    .btn-edit {
-      background-color: #f59e0b;
-      color: white;
-      
-      &:hover {
-        background-color: #d97706;
-      }
-    }
-
-    .btn-delete {
-      background-color: #ef4444;
-      color: white;
-      
-      &:hover {
-        background-color: #dc2626;
-      }
-    }
+  .skeleton-image {
+    width: 200px;
+    height: 150px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
   }
 
-  &__loading {
+  .skeleton-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .skeleton-line {
+    height: 20px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+
+    &.w-40 {
+      width: 40%;
+    }
+
+    &.w-50 {
+      width: 50%;
+    }
+
+    &.w-60 {
+      width: 60%;
+    }
+
+    &.w-80 {
+      width: 80%;
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Point Hero
+.point-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.point-image-wrapper {
+  width: 100%;
+  max-width: 280px;
+  height: 180px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: $bg-light;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  .point-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .point-image-placeholder {
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4rem 0;
+    color: #bdbdbd;
+
+    mat-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+    }
+  }
+}
+
+.point-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  .point-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $text-color;
+    text-align: center;
+  }
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: #eeeeee;
+  color: #616161;
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #9e9e9e;
   }
 
-  &__content {
-    // Content styles
+  &.active {
+    background: #dcfce7;
+    color: #16a34a;
+
+    .dot {
+      background: #16a34a;
+    }
   }
 
-  // Header Section (old - keep for compatibility)
-  .detail-header {
+  &.inactive {
+    background: #fee2e2;
+    color: #dc2626;
+
+    .dot {
+      background: #dc2626;
+    }
+  }
+}
+
+// Info Section
+.info-section {
+  width: 100%;
+  margin-bottom: 1.5rem;
+
+  .section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text-color;
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid $border-color;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-    gap: 1rem;
+    align-items: center;
+    gap: 0.5rem;
 
-    .action-buttons {
-      display: flex;
-      gap: 0.75rem;
+    &.warning {
+      color: #d97706;
 
-      .btn-edit {
-        background-color: #f59e0b;
-        color: white;
-        
-        &:hover {
-          background-color: #d97706;
-        }
-      }
-
-      .btn-delete {
-        background-color: #ef4444;
-        color: white;
-        
-        &:hover {
-          background-color: #dc2626;
-        }
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
       }
     }
   }
+}
 
-  // Title Card
-  .title-card {
-    margin-bottom: 1.5rem;
-    
-    .title-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 
-      .point-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin: 0;
-        color: #1f2937;
-      }
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
 
-      mat-chip {
-        font-weight: 500;
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 
-        &.status-active {
-          background-color: #10b981;
-          color: white;
-        }
+  &.full {
+    grid-column: 1 / -1;
+  }
 
-        &.status-inactive {
-          background-color: #6b7280;
-          color: white;
-        }
+  .info-label {
+    font-size: 0.8rem;
+    color: $subtext-color;
+  }
 
-        &.status-maintenance {
-          background-color: #f59e0b;
-          color: white;
-        }
+  .info-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: $text-color;
+  }
+}
 
-        &.status-full {
-          background-color: #ef4444;
-          color: white;
-        }
-      }
+// Capacity Cards
+.capacity-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.capacity-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: $bg-light;
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  &.regular {
+    background: #f0fdf4;
+
+    mat-icon {
+      color: $primary-green;
     }
   }
 
-  // Main Grid Layout
-  .detail-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+  &.recycle {
+    background: #fef3c7;
 
-    @media (max-width: 968px) {
-      grid-template-columns: 1fr;
+    mat-icon {
+      color: #d97706;
     }
   }
 
-  // Left Column
-  .left-column {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-
-    .image-card {
-      .point-image {
-        width: 100%;
-        height: 300px;
-        object-fit: cover;
-        border-radius: 8px;
-      }
-
-      .no-image {
-        width: 100%;
-        height: 300px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background-color: #f3f4f6;
-        border-radius: 8px;
-        color: #9ca3af;
-
-        mat-icon {
-          font-size: 64px;
-          width: 64px;
-          height: 64px;
-          margin-bottom: 0.5rem;
-        }
-      }
-    }
-
-    .map-card {
-      .map-placeholder {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem;
-        background-color: #f3f4f6;
-        border-radius: 8px;
-        min-height: 120px;
-
-        mat-icon {
-          font-size: 48px;
-          width: 48px;
-          height: 48px;
-          color: #6b7280;
-        }
-
-        .map-info {
-          flex: 1;
-
-          p {
-            margin: 0.25rem 0;
-            color: #4b5563;
-            font-size: 0.95rem;
-
-            strong {
-              color: #1f2937;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // Right Column
-  .right-column {
+  .capacity-info {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.15rem;
 
-    .info-card {
-      mat-card-content {
-        padding: 1.5rem;
-      }
+    .capacity-label {
+      font-size: 0.75rem;
+      color: $subtext-color;
     }
 
-    .address-card {
-      .info-row {
-        display: flex;
-        gap: 1rem;
-        align-items: flex-start;
+    .capacity-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $text-color;
 
-        .info-icon {
-          color: #0b6b3a;
-          margin-top: 0.25rem;
-        }
-
-        .info-content {
-          flex: 1;
-
-          label {
-            display: block;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
-          }
-
-          p {
-            margin: 0;
-            color: #4b5563;
-            line-height: 1.6;
-          }
-        }
-      }
-    }
-
-    .capacity-card {
-      background: linear-gradient(135deg, #e0f2e9 0%, #c6e7d3 100%);
-
-      .capacity-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem;
-
-        .capacity-item {
-          text-align: center;
-          padding: 1rem;
-          background: white;
-          border-radius: 8px;
-          border: 2px solid #0b6b3a;
-
-          &.recycle {
-            border-color: #f59e0b;
-          }
-
-          .capacity-label {
-            font-size: 0.9rem;
-            color: #4b5563;
-            margin-bottom: 0.5rem;
-          }
-
-          .capacity-value {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #0b6b3a;
-          }
-
-          &.recycle .capacity-value {
-            color: #f59e0b;
-          }
-        }
+      small {
+        font-size: 0.85rem;
+        font-weight: 400;
       }
     }
   }
+}
 
-  // Bottom Side
-  .bottom-side {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+// Problem Text
+.problem-text {
+  margin: 0;
+  padding: 1rem;
+  background: #fef3c7;
+  border-radius: 8px;
+  color: #92400e;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
 
-    @media (max-width: 968px) {
-      grid-template-columns: 1fr;
+// Update Info
+.update-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: $subtext-color;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+// Action Buttons
+.action-buttons {
+  width: 100%;
+  display: flex;
+  gap: 0.75rem;
+
+  button {
+    flex: 1;
+    height: 48px;
+    border-radius: 12px !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      margin-right: 0.35rem;
     }
+  }
 
-    .info-card {
-      mat-card-content {
-        padding: 1.5rem;
-      }
-    }
+  .edit-btn {
+    background: $primary-green !important;
+    color: white !important;
+  }
 
-    .problem-card {
-      background-color: #fef3c7;
-      border-left: 4px solid #f59e0b;
-
-      .problem-section {
-        .problem-header {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          margin-bottom: 0.75rem;
-
-          .warning-icon {
-            color: #f59e0b;
-          }
-
-          label {
-            font-weight: 600;
-            color: #92400e;
-            font-size: 0.95rem;
-          }
-        }
-
-        .problem-text {
-          margin: 0;
-          color: #78350f;
-          line-height: 1.6;
-          padding-left: 2rem;
-        }
-      }
-    }
-
-    .date-card {
-      background-color: #f9fafb;
-      width: 280px;
-
-      .date-section {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-
-        .info-icon {
-          color: #6b7280;
-        }
-
-        .date-content {
-          label {
-            display: block;
-            font-size: 0.85rem;
-            color: #6b7280;
-            margin-bottom: 0.25rem;
-          }
-
-          .date-value {
-            margin: 0;
-            font-weight: 600;
-            color: #1f2937;
-            font-size: 1.1rem;
-          }
-        }
-      }
-    }
+  .delete-btn {
+    color: #dc2626 !important;
+    border-color: #dc2626 !important;
   }
 }

@@ -21,6 +21,7 @@ export interface Vehicle {
   // Common fields
   status: VehicleStatus | string; // Allow lowercase from server
   vehicle_type?: string | null;
+  image?: string; // from backend
   image_url?: string | null;
   current_driver_id?: number | null;
   current_driver?: {

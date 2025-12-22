@@ -1,3 +1,6 @@
+@if (showLoader) {
+<app-truck-loader (animationComplete)="onLoaderComplete()"></app-truck-loader>
+} @else {
 <div class="login-container">
   <div class="login-content">
     <!-- Left Column: Form -->
@@ -62,3 +65,4 @@
     </div>
   </div>
 </div>
+}

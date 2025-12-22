@@ -1,177 +1,132 @@
 <div class="vehicle-detail-page">
-  <!-- Action toolbar -->
-  <div class="vehicle-detail-actions" role="toolbar" aria-label="การทำงานของรถ">
-    <button
-      mat-flat-button
-      color="primary"
-      class="vehicle-detail-actions__btn vehicle-detail-actions__btn--edit"
-      type="button"
-      aria-label="แก้ไขข้อมูลรถ"
-      (click)="editVehicle()"
-      [disabled]="loading() || !vehicle()"
-    >
-      <mat-icon>edit</mat-icon>
-      แก้ไขข้อมูลรถ
-    </button>
+  <div class="detail-content">
 
-    <button
-      mat-flat-button
-      color="primary"
-      class="vehicle-detail-actions__btn vehicle-detail-actions__btn--edit-driver"
-      type="button"
-      aria-label="แก้ไขคนขับ"
-      (click)="editDriver()"
-      [disabled]="loading() || !vehicle()"
-    >
-      <mat-icon>person</mat-icon>
-      แก้ไขคนขับรถ
-    </button>
-
-    <button
-      mat-flat-button
-      color="warn"
-      class="vehicle-detail-actions__btn vehicle-detail-actions__btn--delete"
-      type="button"
-      aria-label="ลบข้อมูลรถ"
-      (click)="delete()"
-      [disabled]="loading() || !vehicle()"
-    >
-      <mat-icon>delete</mat-icon>
-      ลบข้อมูล
-    </button>
-
-    <button
-      mat-flat-button
-      color="warn"
-      class="vehicle-detail-actions__btn vehicle-detail-actions__btn--deactivate"
-      type="button"
-      aria-label="ปิดใช้งานรถ"
-      (click)="deactivate()"
-      [disabled]="loading() || !vehicle()"
-    >
-      <mat-icon>block</mat-icon>
-      ปิดใช้งานรถคันนี้
-    </button>
-  </div>
-
-  <div class="vehicle-detail-content">
-    <h3 class="vehicle-detail-title" id="vehicle-title">รายละเอียดรถเก็บขยะ</h3>
+    <!-- Header Section -->
+    <div class="header-section">
+      <h2>รายละเอียดรถเก็บขยะ</h2>
+      <p>ข้อมูลรายละเอียดของรถเก็บขยะ</p>
+    </div>
 
     @if (loading()) {
-    <div class="vehicle-detail-loading">
-      <mat-spinner diameter="48" />
+    <!-- Skeleton Loading -->
+    <div class="skeleton-container">
+      <div class="skeleton-image"></div>
+      <div class="skeleton-info">
+        <div class="skeleton-line w-60"></div>
+        <div class="skeleton-line w-40"></div>
+        <div class="skeleton-line w-80"></div>
+        <div class="skeleton-line w-50"></div>
+        <div class="skeleton-line w-70"></div>
+      </div>
     </div>
-    } @if (!loading() && vehicle()) {
-    <mat-card class="vehicle-detail-card" aria-labelledby="vehicle-title">
-      <mat-card-content class="vehicle-detail-card__content">
-        <div class="vehicle-detail-grid">
-          <!-- ด้านซ้าย: ข้อมูลรถหลัก -->
-          <div class="vehicle-detail-main">
-            <div class="badge">
-              <div class="code">{{ getRegNum() }}</div>
-              <div
-                class="status"
-                [class.available]="
-                  vehicle()?.status?.toUpperCase() === 'AVAILABLE'
-                "
-                [class.inuse]="vehicle()?.status?.toUpperCase() === 'IN_USE'"
-                [class.maint]="
-                  vehicle()?.status?.toUpperCase() === 'MAINTENANCE'
-                "
-              >
-                <span class="dot"></span>
-                {{ statusLabel(vehicle()?.status) }}
-              </div>
-            </div>
-
-            <div class="desc">รถเก็บขยะมูลฝอยเทศบาล</div>
-
-            <div class="spec">
-              <div class="row">
-                <div class="label">รุ่น :</div>
-                <div class="value">
-                  {{ vehicle()?.vehicle_type || "-" }}
-                </div>
-              </div>
-              <div class="row">
-                <div class="label">เลขทะเบียน :</div>
-                <div class="value">
-                  {{ getRegNum() }}
-                </div>
-              </div>
-              <div class="row">
-                <div class="label">ประเภทเชื้อเพลิง :</div>
-                <div class="value">
-                  {{ getFuelType() }}
-                </div>
-              </div>
-              <div class="row">
-                <div class="label">ความจุขยะทั่วไป :</div>
-                <div class="value">{{ num(getRegularCapacity()) }} กก.</div>
-              </div>
-              <div class="row">
-                <div class="label">ความจุขยะรีไซเคิล :</div>
-                <div class="value">{{ num(getRecycleCapacity()) }} กก.</div>
-              </div>
-              <div class="row">
-                <div class="label">ค่าเสื่อมราคา/ปี :</div>
-                <div class="value">฿ {{ num(getDepreciation()) }}</div>
-              </div>
-            </div>
-
-            <div class="card-actions">
-              <button mat-stroked-button type="button" (click)="back()">
-                <mat-icon class="vehicle-detail-back-icon">
-                  arrow_back
-                </mat-icon>
-                กลับ
-              </button>
-            </div>
-          </div>
-
-          <!-- ด้านขวา: รูปรถ + คนขับ -->
-          <div class="vehicle-detail-side">
-            <div class="vehicle-photo">
-              @if (vehicle()?.image_url) {
-              <img [src]="vehicle()?.image_url" alt="รถเก็บขยะ" />
-              }
-            </div>
-
-            @if (driver()) {
-            <div class="driver-card">
-              <div class="driver-title">รายละเอียดคนขับ</div>
-              <div class="driver">
-                <img
-                  class="avatar"
-                  [src]="
-                    driver()?.s_image || '/assets/images/worker-avatar.png'
-                  "
-                  alt="driver"
-                />
-                <div>
-                  <div class="name">
-                    {{ driver()?.firstname }}
-                    {{ driver()?.lastname }}
-                  </div>
-                  <div class="role">พนักงานขับรถเก็บขยะ</div>
-                  <div class="meta">
-                    รหัสพนักงาน
-                    {{ staffCodeFromId(driver()?.id) }}
-                  </div>
-                  <div class="meta">
-                    เบอร์โทร:
-                    {{ driver()?.phone_number || "-" }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            } @else {
-            <div class="driver-card empty">ยังไม่ระบุพนักงานขับรถ</div>
-            }
-          </div>
+    } @else if (vehicle()) {
+    <!-- Vehicle Image & Badge -->
+    <div class="vehicle-hero">
+      <div class="vehicle-image-wrapper">
+        @if (vehicle()?.image || vehicle()?.image_url) {
+        <img [src]="vehicle()?.image || vehicle()?.image_url" alt="รถเก็บขยะ" class="vehicle-image" />
+        } @else {
+        <div class="vehicle-image-placeholder">
+          <mat-icon>local_shipping</mat-icon>
         </div>
-      </mat-card-content>
-    </mat-card>
+        }
+      </div>
+
+      <div class="vehicle-badge">
+        <span class="reg-number">{{ getRegNum() }}</span>
+        <span class="status-badge" 
+          [class.active]="vehicle()?.status?.toLowerCase() === 'available' || vehicle()?.status?.toLowerCase() === 'active'"
+          [class.inuse]="vehicle()?.status?.toLowerCase() === 'in_use'"
+          [class.maint]="vehicle()?.status?.toLowerCase() === 'maintenance' || vehicle()?.status?.toLowerCase() === 'in_maintenance'"
+          [class.decommissioned]="vehicle()?.status?.toLowerCase() === 'decommissioned'">
+          <span class="dot"></span>
+          {{ statusLabel(vehicle()?.status) }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Vehicle Specifications -->
+    <div class="info-section">
+      <h3 class="section-title">ข้อมูลรถ</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">รุ่นรถ</span>
+          <span class="info-value">{{ vehicle()?.vehicle_type || "-" }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">เลขทะเบียน</span>
+          <span class="info-value">{{ getRegNum() }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">ประเภทเชื้อเพลิง</span>
+          <span class="info-value">{{ getFuelType() }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">ความจุขยะทั่วไป</span>
+          <span class="info-value">{{ num(getRegularCapacity()) }} กก.</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">ความจุขยะรีไซเคิล</span>
+          <span class="info-value">{{ num(getRecycleCapacity()) }} กก.</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">ค่าเสื่อมราคา/ปี</span>
+          <span class="info-value">฿{{ num(getDepreciation()) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Driver Section -->
+    <div class="info-section">
+      <h3 class="section-title">ข้อมูลคนขับ</h3>
+      @if (driver()) {
+      <div class="driver-card">
+        <img class="driver-avatar" [src]="driver()?.s_image || driver()?.picture || '/assets/images/worker-avatar.png'"
+          alt="driver" />
+        <div class="driver-info">
+          <div class="driver-name">{{ driver()?.firstname }} {{ driver()?.lastname }}</div>
+          <div class="driver-role">พนักงานขับรถเก็บขยะ</div>
+          <div class="driver-meta">รหัส: {{ staffCodeFromId(driver()?.id) }}</div>
+          <div class="driver-meta">โทร: {{ driver()?.phone_number || "-" }}</div>
+        </div>
+      </div>
+      } @else {
+      <div class="empty-driver">
+        <mat-icon>person_off</mat-icon>
+        <span>ยังไม่ระบุพนักงานขับรถ</span>
+      </div>
+      }
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="actions-section">
+      <div class="action-buttons">
+        <button mat-stroked-button class="action-btn edit-btn" (click)="editVehicle()" [disabled]="loading()">
+          <mat-icon>edit</mat-icon>
+          แก้ไขข้อมูล
+        </button>
+        <button mat-stroked-button class="action-btn driver-btn" (click)="editDriver()" [disabled]="loading()">
+          <mat-icon>person</mat-icon>
+          เปลี่ยนคนขับ
+        </button>
+      </div>
+
+      <div class="danger-buttons">
+        <button mat-stroked-button class="action-btn status-btn" (click)="changeStatus()" [disabled]="loading()">
+          <mat-icon>swap_horiz</mat-icon>
+          เปลี่ยนสถานะ
+        </button>
+        <button mat-stroked-button class="action-btn delete-btn" (click)="delete()" [disabled]="loading()">
+          <mat-icon>delete</mat-icon>
+          ลบข้อมูล
+        </button>
+      </div>
+
+      <button mat-button class="back-btn" (click)="back()">
+        <mat-icon>arrow_back</mat-icon>
+        กลับหน้ารายการ
+      </button>
+    </div>
     }
   </div>
 </div>
