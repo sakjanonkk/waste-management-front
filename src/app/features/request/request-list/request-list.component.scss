@@ -1,0 +1,141 @@
+@use 'sass:color';
+
+$primary-color: #2d5016;
+
+.request-list-page {
+    padding: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    .header-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin: 0;
+    }
+}
+
+.filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+
+    mat-form-field {
+        width: 200px;
+    }
+}
+
+.table-container {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    max-height: calc(100vh - 250px);
+    display: flex;
+    flex-direction: column;
+
+    .mat-mdc-table {
+        width: 100%;
+
+        .mat-mdc-header-cell {
+            background-color: #f9fafb;
+            color: #4b5563;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+    }
+}
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    gap: 1rem;
+    color: #6b7280;
+}
+
+// Badges
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: capitalize;
+
+    &.status-approved {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+
+    &.status-pending {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+
+    &.status-rejected {
+        background-color: #fee2e2;
+        color: #991b1b;
+    }
+}
+
+.type-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    border: 1px solid transparent;
+
+    &.type-problem {
+        border-color: #fca5a5;
+        color: #b91c1c;
+        background-color: #fef2f2;
+    }
+
+    &.type-point {
+        border-color: #93c5fd;
+        color: #1d4ed8;
+        background-color: #eff6ff;
+    }
+}
+
+.img-thumbnail {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.no-img {
+    color: #9ca3af;
+    font-size: 0.8rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+// Overrides
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none; // Hide empty space below form fields in filters if strict
+}
