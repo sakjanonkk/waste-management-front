@@ -1,0 +1,103 @@
+<div class="public-request-container">
+    <mat-card class="request-card">
+        <mat-card-header class="request-card__header">
+            <mat-card-title class="title">Public Request Form</mat-card-title>
+            <mat-card-subtitle class="subtitle">Report a problem or request a new collection point</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="request-card__content">
+            <form [formGroup]="requestForm" (ngSubmit)="onSubmit()" class="form-section">
+
+                <!-- Request Type -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Request Type</mat-label>
+                    <mat-select formControlName="request_type">
+                        <mat-option value="report_problem">Report Problem</mat-option>
+                        <mat-option value="request_point">Request New Point</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="requestForm.get('request_type')?.hasError('required')">
+                        Request Type is required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Point Name -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Point Name / Location Name</mat-label>
+                    <input matInput formControlName="point_name" placeholder="e.g. Near Central Park Gate 1">
+                </mat-form-field>
+
+                <!-- Location (Lat/Lng) -->
+                <div class="location-group">
+                    <label class="group-label">Location Coordinates</label>
+                    <div class="location-inputs">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Latitude</mat-label>
+                            <input matInput type="number" formControlName="latitude" readonly>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Longitude</mat-label>
+                            <input matInput type="number" formControlName="longitude" readonly>
+                        </mat-form-field>
+                    </div>
+                    <button mat-stroked-button color="primary" type="button" (click)="getCurrentLocation()">
+                        <mat-icon>my_location</mat-icon>
+                        Get Current Location
+                    </button>
+                </div>
+
+                <!-- Image Upload -->
+                <div class="upload-group">
+                    <label class="group-label">Upload Image</label>
+
+                    <div *ngIf="!imagePreview; else previewTemplate" class="file-upload-area"
+                        (click)="fileInput.click()">
+                        <div class="upload-content">
+                            <mat-icon class="upload-icon">cloud_upload</mat-icon>
+                            <div class="upload-text">
+                                <strong>Click to upload</strong> or drag and drop
+                            </div>
+                            <div class="upload-hint">PNG, JPG, GIF up to 10MB</div>
+                        </div>
+                        <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" hidden>
+                    </div>
+
+                    <ng-template #previewTemplate>
+                        <div class="image-preview">
+                            <img [src]="imagePreview" alt="Preview">
+                            <button mat-button color="warn" type="button"
+                                (click)="imagePreview = null; selectedFile = null">
+                                <mat-icon>delete</mat-icon> Remove Image
+                            </button>
+                        </div>
+                    </ng-template>
+                </div>
+
+                <!-- Remarks -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Remarks / Description</mat-label>
+                    <textarea matInput formControlName="remarks" rows="3"
+                        placeholder="Additional details..."></textarea>
+                </mat-form-field>
+
+                <!-- Reporter Info -->
+                <div class="row-group">
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Reporter Name</mat-label>
+                        <input matInput formControlName="reporter_name">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Contact Info</mat-label>
+                        <input matInput formControlName="reporter_contact" placeholder="Tel / Email">
+                    </mat-form-field>
+                </div>
+
+                <!-- Submit Button -->
+                <button mat-flat-button color="primary" type="submit" [disabled]="isLoading" class="submit-btn">
+                    <mat-spinner diameter="20" *ngIf="isLoading" class="mr-2"></mat-spinner>
+                    {{ isLoading ? 'Sending...' : 'Submit Request' }}
+                </button>
+
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>
