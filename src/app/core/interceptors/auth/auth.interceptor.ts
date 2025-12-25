@@ -11,12 +11,17 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // ดึง token จาก localStorage
   const token = localStorage.getItem('auth_token');
 
-  // ถ้ามี token และไม่ใช่ login request ให้เพิ่ม Authorization header
-  if (token && !req.url.includes('/auth/login')) {
+  // ถ้ามี token และไม่ใช่ login request และไม่ใช่ public request ให้เพิ่ม Authorization header
+  // ถ้ามี token และไม่ใช่ login request
+  // และไม่ใช่ Public Request (POST /requests) ให้เพิ่ม Authorization header
+  const isPublicRequest =
+    req.url.includes('/requests') && req.method === 'POST';
+
+  if (token && !req.url.includes('/auth/login') && !isPublicRequest) {
     req = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
 
