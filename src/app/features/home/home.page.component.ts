@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
   standalone: true,
   imports: [RouterModule, MatIconModule, MatButtonModule],
   templateUrl: './home.page.component.html',
-  styleUrl: './home.page.component.scss'
+  styleUrl: './home.page.component.scss',
 })
 export class HomePageComponent {
   private router = inject(Router);
@@ -27,6 +27,8 @@ export class HomePageComponent {
   onCollectionPoints(): void {
     this.router.navigate(['/collection-point']);
   }
-  onCitizenRequests(): void {}
+  onCitizenRequests(): void {
+    this.router.navigate(['/requests']);
+  }
   onHistoryReports(): void {}
 }
