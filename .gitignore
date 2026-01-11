@@ -53,3 +53,6 @@ git_command.txt
 MAP_PICKER_SETUP.md
 waste-management-front.code-workspace
 unit-config.json
+
+# Local-only security tooling
+.git-filter-repo-replacements.txt
