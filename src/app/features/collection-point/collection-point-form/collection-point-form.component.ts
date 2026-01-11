@@ -11,7 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MapPickerComponent } from '../../../shared/components/map-picker/map-picker.component';
 import { LocationSelection } from '../../../shared/models/geocoding.model';
 
@@ -26,8 +26,9 @@ import { LocationSelection } from '../../../shared/models/geocoding.model';
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
-],
+    MatSelectModule,
+    MatDialogModule,
+  ],
   templateUrl: './collection-point-form.component.html',
   styleUrl: './collection-point-form.component.scss'
 })

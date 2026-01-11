@@ -1,6 +1,27 @@
 <div class="daily-route-page">
   <!-- Header -->
-  <h1 class="daily-route-title">หน้าแสดงเส้นทางการเก็บขยะประจำวัน</h1>
+  <div class="daily-route-header">
+    <h1 class="daily-route-title">หน้าแสดงเส้นทางการเก็บขยะประจำวัน</h1>
+
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      class="daily-route-generate-button"
+      [disabled]="isGenerating"
+      (click)="onGenerateToday()"
+    >
+      @if (isGenerating) {
+      <mat-progress-spinner
+        diameter="18"
+        mode="indeterminate"
+      ></mat-progress-spinner>
+      <span>กำลังคำนวณ...</span>
+      } @else {
+      <span>คำนวณเส้นทางวันนี้</span>
+      }
+    </button>
+  </div>
 
   <!-- Main Layout -->
   <div class="daily-route-layout">
@@ -8,25 +29,7 @@
     <div class="daily-route-main">
       <!-- Map card -->
       <mat-card class="daily-route-map-card">
-        <div class="daily-route-map">
-          <!-- Placeholder for map - will integrate real map later -->
-          <div class="daily-route-map__placeholder">
-            <svg
-              class="daily-route-map__icon"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-              />
-            </svg>
-            <p class="daily-route-map__label">แผนที่เส้นทาง</p>
-          </div>
-        </div>
+        <div #mapContainer class="daily-route-map"></div>
       </mat-card>
 
       <!-- Summary cards under the map -->
@@ -35,17 +38,21 @@
         <mat-card class="daily-route-card">
           <h3 class="daily-route-card__title">จำนวนรถเก็บขยะที่ใช้ในวันนี้</h3>
           <div class="daily-route-card__value-row">
-            <span class="daily-route-card__value-main">3/5</span>
+            <span class="daily-route-card__value-main"
+              >{{ totalVehicles }}/5</span
+            >
             <span class="daily-route-card__value-unit">คัน</span>
           </div>
           <div class="daily-route-card__progress">
             <div class="daily-route-card__progress-bar">
               <div
                 class="daily-route-card__progress-fill"
-                style="width: 60%"
+                [style.width.%]="(totalVehicles / 5) * 100"
               ></div>
             </div>
-            <span class="daily-route-card__progress-label">60%</span>
+            <span class="daily-route-card__progress-label"
+              >{{ (totalVehicles / 5) * 100 | number : "1.0-0" }}%</span
+            >
           </div>
         </mat-card>
 
@@ -114,17 +121,21 @@
             <div class="daily-route-cost__text">
               <p class="daily-route-cost__label">ค่าใช้จ่ายรวมของทุกเส้นทาง</p>
               <p class="daily-route-cost__hint">
-                (น้ำมัน + ค่าแรงขับรถทั้งหมด)
+                (น้ำมัน + ค่าเสื่อมสภาพรถทั้งหมด)
               </p>
             </div>
-            <p class="daily-route-cost__value">6000 บาท</p>
+            <p class="daily-route-cost__value">
+              {{ totalCost | number : "1.0-2" }} บาท
+            </p>
           </div>
 
           <div
             class="daily-route-cost__block daily-route-cost__block--borderless"
           >
             <p class="daily-route-cost__label">ระยะทางทั้งหมดของทุกเส้นทาง</p>
-            <p class="daily-route-cost__value">72 กิโลเมตร</p>
+            <p class="daily-route-cost__value">
+              {{ totalDistanceKm | number : "1.0-1" }} กิโลเมตร
+            </p>
           </div>
         </div>
       </mat-card>
@@ -154,7 +165,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (route of mockRoutes; track route) {
+            @for (route of routesForTable; track route) {
             <tr>
               <td>{{ route.id }}</td>
               <td>{{ route.driver }}</td>
