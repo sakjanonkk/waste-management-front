@@ -1,0 +1,2 @@
+# Remove Google API key patterns (e.g., AIza...)
+regex:AIza[0-9A-Za-z\-_]{20,}==>REDACTED
