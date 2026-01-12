@@ -48,6 +48,7 @@ go_backend_example
 
 
 Angular21_guide.txt
+*.code-workspace
 /Google_API_referrence
 git_command.txt
 MAP_PICKER_SETUP.md
