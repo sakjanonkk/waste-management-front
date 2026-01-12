@@ -14,6 +14,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MapPickerComponent } from '../../../shared/components/map-picker/map-picker.component';
 import { LocationSelection } from '../../../shared/models/geocoding.model';
+import { MapPickerInlineComponent } from '../../../shared/components/map-picker-inline/map-picker-inline.component';
 
 @Component({
   selector: 'app-collection-point-form',
@@ -28,6 +29,7 @@ import { LocationSelection } from '../../../shared/models/geocoding.model';
     MatInputModule,
     MatSelectModule,
     MatDialogModule,
+    MapPickerInlineComponent,
   ],
   templateUrl: './collection-point-form.component.html',
   styleUrl: './collection-point-form.component.scss'
@@ -139,6 +141,14 @@ export class CollectionPointFormComponent implements OnInit {
           address: result.address
         });
       }
+    });
+  }
+
+  onMapLocationSelected(location: LocationSelection) {
+    this.pointForm.patchValue({
+      latitude: location.latitude,
+      longitude: location.longitude,
+      address: location.address
     });
   }
 

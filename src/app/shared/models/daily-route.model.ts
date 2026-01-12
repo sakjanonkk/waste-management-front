@@ -18,6 +18,7 @@ export interface GenerateTodayResult {
     total_fixed_cost: number;
     total_fuel_cost: number;
     total_vehicles: number;
+    total_vehicles_available: number;
     total_distance_m: number;
   };
 }
@@ -37,6 +38,8 @@ export interface RouteView {
   vehicle_id: number;
   estimated_distance_km: number;
   fuel_cost_estimate_thb?: number;
+  depreciation_estimate_thb?: number;
+  fixed_cost?: number;
   regular_capacity?: number;
   recycle_capacity?: number;
   stops: StopView[];

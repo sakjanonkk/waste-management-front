@@ -73,7 +73,21 @@ export class DailyRoutePageComponent {
   totalItems = 3;
 
   get totalVehicles(): number {
+    // Use summary from generateResult if available (fresh calculation)
+    if (this.generateResult?.summary) {
+      return this.generateResult.summary.total_vehicles;
+    }
+    // Fallback to counting routes from todayView
     return this.todayView?.routes?.length ?? 0;
+  }
+
+  get totalVehiclesAvailable(): number {
+    // Use summary from generateResult if available
+    if (this.generateResult?.summary) {
+      return this.generateResult.summary.total_vehicles_available;
+    }
+    // Fallback: assume 5 vehicles (this should be replaced with actual data)
+    return 5;
   }
 
   get totalDistanceKm(): number {
@@ -82,29 +96,64 @@ export class DailyRoutePageComponent {
   }
 
   get totalCost(): number {
+    // Use summary from generateResult if available (includes both fuel + fixed costs)
+    if (this.generateResult?.summary) {
+      return this.generateResult.summary.total_cost;
+    }
+    // Fallback: calculate from todayView routes (fuel + depreciation)
+    if (!this.todayView?.routes?.length) return 0;
+    return this.todayView.routes.reduce((sum, r) => {
+      const fuelCost = r.fuel_cost_estimate_thb ?? 0;
+      const depreciation = r.depreciation_estimate_thb ?? r.fixed_cost ?? 0;
+      return sum + fuelCost + depreciation;
+    }, 0);
+  }
+
+  get totalFuelCost(): number {
+    // Use summary from generateResult if available
+    if (this.generateResult?.summary) {
+      return this.generateResult.summary.total_fuel_cost;
+    }
+    // Fallback: calculate from todayView
     if (!this.todayView?.routes?.length) return 0;
     return this.todayView.routes.reduce((sum, r) => sum + (r.fuel_cost_estimate_thb ?? 0), 0);
   }
 
-  get totalFuelCost(): number {
+  get totalFixedCost(): number {
+    // Use summary from generateResult if available
+    if (this.generateResult?.summary) {
+      return this.generateResult.summary.total_fixed_cost;
+    }
+    // Fallback: calculate from todayView (depreciation)
     if (!this.todayView?.routes?.length) return 0;
-    return this.todayView.routes.reduce((sum, r) => sum + (r.fuel_cost_estimate_thb ?? 0), 0);
+    return this.todayView.routes.reduce((sum, r) => sum + (r.depreciation_estimate_thb ?? r.fixed_cost ?? 0), 0);
   }
 
   get routesForTable() {
     // Use todayView instead of generateResult for actual route data
     if (!this.todayView?.routes?.length) {
-      return this.mockRoutes;
+      return [];
     }
-    return this.todayView.routes.map((r) => ({
-      id: `รถคันที่ ${r.vehicle_id}`,
-      driver: `พนักงานคนที่ ${r.driver_id}`,
-      fullCapacity: r.regular_capacity ? `${r.regular_capacity} กก.` : '-',
-      currentCapacity: r.recycle_capacity ? `${r.recycle_capacity} กก.` : '-',
-      distance: `${(r.estimated_distance_km ?? 0).toFixed(2)} กิโลเมตร`,
-      cost: r.fuel_cost_estimate_thb ? `${r.fuel_cost_estimate_thb.toFixed(2)} บาท` : '-',
-      status: `${(r.stops?.length ?? 0) - 2} จุด` // Exclude start and end hub
-    }));
+    // Filter out any null/undefined routes and routes without valid data
+    return this.todayView.routes
+      .filter(r => {
+        // Must have valid route object
+        if (!r) return false;
+        // Must have valid vehicle_id (not null, undefined, or 0)
+        if (!r.vehicle_id || r.vehicle_id <= 0) return false;
+        // Must have valid driver_id
+        if (!r.driver_id || r.driver_id <= 0) return false;
+        return true;
+      })
+      .map((r) => ({
+        id: `รถคันที่ ${r.vehicle_id}`,
+        driver: `พนักงานคนที่ ${r.driver_id}`,
+        fullCapacity: r.regular_capacity ? `${r.regular_capacity} กก.` : '-',
+        currentCapacity: r.recycle_capacity ? `${r.recycle_capacity} กก.` : '-',
+        distance: `${(r.estimated_distance_km ?? 0).toFixed(2)} กิโลเมตร`,
+        cost: r.fuel_cost_estimate_thb ? `${r.fuel_cost_estimate_thb.toFixed(2)} บาท` : '-',
+        status: `${(r.stops?.length ?? 0) - 2} จุด` // Exclude start and end hub
+      }));
   }
 
   ngOnInit() {

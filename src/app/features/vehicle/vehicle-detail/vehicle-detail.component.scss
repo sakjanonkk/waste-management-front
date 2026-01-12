@@ -173,6 +173,17 @@ $bg-light: #f9f9f9;
   font-weight: 500;
   background: #eeeeee;
   color: #616161;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 
   .dot {
     width: 8px;
@@ -257,6 +268,23 @@ $bg-light: #f9f9f9;
     font-size: 1rem;
     font-weight: 500;
     color: $text-color;
+  }
+
+  &.capacity-item {
+    background: #f0f7f3;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #d1e7dd;
+
+    .info-label {
+      color: #1e6b45;
+      font-weight: 500;
+    }
+
+    .info-value {
+      color: $primary-green;
+      font-weight: 600;
+    }
   }
 }
 

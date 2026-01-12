@@ -101,18 +101,13 @@
           </mat-form-field>
         </div>
 
-        <!-- Map Picker Button -->
-        <div class="map-picker-button-wrapper">
-          <button
-            type="button"
-            mat-stroked-button
-            color="primary"
-            class="map-picker-btn"
-            (click)="openMapPicker()"
-          >
-            <mat-icon>map</mat-icon>
-            เลือกตำแหน่งบนแผนที่
-          </button>
+        <!-- Embedded Map -->
+        <div class="embedded-map-container">
+          <app-map-picker-inline
+            [latitude]="pointForm.get('latitude')?.value"
+            [longitude]="pointForm.get('longitude')?.value"
+            (locationSelected)="onMapLocationSelected($event)"
+          ></app-map-picker-inline>
         </div>
 
         <mat-form-field appearance="outline" class="full-width">
