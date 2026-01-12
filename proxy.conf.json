@@ -22,6 +22,24 @@
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug"
+  },
+  "/api/v1/geocoding": {
+    "target": "http://localhost:8081",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/api/v1/distance": {
+    "target": "http://localhost:8081",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/api/v1/daily-routes": {
+    "target": "http://localhost:8081",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
   }
 }
 

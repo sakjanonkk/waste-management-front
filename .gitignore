@@ -43,5 +43,16 @@ Thumbs.db
 node_modules
 
 
+# Custom ignores
+go_backend_example
+
+
 Angular21_guide.txt
+/Google_API_referrence
 git_command.txt
+MAP_PICKER_SETUP.md
+waste-management-front.code-workspace
+unit-config.json
+
+# Local-only security tooling
+.git-filter-repo-replacements.txt

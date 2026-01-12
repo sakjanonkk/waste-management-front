@@ -1,13 +1,24 @@
 <mat-toolbar class="navbar-toolbar">
-  <span class="brand-text" (click)="navigateToHome()">
-    Waste Route
-  </span>
+  <span class="brand-text" (click)="navigateToHome()"> Waste Route </span>
+
+  <div class="nav-links">
+    <button mat-button [routerLink]="['/daily-route']">
+      <mat-icon>route</mat-icon>
+      เส้นทางวันนี้
+    </button>
+    <button mat-button [routerLink]="['/staff']">รายชื่อพนักงาน</button>
+    <button mat-button [routerLink]="['/vehicle']">รถเก็บขยะ</button>
+    <button mat-button [routerLink]="['/collection-point']">จุดเก็บขยะ</button>
+    <button mat-button [routerLink]="['/requests']">คำร้องเรียน</button>
+    <button mat-button disabled>Dashboard</button>
+  </div>
+
   <span class="spacer"></span>
 
   @if (userData(); as user) {
   <div [matMenuTriggerFor]="menu" class="user-profile">
     @if (user.picture) {
-    <img [src]="user.picture" alt="Profile" class="profile-image">
+    <img [src]="user.picture" alt="Profile" class="profile-image" />
     } @else {
     <mat-icon class="profile-icon">account_circle</mat-icon>
     }

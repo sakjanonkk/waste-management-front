@@ -11,6 +11,23 @@
   margin-bottom: 1.5rem;
 }
 
+.daily-route-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.daily-route-generate-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.daily-route-generate-button mat-progress-spinner {
+  display: inline-block;
+}
+
 /* main grid layout */
 .daily-route-layout {
   display: grid;
@@ -41,7 +58,7 @@
 .daily-route-map {
   width: 100%;
   height: 100%;
-  padding: 1rem;
+  padding: 0;
 }
 
 .daily-route-map__placeholder {
@@ -69,8 +86,8 @@
 
 /* small cards under map */
 .daily-route-main-stats {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
 }
 
@@ -78,6 +95,7 @@
 .daily-route-card {
   background: #ffffff;
   border-radius: 0.75rem;
+  padding: 1.25rem;
 }
 
 .daily-route-card__title {
@@ -139,6 +157,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding: 1.25rem;
 }
 
 .daily-route-alert-card__content {

@@ -1,6 +1,5 @@
 <div class="vehicle-detail-page">
   <div class="detail-content">
-
     <!-- Header Section -->
     <div class="header-section">
       <h2>รายละเอียดรถเก็บขยะ</h2>
@@ -24,7 +23,11 @@
     <div class="vehicle-hero">
       <div class="vehicle-image-wrapper">
         @if (vehicle()?.image || vehicle()?.image_url) {
-        <img [src]="vehicle()?.image || vehicle()?.image_url" alt="รถเก็บขยะ" class="vehicle-image" />
+        <img
+          [src]="vehicle()?.image || vehicle()?.image_url"
+          alt="รถเก็บขยะ"
+          class="vehicle-image"
+        />
         } @else {
         <div class="vehicle-image-placeholder">
           <mat-icon>local_shipping</mat-icon>
@@ -34,11 +37,22 @@
 
       <div class="vehicle-badge">
         <span class="reg-number">{{ getRegNum() }}</span>
-        <span class="status-badge" 
-          [class.active]="vehicle()?.status?.toLowerCase() === 'available' || vehicle()?.status?.toLowerCase() === 'active'"
+        <span
+          class="status-badge"
+          [class.active]="
+            vehicle()?.status?.toLowerCase() === 'available' ||
+            vehicle()?.status?.toLowerCase() === 'active'
+          "
           [class.inuse]="vehicle()?.status?.toLowerCase() === 'in_use'"
-          [class.maint]="vehicle()?.status?.toLowerCase() === 'maintenance' || vehicle()?.status?.toLowerCase() === 'in_maintenance'"
-          [class.decommissioned]="vehicle()?.status?.toLowerCase() === 'decommissioned'">
+          [class.maint]="
+            vehicle()?.status?.toLowerCase() === 'maintenance' ||
+            vehicle()?.status?.toLowerCase() === 'in_maintenance'
+          "
+          [class.decommissioned]="
+            vehicle()?.status?.toLowerCase() === 'decommissioned'
+          "
+          (click)="changeStatus()"
+        >
           <span class="dot"></span>
           {{ statusLabel(vehicle()?.status) }}
         </span>
@@ -62,16 +76,16 @@
           <span class="info-value">{{ getFuelType() }}</span>
         </div>
         <div class="info-item">
+          <span class="info-label">ค่าเสื่อมราคา/ปี</span>
+          <span class="info-value">฿{{ num(getDepreciation()) }}</span>
+        </div>
+        <div class="info-item capacity-item">
           <span class="info-label">ความจุขยะทั่วไป</span>
           <span class="info-value">{{ num(getRegularCapacity()) }} กก.</span>
         </div>
-        <div class="info-item">
+        <div class="info-item capacity-item">
           <span class="info-label">ความจุขยะรีไซเคิล</span>
           <span class="info-value">{{ num(getRecycleCapacity()) }} กก.</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">ค่าเสื่อมราคา/ปี</span>
-          <span class="info-value">฿{{ num(getDepreciation()) }}</span>
         </div>
       </div>
     </div>
@@ -81,13 +95,26 @@
       <h3 class="section-title">ข้อมูลคนขับ</h3>
       @if (driver()) {
       <div class="driver-card">
-        <img class="driver-avatar" [src]="driver()?.s_image || driver()?.picture || '/assets/images/worker-avatar.png'"
-          alt="driver" />
+        <img
+          class="driver-avatar"
+          [src]="
+            driver()?.s_image ||
+            driver()?.picture ||
+            '/assets/images/worker-avatar.png'
+          "
+          alt="driver"
+        />
         <div class="driver-info">
-          <div class="driver-name">{{ driver()?.firstname }} {{ driver()?.lastname }}</div>
+          <div class="driver-name">
+            {{ driver()?.firstname }} {{ driver()?.lastname }}
+          </div>
           <div class="driver-role">พนักงานขับรถเก็บขยะ</div>
-          <div class="driver-meta">รหัส: {{ staffCodeFromId(driver()?.id) }}</div>
-          <div class="driver-meta">โทร: {{ driver()?.phone_number || "-" }}</div>
+          <div class="driver-meta">
+            รหัส: {{ staffCodeFromId(driver()?.id) }}
+          </div>
+          <div class="driver-meta">
+            โทร: {{ driver()?.phone_number || "-" }}
+          </div>
         </div>
       </div>
       } @else {
@@ -101,22 +128,42 @@
     <!-- Action Buttons -->
     <div class="actions-section">
       <div class="action-buttons">
-        <button mat-stroked-button class="action-btn edit-btn" (click)="editVehicle()" [disabled]="loading()">
+        <button
+          mat-stroked-button
+          class="action-btn edit-btn"
+          (click)="editVehicle()"
+          [disabled]="loading()"
+        >
           <mat-icon>edit</mat-icon>
           แก้ไขข้อมูล
         </button>
-        <button mat-stroked-button class="action-btn driver-btn" (click)="editDriver()" [disabled]="loading()">
+        <button
+          mat-stroked-button
+          class="action-btn driver-btn"
+          (click)="editDriver()"
+          [disabled]="loading()"
+        >
           <mat-icon>person</mat-icon>
           เปลี่ยนคนขับ
         </button>
       </div>
 
       <div class="danger-buttons">
-        <button mat-stroked-button class="action-btn status-btn" (click)="changeStatus()" [disabled]="loading()">
+        <button
+          mat-stroked-button
+          class="action-btn status-btn"
+          (click)="changeStatus()"
+          [disabled]="loading()"
+        >
           <mat-icon>swap_horiz</mat-icon>
           เปลี่ยนสถานะ
         </button>
-        <button mat-stroked-button class="action-btn delete-btn" (click)="delete()" [disabled]="loading()">
+        <button
+          mat-stroked-button
+          class="action-btn delete-btn"
+          (click)="delete()"
+          [disabled]="loading()"
+        >
           <mat-icon>delete</mat-icon>
           ลบข้อมูล
         </button>

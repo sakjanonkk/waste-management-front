@@ -1,5 +1,5 @@
 import { Component, input, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -10,7 +10,7 @@ import { UserService } from '../../../core/services/user/user.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatToolbarModule, MatIconModule, MatMenuModule, MatButtonModule],
+  imports: [MatToolbarModule, MatIconModule, MatMenuModule, MatButtonModule, RouterModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })

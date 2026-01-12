@@ -1,10 +1,15 @@
 <div class="collection-point-form-page">
   <div class="form-content">
-
     <!-- Header Section -->
     <div class="header-section">
       <h2>{{ isEditMode ? "แก้ไขจุดเก็บขยะ" : "เพิ่มจุดเก็บขยะใหม่" }}</h2>
-      <p>{{ isEditMode ? "แก้ไขข้อมูลจุดเก็บขยะ" : "กรอกข้อมูลเพื่อเพิ่มจุดเก็บขยะใหม่" }}</p>
+      <p>
+        {{
+          isEditMode
+            ? "แก้ไขข้อมูลจุดเก็บขยะ"
+            : "กรอกข้อมูลเพื่อเพิ่มจุดเก็บขยะใหม่"
+        }}
+      </p>
     </div>
 
     @if (loading()) {
@@ -19,13 +24,17 @@
     </div>
     } @else {
     <form [formGroup]="pointForm" (ngSubmit)="onSubmit()">
-
       <!-- Image Upload -->
       <div class="image-upload-section">
         <div class="image-preview-wrapper">
           @if (imagePreview()) {
           <img [src]="imagePreview()" alt="Preview" class="preview-image" />
-          <button type="button" mat-icon-button class="remove-image-btn" (click)="removeImage()">
+          <button
+            type="button"
+            mat-icon-button
+            class="remove-image-btn"
+            (click)="removeImage()"
+          >
             <mat-icon>close</mat-icon>
           </button>
           } @else {
@@ -35,19 +44,35 @@
           </div>
           }
         </div>
-        <button type="button" mat-stroked-button class="upload-btn" (click)="fileInput.click()">
+        <button
+          type="button"
+          mat-stroked-button
+          class="upload-btn"
+          (click)="fileInput.click()"
+        >
           <mat-icon>upload</mat-icon>
           เลือกไฟล์รูป
         </button>
-        <input #fileInput type="file" accept="image/*" style="display: none" (change)="onFileSelected($event)" />
+        <input
+          #fileInput
+          type="file"
+          accept="image/*"
+          style="display: none"
+          (change)="onFileSelected($event)"
+        />
       </div>
 
       <!-- Form Fields -->
       <div class="form-fields">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>ชื่อจุดเก็บขยะ</mat-label>
-          <input matInput formControlName="point_name" placeholder="กรอกชื่อจุด" />
-          @if (pointForm.get('point_name')?.hasError('required') && pointForm.get('point_name')?.touched) {
+          <input
+            matInput
+            formControlName="point_name"
+            placeholder="กรอกชื่อจุด"
+          />
+          @if (pointForm.get('point_name')?.hasError('required') &&
+          pointForm.get('point_name')?.touched) {
           <mat-error>กรุณากรอกชื่อจุดเก็บขยะ</mat-error>
           }
         </mat-form-field>
@@ -55,37 +80,78 @@
         <div class="two-col">
           <mat-form-field appearance="outline">
             <mat-label>ละติจูด</mat-label>
-            <input matInput formControlName="latitude" type="number" step="any" placeholder="0.000000" />
+            <input
+              matInput
+              formControlName="latitude"
+              type="number"
+              step="any"
+              placeholder="0.000000"
+            />
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>ลองจิจูด</mat-label>
-            <input matInput formControlName="longitude" type="number" step="any" placeholder="0.000000" />
+            <input
+              matInput
+              formControlName="longitude"
+              type="number"
+              step="any"
+              placeholder="0.000000"
+            />
           </mat-form-field>
+        </div>
+
+        <!-- Embedded Map -->
+        <div class="embedded-map-container">
+          <app-map-picker-inline
+            [latitude]="pointForm.get('latitude')?.value"
+            [longitude]="pointForm.get('longitude')?.value"
+            (locationSelected)="onMapLocationSelected($event)"
+          ></app-map-picker-inline>
         </div>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>ที่อยู่</mat-label>
-          <textarea matInput formControlName="address" rows="2" placeholder="กรอกที่อยู่"></textarea>
+          <textarea
+            matInput
+            formControlName="address"
+            rows="2"
+            placeholder="กรอกที่อยู่"
+          ></textarea>
         </mat-form-field>
 
         <div class="two-col">
           <mat-form-field appearance="outline">
             <mat-label>ความจุขยะทั่วไป</mat-label>
-            <input matInput formControlName="regular_capacity" type="number" placeholder="0" />
+            <input
+              matInput
+              formControlName="regular_capacity"
+              type="number"
+              placeholder="0"
+            />
             <span matTextSuffix>Kg.</span>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>ความจุขยะรีไซเคิล</mat-label>
-            <input matInput formControlName="recycle_capacity" type="number" placeholder="0" />
+            <input
+              matInput
+              formControlName="recycle_capacity"
+              type="number"
+              placeholder="0"
+            />
             <span matTextSuffix>Kg.</span>
           </mat-form-field>
         </div>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>หมายเหตุปัญหา (ถ้ามี)</mat-label>
-          <textarea matInput formControlName="problem_reported" rows="2" placeholder="กรอกหมายเหตุ"></textarea>
+          <textarea
+            matInput
+            formControlName="problem_reported"
+            rows="2"
+            placeholder="กรอกหมายเหตุ"
+          ></textarea>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
@@ -99,10 +165,20 @@
 
       <!-- Action Buttons -->
       <div class="action-buttons">
-        <button type="button" mat-stroked-button class="cancel-btn" (click)="goBack()">
+        <button
+          type="button"
+          mat-stroked-button
+          class="cancel-btn"
+          (click)="goBack()"
+        >
           ยกเลิก
         </button>
-        <button type="submit" mat-flat-button class="submit-btn" [disabled]="pointForm.invalid || submitting()">
+        <button
+          type="submit"
+          mat-flat-button
+          class="submit-btn"
+          [disabled]="pointForm.invalid || submitting()"
+        >
           @if (submitting()) {
           <mat-spinner diameter="20"></mat-spinner>
           } @else {
