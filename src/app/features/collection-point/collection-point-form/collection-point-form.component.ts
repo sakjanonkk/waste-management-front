@@ -11,6 +11,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MapPickerComponent } from '../../../shared/components/map-picker/map-picker.component';
+import { LocationSelection } from '../../../shared/models/geocoding.model';
+import { MapPickerInlineComponent } from '../../../shared/components/map-picker-inline/map-picker-inline.component';
 
 @Component({
   selector: 'app-collection-point-form',
@@ -23,8 +27,10 @@ import { MatSelectModule } from '@angular/material/select';
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
-],
+    MatSelectModule,
+    MatDialogModule,
+    MapPickerInlineComponent,
+  ],
   templateUrl: './collection-point-form.component.html',
   styleUrl: './collection-point-form.component.scss'
 })
@@ -33,6 +39,7 @@ export class CollectionPointFormComponent implements OnInit {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private collectionPointService = inject(CollectionPointService);
+  private dialog = inject(MatDialog);
 
   loading = signal<boolean>(false);
   submitting = signal<boolean>(false);
@@ -113,6 +120,36 @@ export class CollectionPointFormComponent implements OnInit {
     this.imagePreview.set(null);
     this.selectedFile = null;
     this.pointForm.patchValue({ point_image: '' });
+  }
+
+  openMapPicker() {
+    const dialogRef = this.dialog.open(MapPickerComponent, {
+      width: '90vw',
+      maxWidth: '900px',
+      height: '80vh',
+      maxHeight: '700px',
+      disableClose: false,
+      panelClass: 'map-picker-dialog-container'
+    });
+
+    dialogRef.afterClosed().subscribe((result: LocationSelection | null) => {
+      if (result) {
+        // Update form with selected location
+        this.pointForm.patchValue({
+          latitude: result.latitude,
+          longitude: result.longitude,
+          address: result.address
+        });
+      }
+    });
+  }
+
+  onMapLocationSelected(location: LocationSelection) {
+    this.pointForm.patchValue({
+      latitude: location.latitude,
+      longitude: location.longitude,
+      address: location.address
+    });
   }
 
   onSubmit() {
