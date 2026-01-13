@@ -1,20 +1,29 @@
 <mat-toolbar class="navbar-toolbar">
-  <span class="brand-text" (click)="navigateToHome()"> Waste Route </span>
-
-  <div class="nav-links">
-    <button mat-button [routerLink]="['/daily-route']">
-      <mat-icon>route</mat-icon>
-      เส้นทางวันนี้
+  @if (isMobile) {
+    <button mat-icon-button class="mobile-menu-btn" [matMenuTriggerFor]="mobileMenu">
+      <mat-icon>menu</mat-icon>
     </button>
-    <button mat-button [routerLink]="['/staff']">รายชื่อพนักงาน</button>
-    <button mat-button [routerLink]="['/vehicle']">รถเก็บขยะ</button>
-    <button mat-button [routerLink]="['/collection-point']">จุดเก็บขยะ</button>
-    <button mat-button [routerLink]="['/requests']">คำร้องเรียน</button>
-    <button mat-button disabled>Dashboard</button>
-  </div>
+  }
+
+  <span class="brand-text" (click)="navigateToHome()"> Waste Route </span>
 
   <span class="spacer"></span>
 
+  <!-- Desktop Nav Links -->
+  <div class="nav-links desktop-only">
+    <button mat-button [routerLink]="['/daily-route']" routerLinkActive="active-link">
+      <mat-icon>route</mat-icon>
+      ข้อมูลเส้นทาง
+    </button>
+    <button mat-button [routerLink]="['/staff']" routerLinkActive="active-link">รายชื่อพนักงาน</button>
+    <button mat-button [routerLink]="['/vehicle']" routerLinkActive="active-link">รถเก็บขยะ</button>
+    <button mat-button [routerLink]="['/collection-point']" routerLinkActive="active-link">จุดเก็บขยะ</button>
+    <button mat-button [routerLink]="['/requests']" routerLinkActive="active-link">คำร้องเรียน</button>
+  </div>
+
+  <span class="desktop-spacer desktop-only"></span>
+
+  <!-- User Profile -->
   @if (userData(); as user) {
   <div [matMenuTriggerFor]="menu" class="user-profile">
     @if (user.picture) {
@@ -22,7 +31,7 @@
     } @else {
     <mat-icon class="profile-icon">account_circle</mat-icon>
     }
-    <span class="profile-name">{{ user.firstname }} {{ user.lastname }}</span>
+    <span class="profile-name mobile-hide">{{ user.firstname }} {{ user.lastname }}</span>
   </div>
   } @else {
   <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Open menu">
@@ -30,8 +39,39 @@
   </button>
   }
 
+  <!-- Profile Menu -->
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>โปรไฟล์</button>
-    <button mat-menu-item (click)="logout()">ออกจากระบบ</button>
+    <button mat-menu-item>
+        <mat-icon>person</mat-icon>
+        โปรไฟล์
+    </button>
+    <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        ออกจากระบบ
+    </button>
+  </mat-menu>
+
+  <!-- Mobile Menu -->
+  <mat-menu #mobileMenu="matMenu">
+    <button mat-menu-item [routerLink]="['/daily-route']" routerLinkActive="active-link-mobile">
+        <mat-icon>route</mat-icon>
+        ข้อมูลเส้นทาง
+    </button>
+    <button mat-menu-item [routerLink]="['/staff']" routerLinkActive="active-link-mobile">
+        <mat-icon>group</mat-icon>
+        รายชื่อพนักงาน
+    </button>
+    <button mat-menu-item [routerLink]="['/vehicle']" routerLinkActive="active-link-mobile">
+        <mat-icon>local_shipping</mat-icon>
+        รถเก็บขยะ
+    </button>
+    <button mat-menu-item [routerLink]="['/collection-point']" routerLinkActive="active-link-mobile">
+        <mat-icon>delete</mat-icon>
+        จุดเก็บขยะ
+    </button>
+    <button mat-menu-item [routerLink]="['/requests']" routerLinkActive="active-link-mobile">
+        <mat-icon>campaign</mat-icon>
+        คำร้องเรียน
+    </button>
   </mat-menu>
 </mat-toolbar>

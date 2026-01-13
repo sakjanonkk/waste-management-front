@@ -18,6 +18,10 @@ export class RequestService {
     return this.http.get(this.apiUrl, { params });
   }
 
+  getRequestById(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${id}`);
+  }
+
   approveRequest(id: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}/approve`, {});
   }

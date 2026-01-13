@@ -1,0 +1,93 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <div class="header-title">
+      <mat-icon>assignment</mat-icon>
+      <h2>รายละเอียดคำร้อง #{{ data.id }}</h2>
+    </div>
+    <div class="status-badge" [ngClass]="data.status">
+      {{ getStatusLabel(data.status) }}
+    </div>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <div class="content-grid">
+      <!-- Left Column: Info -->
+      <div class="info-column">
+        <!-- Request Info -->
+        <div class="section">
+          <h3 class="section-title">ข้อมูลคำร้อง</h3>
+          <div class="info-item">
+            <span class="label">ประเภท:</span>
+            <span class="value font-medium">{{ getRequestTypeName(data.request_type) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">สถานที่:</span>
+            <span class="value">{{ data.point_name || '-' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">วันที่แจ้ง:</span>
+            <span class="value">{{ data.request_datetime | date : 'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Reporter Info -->
+        <div class="section">
+          <h3 class="section-title">ข้อมูลผู้แจ้ง</h3>
+          <div class="info-item">
+            <span class="label">ชื่อ:</span>
+            <span class="value">{{ data.reporter_name || '-' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">ติดต่อ:</span>
+            <span class="value">{{ data.reporter_contact || '-' }}</span>
+          </div>
+        </div>
+
+        <!-- Remarks -->
+        <div class="section" *ngIf="data.remarks">
+          <h3 class="section-title">หมายเหตุ</h3>
+          <p class="remarks-text">{{ data.remarks }}</p>
+        </div>
+      </div>
+
+      <!-- Right Column: Map & Image -->
+      <div class="media-column">
+        <!-- Image -->
+        <div class="image-container" *ngIf="data.point_image">
+          <img [src]="data.point_image" alt="Request Image" (click)="openImage(data.point_image)">
+          <div class="overlay">
+            <mat-icon>visibility</mat-icon>
+          </div>
+        </div>
+        
+        <!-- Location -->
+        <div class="location-box" *ngIf="data.latitude && data.longitude">
+          <div class="coords">
+            <mat-icon>location_on</mat-icon>
+            <span>{{ data.latitude | number:'1.6-6' }}, {{ data.longitude | number:'1.6-6' }}</span>
+          </div>
+          <div class="address" *ngIf="addressFromCoords()">
+            {{ addressFromCoords() }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button mat-dialog-close>ปิด</button>
+
+    @if (data.status === 'pending') {
+      <button mat-stroked-button color="warn" (click)="onReject()" class="action-btn">
+        <mat-icon>close</mat-icon>
+        ปฏิเสธ
+      </button>
+      <button mat-flat-button color="primary" (click)="onApprove()" class="action-btn approve-btn">
+        <mat-icon>check</mat-icon>
+        อนุมัติ
+      </button>
+    }
+  </mat-dialog-actions>
+</div>

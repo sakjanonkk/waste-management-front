@@ -243,50 +243,126 @@ $shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06
   }
 }
 
-// Responsive "Card" View
-@media (max-width: 600px) {
-  .mat-mdc-table {
-    display: block !important;
-  }
+// Responsive "Card" View for mobile screens
+@media (max-width: 768px) {
+  .collection-point-list-table {
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    width: 100% !important;
 
-  .mat-mdc-header-row {
-    display: none !important;
-  }
+    &__scroll {
+      overflow-x: visible;
+      width: 100% !important;
+    }
 
-  .mat-mdc-row {
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 1rem !important;
-    border-bottom: 8px solid #f3f4f6 !important;
-    background-color: $white !important;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  .mat-mdc-cell {
-    display: flex !important;
-    justify-content: space-between !important;
-    padding: 0.5rem 0 !important;
-    border: none !important;
-    font-size: 1rem !important;
-
-    &:before {
-      content: attr(data-label);
-      font-weight: 600;
-      color: $text-secondary;
-      margin-right: 1rem;
+    table {
+      min-width: 100% !important;
+      width: 100% !important;
+      display: block !important;
     }
   }
 
+  ::ng-deep {
+    .mat-mdc-table {
+      display: block !important;
+      min-width: 100% !important;
+      width: 100% !important;
+      background: transparent !important;
+    }
+
+    .mat-mdc-table thead {
+      display: none !important;
+    }
+
+    .mat-mdc-table tbody {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 1rem !important;
+      width: 100% !important;
+    }
+
+    .mat-mdc-header-row {
+      display: none !important;
+    }
+
+    .mat-mdc-row {
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 1rem !important;
+      background-color: $white !important;
+      border-radius: 12px !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+      border: 1px solid #e5e7eb !important;
+      height: auto !important;
+      min-height: unset !important;
+      align-items: stretch !important;
+      gap: 0.5rem !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    .mat-mdc-cell {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: flex-start !important;
+      padding: 0.5rem 0 !important;
+      border: none !important;
+      border-bottom: 1px solid #f3f4f6 !important;
+      font-size: 0.9rem !important;
+      min-height: unset !important;
+      height: auto !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow: visible !important;
+      white-space: normal !important;
+      text-overflow: unset !important;
+      box-sizing: border-box !important;
+      flex: 1 1 100% !important;
+
+      &:last-child {
+        border-bottom: none !important;
+      }
+
+      &:before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: $text-secondary;
+        font-size: 0.85rem;
+        min-width: 120px;
+        flex-shrink: 0;
+        padding-right: 0.75rem;
+      }
+    }
+
+    .mat-mdc-cell > span,
+    .mat-mdc-cell > div {
+      text-align: right;
+      flex: 1;
+      word-break: break-word;
+    }
+  }
+
+  // Actions cell styling
   .collection-point-list-table__actions-cell {
-    justify-content: flex-end !important;
-    margin-top: 1rem;
+    justify-content: center !important;
+    margin-top: 0.5rem;
     padding-top: 1rem !important;
-    border-top: 1px solid #f3f4f6 !important;
+    border-top: 1px solid #e5e7eb !important;
+    border-bottom: none !important;
 
     &:before {
-      display: none;
+      display: none !important;
     }
+
+    .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  // Status badge adjustments
+  .status-badge {
+    text-align: right;
   }
 }

@@ -1,115 +1,156 @@
 <div class="vehicle-form-page">
   <div class="form-content">
-
     <!-- Header Section -->
     <div class="header-section">
       @if (id) {
-      <h2>แก้ไขข้อมูลรถเก็บขยะ</h2>
-      <p>แก้ไขรายละเอียดข้อมูลรถเก็บขยะ</p>
+        <h2>แก้ไขข้อมูลรถเก็บขยะ</h2>
+        <p>แก้ไขรายละเอียดข้อมูลรถเก็บขยะ</p>
       } @else {
-      <h2>เพิ่มรถเก็บขยะใหม่</h2>
-      <p>กรอกข้อมูลรถเก็บขยะเข้าสู่ระบบ</p>
+        <h2>เพิ่มรถเก็บขยะใหม่</h2>
+        <p>กรอกข้อมูลรถเก็บขยะเข้าสู่ระบบ</p>
       }
     </div>
 
     @if (loading() && id) {
-    <!-- Skeleton Loading for Edit Mode -->
-    <div class="vehicle-form skeleton-form">
-      <div class="avatar-section">
-        <div class="skeleton-avatar"></div>
-        <div class="skeleton-line w-40"></div>
+      <!-- Skeleton Loading for Edit Mode -->
+      <div class="vehicle-form skeleton-form">
+        <div class="avatar-section">
+          <div class="skeleton-avatar"></div>
+          <div class="skeleton-line w-40"></div>
+        </div>
+        <div class="input-group">
+          @for (i of [1, 2, 3, 4, 5, 6, 7]; track i) {
+            <div class="skeleton-field"></div>
+          }
+        </div>
       </div>
-      <div class="input-group">
-        @for (i of [1,2,3,4,5,6,7]; track i) {
-        <div class="skeleton-field"></div>
-        }
-      </div>
-    </div>
     } @else {
-    <form [formGroup]="form" class="vehicle-form">
-
-      <!-- Image Upload Section -->
-      <div class="avatar-section">
-        <div class="avatar-wrapper" (click)="fileInput.click()">
-          @if (form.value.image_url) {
-          <img [src]="form.value.image_url" alt="Vehicle preview" />
-          } @else {
-          <div class="avatar-placeholder">
-            <mat-icon>local_shipping</mat-icon>
+      <form [formGroup]="form" class="vehicle-form">
+        <!-- Image Upload Section -->
+        <div class="avatar-section">
+          <div class="avatar-wrapper" (click)="fileInput.click()">
+            @if (form.value.image_url) {
+              <img [src]="form.value.image_url" alt="Vehicle preview" />
+            } @else {
+              <div class="avatar-placeholder">
+                <mat-icon>local_shipping</mat-icon>
+              </div>
+            }
+            <label class="upload-btn" matRipple>
+              <mat-icon>photo_camera</mat-icon>
+            </label>
           </div>
-          }
-          <label class="upload-btn" matRipple>
-            <mat-icon>photo_camera</mat-icon>
-          </label>
-        </div>
-        <p>อัพโหลดรูปรถเก็บขยะ</p>
-        <input #fileInput type="file" accept="image/*" style="display: none" (change)="onImageFileSelected($event)" />
-      </div>
-
-      <!-- Form Fields -->
-      <div class="input-group">
-
-        <mat-form-field appearance="outline">
-          <mat-label>เลขทะเบียนรถ*</mat-label>
-          <input matInput formControlName="vehicle_reg_num" placeholder="กข-1234" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>รุ่นรถ</mat-label>
-          <input matInput formControlName="vehicle_type" placeholder="เช่น Isuzu NQR" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>ประเภทเชื้อเพลิง*</mat-label>
-          <mat-select formControlName="fuel_category">
-            <mat-option value="DIESEL">ดีเซล</mat-option>
-            <mat-option value="GASOLINE">เบนซิน</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>สถานะ*</mat-label>
-          <mat-select formControlName="status">
-            <mat-option value="active">พร้อมใช้งาน</mat-option>
-            <mat-option value="in_maintenance">ซ่อมบำรุง</mat-option>
-            <mat-option value="decommissioned">ปลดประจำการ</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <div class="capacity-row">
-          <mat-form-field appearance="outline" class="capacity-field regular">
-            <mat-label>ความจุขยะทั่วไป (กก.)</mat-label>
-            <input matInput type="number" formControlName="regular_capacity" />
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="capacity-field recycle">
-            <mat-label>ความจุรีไซเคิล (กก.)</mat-label>
-            <input matInput type="number" formControlName="recycle_capacity" />
-          </mat-form-field>
+          <p>อัพโหลดรูปรถเก็บขยะ</p>
+          <input
+            #fileInput
+            type="file"
+            accept="image/*"
+            style="display: none"
+            (change)="onImageFileSelected($event)"
+          />
         </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>ค่าเสื่อมราคา/ปี (บาท)</mat-label>
-          <input matInput type="number" formControlName="depreciation_thb" />
-        </mat-form-field>
+        <!-- Form Fields -->
+        <div class="input-group">
+          <mat-form-field appearance="outline">
+            <mat-label>เลขทะเบียนรถ*</mat-label>
+            <input
+              matInput
+              formControlName="vehicle_reg_num"
+              placeholder="กข-1234"
+            />
+          </mat-form-field>
 
-      </div>
+          <mat-form-field appearance="outline">
+            <mat-label>รุ่นรถ</mat-label>
+            <input
+              matInput
+              formControlName="vehicle_type"
+              placeholder="เช่น Isuzu NQR"
+            />
+          </mat-form-field>
 
-      <!-- Action Buttons -->
-      <div class="actions-section">
-        <button mat-flat-button class="submit-btn" type="button" (click)="submit()" [disabled]="loading()">
-          @if (!loading()) {
-          <span>{{ id ? 'บันทึกการแก้ไข' : 'ยืนยันเพิ่มรถ' }}</span>
-          } @else {
-          <span>กำลังบันทึก...</span>
-          }
-        </button>
-        <button mat-button class="cancel-btn" type="button" (click)="cancel()" [disabled]="loading()">
-          ยกเลิก
-        </button>
-      </div>
+          <mat-form-field appearance="outline">
+            <mat-label>ประเภทเชื้อเพลิง*</mat-label>
+            <mat-select formControlName="fuel_category">
+              <mat-option value="DIESEL">ดีเซล</mat-option>
+              <mat-option value="GASOLINE">เบนซิน</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-    </form>
+          <mat-form-field appearance="outline">
+            <mat-label>สถานะ*</mat-label>
+            <mat-select formControlName="status">
+              <mat-option value="active">พร้อมใช้งาน</mat-option>
+              <mat-option value="in_maintenance">ซ่อมบำรุง</mat-option>
+              <mat-option value="decommissioned">ปลดประจำการ</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>พนักงานขับรถ</mat-label>
+            <mat-select formControlName="current_driver_id">
+              <mat-option [value]="null">-- ไม่ระบุ --</mat-option>
+              @for (driver of drivers(); track driver.id) {
+                <mat-option [value]="driver.id"
+                  >{{ driver.firstname }} {{ driver.lastname }}</mat-option
+                >
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="capacity-row">
+            <mat-form-field appearance="outline" class="capacity-field regular">
+              <mat-label>ความจุขยะทั่วไป (กก.)</mat-label>
+              <input
+                matInput
+                type="number"
+                formControlName="regular_capacity"
+              />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="capacity-field recycle">
+              <mat-label>ความจุรีไซเคิล (กก.)</mat-label>
+              <input
+                matInput
+                type="number"
+                formControlName="recycle_capacity"
+              />
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>ค่าเสื่อมราคา/ปี (บาท)</mat-label>
+            <input matInput type="number" formControlName="depreciation_thb" />
+          </mat-form-field>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions-section">
+          <button
+            mat-flat-button
+            class="submit-btn"
+            type="button"
+            (click)="submit()"
+            [disabled]="loading()"
+          >
+            @if (!loading()) {
+              <span>{{ id ? "บันทึกการแก้ไข" : "ยืนยันเพิ่มรถ" }}</span>
+            } @else {
+              <span>กำลังบันทึก...</span>
+            }
+          </button>
+          <button
+            mat-button
+            class="cancel-btn"
+            type="button"
+            (click)="cancel()"
+            [disabled]="loading()"
+          >
+            ยกเลิก
+          </button>
+        </div>
+      </form>
     }
   </div>
 </div>

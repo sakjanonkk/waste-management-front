@@ -1,64 +1,33 @@
-import { Component, inject, signal, OnInit, OnDestroy, PLATFORM_ID, Input, Output, EventEmitter, ViewChild, ElementRef, effect } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, inject, signal, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, numberAttribute } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
-import { Subscription, catchError, debounceTime, distinctUntilChanged, map, of, switchMap, tap } from 'rxjs';
-import { GeocodingService } from '../../../core/services/geocoding/geocoding.service';
 import { LocationSelection } from '../../models/geocoding.model';
-import { MapSearchResult } from '../../models/map-search.model';
-import { MapSearchService } from '../../../core/services/map-search/map-search.service';
-import { OsmNominatimSearchService } from '../../../core/services/map-search/osm-nominatim-search.service';
-import * as L from 'leaflet';
+
+declare const google: any;
 
 @Component({
   selector: 'app-map-picker-inline',
   standalone: true,
   imports: [
+    CommonModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule,
     MatFormFieldModule,
     MatInputModule,
-    MatAutocompleteModule,
-    ReactiveFormsModule
-  ],
-  providers: [
-    { provide: MapSearchService, useExisting: OsmNominatimSearchService }
   ],
   template: `
     <div class="map-picker-inline">
-      <div class="search-overlay">
-        <mat-form-field appearance="outline" class="search-field">
-          <mat-label>ค้นหาสถานที่</mat-label>
-          <input
-            matInput
-            type="text"
-            [formControl]="searchControl"
-            [matAutocomplete]="auto" />
-        </mat-form-field>
+      <!-- Search Box -->
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>ค้นหาสถานที่</mat-label>
+        <input matInput #searchInput placeholder="พิมพ์ชื่อสถานที่...">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
 
-        <mat-autocomplete
-          #auto="matAutocomplete"
-          [displayWith]="displaySearchValue"
-          (optionSelected)="onSearchOptionSelected($event.option.value)">
-          @for (result of searchResults(); track result.label) {
-            <mat-option [value]="result">{{ result.label }}</mat-option>
-          }
-        </mat-autocomplete>
-      </div>
-
-      @if (loading()) {
-        <div class="loading-overlay">
-          <mat-spinner diameter="48"></mat-spinner>
-          <p>กำลังโหลดข้อมูลตำแหน่ง...</p>
-        </div>
-      }
-
+      <!-- Map -->
       <div #mapContainer class="map-container"></div>
     </div>
   `,
@@ -70,237 +39,159 @@ import * as L from 'leaflet';
     }
 
     .map-picker-inline {
-      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
       width: 100%;
       height: 100%;
-    }
-
-    .search-overlay {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      right: 60px;
-      z-index: 1000;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
 
     .search-field {
       width: 100%;
-      margin: 0;
-
-      ::ng-deep .mat-mdc-form-field-flex {
-        background: white;
-      }
-    }
-
-    .loading-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.9);
-      z-index: 999;
-      gap: 1rem;
-
-      p {
-        margin: 0;
-        color: #666;
-        font-size: 0.9rem;
-      }
     }
 
     .map-container {
       width: 100%;
-      height: 100%;
+      height: 300px; /* Default height */
+      flex: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #e0e0e0;
     }
   `]
 })
-export class MapPickerInlineComponent implements OnInit, OnDestroy {
-  @Input() latitude: number | null = null;
-  @Input() longitude: number | null = null;
+export class MapPickerInlineComponent implements OnInit {
+  @Input({ transform: numberAttribute }) latitude: number | null = null;
+  @Input({ transform: numberAttribute }) longitude: number | null = null;
   @Output() locationSelected = new EventEmitter<LocationSelection>();
+
   @ViewChild('mapContainer', { static: true }) mapContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
-  private platformId = inject(PLATFORM_ID);
-  private geocodingService = inject(GeocodingService);
-  private searchService = inject(MapSearchService);
-
-  loading = signal<boolean>(false);
-  searchResults = signal<MapSearchResult[]>([]);
-  selectedLocation = signal<LocationSelection | null>(null);
+  private map: any;
+  private marker: any;
   
-  searchControl = new FormControl('');
-  private searchSubscription?: Subscription;
-
-  private map?: L.Map;
-  private marker?: L.Marker;
-  private readonly defaultLat = 16.4419;
-  private readonly defaultLng = 102.8360;
-
-  constructor() {
-    // Watch for input changes
-    effect(() => {
-      const lat = this.latitude;
-      const lng = this.longitude;
-      if (lat && lng && this.map) {
-        this.updateMarkerPosition(lat, lng);
-      }
-    });
-  }
+  // Default: Bangkok
+  private readonly defaultLat = 13.7563;
+  private readonly defaultLng = 100.5018;
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      setTimeout(() => this.initializeMap(), 100);
-      this.setupSearch();
-    }
+    // Wait for view init roughly
+    setTimeout(() => this.initMap(), 500);
   }
 
-  ngOnDestroy() {
-    this.searchSubscription?.unsubscribe();
-    if (this.map) {
-      this.map.remove();
+  private initMap() {
+    if (typeof google === 'undefined') {
+      console.warn('Google Maps API not loaded');
+      setTimeout(() => this.initMap(), 1000); // Retry
+      return;
     }
-  }
 
-  private initializeMap() {
     const lat = this.latitude || this.defaultLat;
     const lng = this.longitude || this.defaultLng;
+    const zoom = this.latitude ? 16 : 12;
 
-    this.map = L.map(this.mapContainer.nativeElement, {
-      center: [lat, lng],
-      zoom: this.latitude ? 16 : 13,
-      zoomControl: true
+    const mapOptions = {
+      center: { lat, lng },
+      zoom: zoom,
+      mapTypeControl: false,
+      streetViewControl: false,
+      styles: [
+        { featureType: 'poi', stylers: [{ visibility: 'simplified' }] }
+      ]
+    };
+
+    this.map = new google.maps.Map(this.mapContainer.nativeElement, mapOptions);
+
+    // Initial Marker
+    this.placeMarker({ lat, lng }, false);
+
+    // Click listener
+    this.map.addListener('click', (event: any) => {
+      this.handleMapClick(event.latLng);
     });
 
-    // Position zoom controls on the right side
-    if (this.map.zoomControl) {
-      this.map.zoomControl.setPosition('topright');
-    }
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
-      maxZoom: 19
-    }).addTo(this.map);
-
-    const customIcon = L.icon({
-      iconUrl: 'assets/icons/marker-icon.png',
-      iconRetinaUrl: 'assets/icons/marker-icon-2x.png',
-      shadowUrl: 'assets/icons/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
-
-    this.marker = L.marker([lat, lng], {
-      icon: customIcon,
-      draggable: true
-    }).addTo(this.map);
-
-    this.marker.on('dragend', () => {
-      if (this.marker) {
-        const position = this.marker.getLatLng();
-        this.onMarkerPositionChanged(position.lat, position.lng);
-      }
-    });
-
-    this.map.on('click', (e: L.LeafletMouseEvent) => {
-      this.onMarkerPositionChanged(e.latlng.lat, e.latlng.lng);
-    });
-
-    if (this.latitude && this.longitude) {
-      this.fetchLocationInfo(this.latitude, this.longitude);
-    }
+    // Search Box
+    this.initAutocomplete();
   }
 
-  private setupSearch() {
-    this.searchSubscription = this.searchControl.valueChanges
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        tap(() => this.searchResults.set([])),
-        switchMap((query) => {
-          if (typeof query === 'string' && query.trim().length > 2) {
-            return this.searchService.search(query).pipe(
-              map((results) => results.slice(0, 5)),
-              catchError(() => of([]))
-            );
-          }
-          return of([]);
-        })
-      )
-      .subscribe((results) => {
-        this.searchResults.set(results);
+  private initAutocomplete() {
+    if (!this.searchInput) return;
+
+    const autocomplete = new google.maps.places.Autocomplete(this.searchInput.nativeElement, {
+      componentRestrictions: { country: 'th' },
+      fields: ['geometry', 'name', 'formatted_address']
+    });
+
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      if (!place.geometry || !place.geometry.location) return;
+
+      this.map.panTo(place.geometry.location);
+      this.map.setZoom(16);
+      this.handleMapClick(place.geometry.location);
+    });
+  }
+
+  private handleMapClick(latLng: any) {
+    this.placeMarker(latLng, true);
+    this.reverseGeocode(latLng);
+  }
+
+  private placeMarker(latLng: any, emit: boolean) {
+    // Convert generic object {lat, lng} to google LatLng if needed, 
+    // but google maps handles {lat, lng} object fine usually.
+    // Ensure we have lat() lng() methods if coming from event
+    const lat = typeof latLng.lat === 'function' ? latLng.lat() : latLng.lat;
+    const lng = typeof latLng.lng === 'function' ? latLng.lng() : latLng.lng;
+
+    if (this.marker) {
+      this.marker.setPosition({ lat, lng });
+    } else {
+      this.marker = new google.maps.Marker({
+        position: { lat, lng },
+        map: this.map,
+        draggable: true,
+        animation: google.maps.Animation.DROP
       });
-  }
 
-  private onMarkerPositionChanged(lat: number, lng: number) {
-    if (this.marker && this.map) {
-      this.marker.setLatLng([lat, lng]);
-      this.map.panTo([lat, lng]);
+      this.marker.addListener('dragend', () => {
+        const pos = this.marker.getPosition();
+        this.handleMapClick(pos);
+      });
     }
-    this.fetchLocationInfo(lat, lng);
-  }
 
-  private updateMarkerPosition(lat: number, lng: number) {
-    if (this.marker && this.map) {
-      this.marker.setLatLng([lat, lng]);
-      this.map.setView([lat, lng], 16);
+    if (emit) {
+      // Address will be filled by reverse geocode async
+      // For now emit coords
+      this.locationSelected.emit({
+        latitude: lat,
+        longitude: lng,
+        address: 'กำลังโหลดที่อยู่...',
+        placeName: ''
+      });
     }
   }
 
-  private fetchLocationInfo(lat: number, lng: number) {
-    this.loading.set(true);
-    
-    this.geocodingService.reverseGeocode(lat, lng).subscribe({
-      next: (response) => {
-        const location: LocationSelection = {
+  private reverseGeocode(latLng: any) {
+    const lat = typeof latLng.lat === 'function' ? latLng.lat() : latLng.lat;
+    const lng = typeof latLng.lng === 'function' ? latLng.lng() : latLng.lng;
+
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ location: { lat, lng } }, (results: any, status: any) => {
+      if (status === 'OK' && results[0]) {
+        const address = results[0].formatted_address;
+        
+        // Emit updated location with address
+        this.locationSelected.emit({
           latitude: lat,
           longitude: lng,
-          address: response.data?.address || `${lat.toFixed(6)}, ${lng.toFixed(6)}`,
-          placeName: response.data?.place_name || 'ไม่พบข้อมูลสถานที่'
-        };
-        this.selectedLocation.set(location);
-        this.locationSelected.emit(location);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        console.error('Reverse geocoding error:', err);
-        const location: LocationSelection = {
-          latitude: lat,
-          longitude: lng,
-          address: `${lat.toFixed(6)}, ${lng.toFixed(6)}`,
-          placeName: 'ไม่พบข้อมูลสถานที่'
-        };
-        this.selectedLocation.set(location);
-        this.locationSelected.emit(location);
-        this.loading.set(false);
+          address: address,
+          placeName: '' // Google doesn't easily give "Place Name" from reverse geocode unless strictly checking types
+        });
+
+        // Update search input text optionally? No, keeping custom search text is better usually.
       }
     });
-  }
-
-  displaySearchValue(result: MapSearchResult | string): string {
-    return typeof result === 'string' ? result : result.label;
-  }
-
-  onSearchOptionSelected(result: MapSearchResult) {
-    if (result && this.map && this.marker) {
-      const lat = result.latitude;
-      const lng = result.longitude;
-      
-      this.marker.setLatLng([lat, lng]);
-      this.map.setView([lat, lng], 16);
-      
-      this.fetchLocationInfo(lat, lng);
-    }
-    
-    this.searchControl.setValue('', { emitEvent: false });
   }
 }
