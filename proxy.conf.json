@@ -17,6 +17,18 @@
     "changeOrigin": true,
     "logLevel": "debug"
   },
+  "/api/v1/collection-points": {
+    "target": "https://waste.mysterchat.com",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/api/v1/requests": {
+    "target": "https://waste.mysterchat.com",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
   "/api/v1/auth": {
     "target": "https://waste.mysterchat.com",
     "secure": true,
@@ -42,5 +54,3 @@
     "logLevel": "debug"
   }
 }
-
-

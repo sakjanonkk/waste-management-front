@@ -1,122 +1,148 @@
 <div class="request-list-page">
-    <div class="header">
-        <h2 class="header-title">รายการคำร้องเรียน</h2>
-
-        <!-- Optional: Add Refresh Button -->
-        <button mat-icon-button (click)="fetchRequests()" color="primary" [disabled]="loading()">
-            <mat-icon>refresh</mat-icon>
-        </button>
+  <!-- Header -->
+  <div class="request-list-header">
+    <div class="header-left">
+      <h1 class="header-title">คำร้องเรียน</h1>
+      <p class="header-subtitle">ติดตามและจัดการคำร้องเรียนทั้งหมด</p>
     </div>
+    <button mat-icon-button (click)="fetchRequests()" [disabled]="loading()" class="refresh-btn">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
 
-    <div class="filters">
-        <mat-form-field appearance="outline">
-            <mat-label>สถานะ</mat-label>
-            <mat-select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event); onFilterChange()">
-                <mat-option value="">ทั้งหมด</mat-option>
-                <mat-option value="pending">รอดำเนินการ</mat-option>
-                <mat-option value="approved">อนุมัติแล้ว</mat-option>
-                <mat-option value="rejected">ปฏิเสธ</mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-            <mat-label>ประเภทคำร้อง</mat-label>
-            <mat-select [ngModel]="typeFilter()" (ngModelChange)="typeFilter.set($event); onFilterChange()">
-                <mat-option value="">ทั้งหมด</mat-option>
-                <mat-option value="report_problem">แจ้งปัญหา</mat-option>
-                <mat-option value="request_point">ขอจุดเก็บขยะใหม่</mat-option>
-            </mat-select>
-        </mat-form-field>
+  <!-- Stats Cards -->
+  <div class="stats-cards">
+    <div class="stat-card stat-pending">
+      <mat-icon>pending_actions</mat-icon>
+      <div class="stat-info">
+        <span class="stat-value">{{ getPendingCount() }}</span>
+        <span class="stat-label">รอดำเนินการ</span>
+      </div>
     </div>
-
-    <!-- Loading State -->
-    <div *ngIf="loading()" class="loading-state">
-        <mat-spinner diameter="40"></mat-spinner>
-        <p>กำลังโหลดข้อมูล...</p>
+    <div class="stat-card stat-approved">
+      <mat-icon>check_circle</mat-icon>
+      <div class="stat-info">
+        <span class="stat-value">{{ getApprovedCount() }}</span>
+        <span class="stat-label">อนุมัติแล้ว</span>
+      </div>
     </div>
+    <div class="stat-card stat-rejected">
+      <mat-icon>cancel</mat-icon>
+      <div class="stat-info">
+        <span class="stat-value">{{ getRejectedCount() }}</span>
+        <span class="stat-label">ปฏิเสธ</span>
+      </div>
+    </div>
+  </div>
 
-    <!-- Table Container -->
-    <div class="table-container mat-elevation-z1" *ngIf="!loading()">
-        <div class="table-scroll-wrapper">
-            <table mat-table [dataSource]="data()">
+  <!-- Filters -->
+  <div class="request-list-filters">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>สถานะ</mat-label>
+      <mat-select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event); onFilterChange()">
+        <mat-option value="">ทั้งหมด</mat-option>
+        <mat-option value="pending">รอดำเนินการ</mat-option>
+        <mat-option value="approved">อนุมัติแล้ว</mat-option>
+        <mat-option value="rejected">ปฏิเสธ</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-                <!-- ID Column -->
-                <ng-container matColumnDef="id">
-                    <th mat-header-cell *matHeaderCellDef> ID </th>
-                    <td mat-cell *matCellDef="let row"> #{{row.id}} </td>
-                </ng-container>
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>ประเภทคำร้อง</mat-label>
+      <mat-select [ngModel]="typeFilter()" (ngModelChange)="typeFilter.set($event); onFilterChange()">
+        <mat-option value="">ทั้งหมด</mat-option>
+        <mat-option value="report_problem">แจ้งปัญหา</mat-option>
+        <mat-option value="request_point">ขอจุดเก็บขยะใหม่</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
-                <!-- Type Column -->
-                <ng-container matColumnDef="request_type">
-                    <th mat-header-cell *matHeaderCellDef> ประเภท </th>
-                    <td mat-cell *matCellDef="let row">
-                        <span class="type-badge" [class.type-problem]="row.request_type === 'report_problem'"
-                            [class.type-point]="row.request_type === 'request_point'">
-                            {{ getRequestTypeName(row.request_type) }}
-                        </span>
-                    </td>
-                </ng-container>
+  <!-- Main Content: Split View -->
+  <div class="content-split">
+    <!-- Left: Request List -->
+    <div class="list-panel">
+      @if (loading()) {
+        <div class="loading-state">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>กำลังโหลดข้อมูล...</p>
+        </div>
+      } @else {
+        <div class="request-cards">
+          @for (request of data(); track request.id) {
+            <div 
+              class="request-card" 
+              [class.selected]="selectedRequest()?.id === request.id"
+              (click)="selectRequest(request)"
+            >
+              <div class="card-header">
+                <span class="request-id">#{{ request.id }}</span>
+                <span class="type-badge" [class.type-problem]="request.request_type === 'report_problem'" [class.type-point]="request.request_type === 'request_point'">
+                  {{ getRequestTypeName(request.request_type) }}
+                </span>
+              </div>
+              
+              <div class="card-body">
+                <h3 class="point-name">{{ request.point_name || 'ไม่ระบุชื่อ' }}</h3>
+                <p class="reporter">
+                  <mat-icon class="icon-sm">person</mat-icon>
+                  {{ request.reporter_name || '-' }}
+                </p>
+                <p class="datetime">
+                  <mat-icon class="icon-sm">schedule</mat-icon>
+                  {{ request.request_datetime | date:'dd/MM/yyyy HH:mm' }}
+                </p>
+              </div>
 
-                <!-- Point Name Column -->
-                <ng-container matColumnDef="point_name">
-                    <th mat-header-cell *matHeaderCellDef> สถานที่ / จุด </th>
-                    <td mat-cell *matCellDef="let row"> {{row.point_name || '-'}} </td>
-                </ng-container>
-
-                <!-- Note: Image Column Removed -->
-
-                <!-- Created At Column -->
-                <ng-container matColumnDef="created_at">
-                    <th mat-header-cell *matHeaderCellDef> วันที่แจ้ง </th>
-                    <td mat-cell *matCellDef="let row"> {{row.request_datetime | date:'dd/MM/yyyy HH:mm'}} </td>
-                </ng-container>
-
-                <!-- Status Column -->
-                <ng-container matColumnDef="status">
-                    <th mat-header-cell *matHeaderCellDef> สถานะ </th>
-                    <td mat-cell *matCellDef="let row">
-                        <span class="status-badge" [ngClass]="getStatusClass(row.status)">
-                            {{ getStatusLabel(row.status) }}
-                        </span>
-                    </td>
-                </ng-container>
-
-                <!-- Reporter Column -->
-                <ng-container matColumnDef="reporter">
-                    <th mat-header-cell *matHeaderCellDef> ผู้แจ้ง </th>
-                    <td mat-cell *matCellDef="let row">
-                        <div class="flex flex-col text-sm">
-                            <span>{{row.reporter_name || '-'}}</span>
-                            <span class="text-gray-500 text-xs">{{row.reporter_contact}}</span>
-                        </div>
-                    </td>
-                </ng-container>
-
-                <!-- Actions Column -->
-                <ng-container matColumnDef="actions">
-                    <th mat-header-cell *matHeaderCellDef> จัดการ </th>
-                    <td mat-cell *matCellDef="let row">
-                        <button mat-stroked-button color="primary" (click)="openManageDialog(row)">
-                            จัดการ
-                        </button>
-                    </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-                <!-- Empty Row -->
-                <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell text-center py-4 text-gray-500" [attr.colspan]="displayedColumns.length">
-                        ไม่พบข้อมูลคำร้อง
-                    </td>
-                </tr>
-
-            </table>
+              <div class="card-footer">
+                <span class="status-badge" [ngClass]="getStatusClass(request.status)">
+                  {{ getStatusLabel(request.status) }}
+                </span>
+                <button mat-stroked-button color="primary" class="manage-btn" (click)="openManageDialog(request); $event.stopPropagation()">
+                  จัดการ
+                </button>
+              </div>
+            </div>
+          } @empty {
+            <div class="empty-state">
+              <mat-icon>inbox</mat-icon>
+              <p>ไม่พบคำร้องเรียน</p>
+            </div>
+          }
         </div>
 
-        <mat-paginator [length]="total()" [pageSize]="pageSize()" [pageSizeOptions]="[5, 10, 25, 100]"
-            (page)="onPageChange($event)" aria-label="Select page">
+        <mat-paginator 
+          [length]="total()" 
+          [pageSize]="pageSize()" 
+          [pageSizeOptions]="[5, 10, 25]"
+          (page)="onPageChange($event)"
+          class="paginator">
         </mat-paginator>
+      }
     </div>
+
+    <!-- Right: Google Map -->
+    <div class="map-panel">
+      <div class="map-header">
+        <mat-icon>map</mat-icon>
+        <span>ตำแหน่งคำร้อง</span>
+      </div>
+      <div id="request-map" class="map-container"></div>
+      
+      @if (selectedRequest()) {
+        <div class="selected-info">
+          <h4>{{ selectedRequest()?.point_name || 'ไม่ระบุชื่อ' }}</h4>
+          <p class="coords">
+            <mat-icon class="icon-sm">location_on</mat-icon>
+            {{ selectedRequest()?.latitude | number:'1.4-4' }}, {{ selectedRequest()?.longitude | number:'1.4-4' }}
+          </p>
+          @if (selectedAddress()) {
+            <p class="address">
+              <mat-icon class="icon-sm">home</mat-icon>
+              {{ selectedAddress() }}
+            </p>
+          }
+        </div>
+      }
+    </div>
+  </div>
 </div>
