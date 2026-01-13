@@ -178,13 +178,13 @@
           <tbody>
             @for (route of routesForTable; track route.id) {
             <tr>
-              <td>{{ route.id }}</td>
-              <td>{{ route.driver }}</td>
-              <td>{{ route.fullCapacity }}</td>
-              <td>{{ route.currentCapacity }}</td>
-              <td>{{ route.distance }}</td>
-              <td>{{ route.cost }}</td>
-              <td>
+              <td data-label="ทะเบียนรถ">{{ route.id }}</td>
+              <td data-label="ชื่อคนขับ">{{ route.driver }}</td>
+              <td data-label="ความจุขยะทั่วไป">{{ route.fullCapacity }}</td>
+              <td data-label="ความจุขยะรีไซเคิล">{{ route.currentCapacity }}</td>
+              <td data-label="ระยะทางทั้งหมดวิ่ง">{{ route.distance }}</td>
+              <td data-label="ค่าน้ำมัน">{{ route.cost }}</td>
+              <td data-label="รายละเอียด">
                 <span class="daily-route-status-chip">
                   ✓ {{ route.status }}
                 </span>

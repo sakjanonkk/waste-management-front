@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { UserService } from '../../../core/services/user/user.service';
 
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -18,9 +20,20 @@ export class NavbarComponent {
   private authService = inject(AuthService);
   private userService = inject(UserService);
   private router = inject(Router);
+  private breakpointObserver = inject(BreakpointObserver);
   
   userData = this.userService.myUserData;
   unreadCount = input<number>(0);
+
+  isMobile = false;
+
+  constructor() {
+    this.breakpointObserver.observe([
+      '(max-width: 960px)'
+    ]).subscribe(result => {
+      this.isMobile = result.matches;
+    });
+  }
 
   navigateToHome(): void {
     this.router.navigate(['/home']);
